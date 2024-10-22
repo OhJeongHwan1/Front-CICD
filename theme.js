@@ -31,6 +31,12 @@ const theme = {
     h2: "28px",
     h1: "36px",
   },
+  fontWeight: {
+    light: 200,
+    regular: 400,
+    bold: 700,
+    header: 800,
+  },
   borderRadius: {
     sm: "15px",
     md: "30px",
