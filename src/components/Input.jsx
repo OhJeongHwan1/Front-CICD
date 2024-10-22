@@ -20,21 +20,22 @@ const StyledInput = styled.input`
   box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1) inset;
   transition: 0.3s;
 
+  &:focus {
+    border: 1px solid var(--primary, #6a68f9);
+  }
+
   ${({ center }) => center && `text-align: center; padding-left: 0px;`}
 
-  ${({ error }) => {
+  ${({ error }) =>
     error &&
-      `border: 1px solid var(--error, #EF4444);  &:focus {
-    border: 1px solid var(--primary,  #EF4444);
-  }`;
-  }}
+    `border: 1px solid var(--error, #ef4444);
+      &:focus {
+        border: 1px solid var(--primary, #ef4444);
+      }
+    `}
 
   &::placeholder {
     color: #94a3b8;
-  }
-
-  &:focus {
-    border: 1px solid var(--primary, #6a68f9);
   }
 `;
 
