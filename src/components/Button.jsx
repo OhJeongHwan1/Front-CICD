@@ -58,25 +58,27 @@ function Button({ text, type, width, btnClick, disabled }) {
         return (
           <>
             <img src="/folder-add.svg" />
-            <p>스페이스 생성</p>
+            <p style={{ color: disabled ? `#94A3B8` : "white" }}>
+              스페이스 생성
+            </p>
           </>
         );
       if (type === "posting")
         return (
           <>
             <img src="/edit.svg" />
-            <p>게시글 쓰기</p>
+            <p style={{ color: disabled ? `#94A3B8` : "white" }}>게시글 쓰기</p>
           </>
         );
       if (type === "follow")
         return (
           <>
             <img src="/heart.svg" />
-            <p>이웃 추가</p>
+            <p style={{ color: disabled ? `#94A3B8` : "white" }}>이웃 추가</p>
           </>
         );
     } else {
-      return text;
+      return <p style={{ color: disabled ? `#94A3B8` : "white" }}>{text}</p>;
     }
   };
 

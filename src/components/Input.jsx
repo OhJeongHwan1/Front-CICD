@@ -7,19 +7,34 @@ const StyledInput = styled.input`
   width: ${({ width }) => (width ? `${width}px` : `500px`)};
   height: 60px;
   flex-shrink: 0;
-  padding-left: 68px;
+  padding-left: ${({ the_type }) =>
+    TYPES.some((t) => t === the_type) ? "68px" : "34px"};
   border-radius: 100px;
   font-size: 16px;
   font-style: normal;
   font-weight: 200;
   line-height: 24px;
   outline: none;
-  border-width: 0;
+  border: 1px solid transparent;
   background: #f1f5f9;
   box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1) inset;
+  transition: 0.3s;
+
+  ${({ center }) => center && `text-align: center; padding-left: 0px;`}
+
+  ${({ error }) => {
+    error &&
+      `border: 1px solid var(--error, #EF4444);  &:focus {
+    border: 1px solid var(--primary,  #EF4444);
+  }`;
+  }}
 
   &::placeholder {
     color: #94a3b8;
+  }
+
+  &:focus {
+    border: 1px solid var(--primary, #6a68f9);
   }
 `;
 
@@ -29,7 +44,7 @@ const Icon = styled.img`
   left: 24px;
 `;
 
-function Input({ width, type, placeholder }) {
+function Input({ width, type, placeholder, center, error }) {
   const renderIcon = (type) => {
     if (type) {
       let path = "";
@@ -44,7 +59,13 @@ function Input({ width, type, placeholder }) {
 
   return (
     <div style={{ position: "relative" }}>
-      <StyledInput width={width} placeholder={placeholder}></StyledInput>
+      <StyledInput
+        the_type={type}
+        width={width}
+        placeholder={placeholder}
+        center={center}
+        error={true}
+      ></StyledInput>
       {renderIcon(type)}
     </div>
   );

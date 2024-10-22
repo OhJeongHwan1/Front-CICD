@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import theme from "../theme";
 
 const StyledButton = styled.div`
   width: ${({ width }) => (width ? `${width}px` : "270px")};
@@ -9,7 +10,7 @@ const StyledButton = styled.div`
   background: linear-gradient(0deg, #1e293b 0%, #475569 50%, #9994b8 100%);
 
   > div {
-    background-color: #475569;
+    background-color: ${theme.colors.neutral600};
     border-radius: 15px;
     height: 46px;
     display: flex;
@@ -17,7 +18,9 @@ const StyledButton = styled.div`
   }
 
   &:hover {
-    opacity: 0.9;
+    > div {
+      background-color: ${theme.colors.neutral700};
+    }
   }
 
   ${({ disabled }) =>
@@ -50,7 +53,7 @@ function EditButton({ text, width, btnClick, disabled }) {
       width={width}
       disabled={disabled}
     >
-      <div>{text}</div>
+      <div style={{ color: disabled ? `#94A3B8` : "white" }}>{text}</div>
     </StyledButton>
   );
 }
