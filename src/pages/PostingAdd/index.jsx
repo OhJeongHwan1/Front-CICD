@@ -11,7 +11,7 @@ const PostingAddContainer = styled.div`
   align-items: center;
 `;
 
-const EditerContainer = styled.div`
+const EditorContainer = styled.div`
   margin-top: 30px;
   border-radius: ${theme.borderRadius.md} ${theme.borderRadius.md} 0 0;
   width: 800px;
@@ -19,7 +19,7 @@ const EditerContainer = styled.div`
   background: ${theme.colors.white};
 `;
 
-const EditerHeader = styled.div`
+const EditorHeader = styled.div`
   padding: 80px 80px 40px 60px;
 `;
 
@@ -47,15 +47,26 @@ const Location = styled.div`
 
 const TitleArea = styled.div`
   display: flex;
+  justify-content: space-between;
   align-items: center;
 `;
 
 const TitleInput = styled.input`
+  width: 600px;
   height: 60px;
-  padding-left: 20px;
+  padding: 0 20px;
   flex-shrink: 0;
   font-size: ${theme.fontSizes.h1};
   font-weight: ${theme.fontWeight.header};
+  outline: none;
+`;
+
+const LockButton = styled.div`
+  position: relative;
+  width: 32px;
+  height: 32px;
+  padding: 10px 20px;
+  cursor: pointer;
 `;
 
 const SubmitContainer = styled.div`
@@ -85,10 +96,14 @@ const CancelButton = styled.p`
 `;
 
 function PostingAdd() {
+  const [isLockBtnHovered, setIsLockBtnHovered] = useState(false);
+  const [isLockBtnClicked, setIsLockBtnClicked] = useState(false);
+  const [isLock, setIsLock] = useState(false);
+
   return (
     <PostingAddContainer>
-      <EditerContainer>
-        <EditerHeader>
+      <EditorContainer>
+        <EditorHeader>
           <SpaceArea>
             <Space>스페이스를 선택하세요</Space>
             <Location>
@@ -101,13 +116,50 @@ function PostingAdd() {
           </SpaceArea>
           <TitleArea>
             <TitleInput placeholder="제목을 입력하세요." />
-            PostingAdd
+            <LockButton
+              onMouseEnter={() => setIsLockBtnHovered(true)}
+              onMouseLeave={() => setIsLockBtnHovered(false)}
+              onMouseDown={() => setIsLockBtnClicked(true)}
+              onMouseUp={() => setIsLockBtnClicked(false)}
+              onClick={() => setIsLock(!isLock)}
+            >
+              {isLock ? (
+                <>
+                  <img
+                    src="/lock2.svg"
+                    alt="Default"
+                    className={`absolute top-0 left-0 transition-transform ease-in-out
+        ${isLockBtnClicked ? "scale-90" : "scale-100"}`}
+                  />
+                </>
+              ) : (
+                <>
+                  <img
+                    src="/lock.svg"
+                    alt="Default"
+                    className={`absolute top-0 left-0 transition-opacity duration-300 ease-in-out
+        ${isLockBtnHovered ? "opacity-0" : "opacity-100"} ${
+                      isLockBtnClicked ? "scale-90" : "scale-100"
+                    }`}
+                  />
+
+                  <img
+                    src="/lock2.svg"
+                    alt="Hover"
+                    className={`absolute top-0 left-0 transition-opacity duration-300 ease-in-out
+        ${isLockBtnHovered ? "opacity-100" : "opacity-0"} ${
+                      isLockBtnClicked ? "scale-90" : "scale-100"
+                    }`}
+                  />
+                </>
+              )}
+            </LockButton>
           </TitleArea>
-        </EditerHeader>
-      </EditerContainer>
+        </EditorHeader>
+      </EditorContainer>
       <SubmitContainer>
         <CancelButton>취소</CancelButton>
-        <Button type="posting" width={140} text="작성완료" />
+        <Button type="posting" width="140px" text="작성완료" />
       </SubmitContainer>
     </PostingAddContainer>
   );
