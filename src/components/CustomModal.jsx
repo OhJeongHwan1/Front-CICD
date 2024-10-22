@@ -117,7 +117,7 @@ function CustomModal({
         {!noBottom && (
           <BottomArea>
             <Button
-              width={large ? 728 : 478}
+              width={large ? `728px` : `478px`}
               text={btnText}
               btnClick={btnClick}
               disabled={btnDisable}
