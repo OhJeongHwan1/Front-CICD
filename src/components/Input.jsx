@@ -29,7 +29,7 @@ const Icon = styled.img`
   left: 24px;
 `;
 
-function Input({ width, type, placeholder }) {
+function Input({ width, type, placeholder, ...props }) {
   const renderIcon = (type) => {
     if (type) {
       let path = "";
@@ -44,7 +44,11 @@ function Input({ width, type, placeholder }) {
 
   return (
     <div style={{ position: "relative" }}>
-      <StyledInput width={width} placeholder={placeholder}></StyledInput>
+      <StyledInput
+        width={width}
+        placeholder={placeholder}
+        {...props}
+      ></StyledInput>
       {renderIcon(type)}
     </div>
   );
