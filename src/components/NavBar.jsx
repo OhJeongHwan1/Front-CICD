@@ -1,7 +1,8 @@
-import React, { useState, useRef, useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 import Button from "./Button";
 import Input from "./Input";
+import SideButton from "./SideButton";
 
 const NavContainer = styled.div`
   position: fixed;
@@ -46,11 +47,10 @@ const SideButtonWrap = styled.div`
   left: 15px;
   top: 140px;
   z-index: 6;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 `;
-
-const SideButton = ({ icon, btnClick }) => {
-  return <div></div>;
-};
 
 function NavigationBar() {
   return (
@@ -69,7 +69,12 @@ function NavigationBar() {
       </ButtonWrap>
       <StyledImage src="/blank.svg" />
 
-      <SideButtonWrap className="bg-blue-100"></SideButtonWrap>
+      <SideButtonWrap>
+        <SideButton />
+        <SideButton />
+        <SideButton />
+        <SideButton />
+      </SideButtonWrap>
     </NavContainer>
   );
 }
