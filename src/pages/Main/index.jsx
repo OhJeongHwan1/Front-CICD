@@ -16,17 +16,17 @@ function Main() {
   };
 
   return (
-    <div>
+    <div style={{ padding: "100px 0 0 120px" }}>
       Main
       <br></br>
       <Button
         btnClick={handleClick}
-        width={150}
+        width={`150px`}
         text="로그인"
         //disabled={true}
       />
       <br></br>
-      <EditButton btnClick={handleClick} width={150} text="수정" />
+      <EditButton btnClick={handleClick} width={`150px`} text="수정" />
       <br></br>
       <Input
         type="search"

@@ -4,7 +4,7 @@ import styled from "styled-components";
 const TYPES = ["search", "sms", "password", "user"];
 
 const StyledInput = styled.input`
-  width: ${({ width }) => (width ? `${width}px` : `500px`)};
+  width: ${({ width }) => (width ? `${width}` : `500px`)};
   height: 60px;
   flex-shrink: 0;
   padding-left: ${({ the_type }) =>
@@ -44,7 +44,7 @@ const Icon = styled.img`
   left: 24px;
 `;
 
-function Input({ width, type, placeholder, center, error }) {
+function Input({ width, type, placeholder, center, error, ...props }) {
   const renderIcon = (type) => {
     if (type) {
       let path = "";
@@ -64,7 +64,8 @@ function Input({ width, type, placeholder, center, error }) {
         width={width}
         placeholder={placeholder}
         center={center}
-        error={true}
+        error={error}
+        {...props}
       ></StyledInput>
       {renderIcon(type)}
     </div>

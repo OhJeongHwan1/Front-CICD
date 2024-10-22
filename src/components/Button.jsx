@@ -2,11 +2,12 @@ import React from "react";
 import styled from "styled-components";
 
 const StyledButton = styled.div`
-  width: ${({ width }) => (width ? `${width}px` : "270px")};
+  width: ${({ width }) => (width ? `${width}` : "270px")};
   height: 48px;
   border-radius: 15px;
   padding: 1px;
   background: linear-gradient(0deg, #4a48c9 0%, #6a68f9 50%, #9e9cfb 100%);
+  transition: 0.2s;
 
   > div {
     background-color: #6a68f9;
@@ -14,6 +15,7 @@ const StyledButton = styled.div`
     height: 46px;
     display: flex;
     justify-content: center;
+    transition: 0.2s;
   }
 
   &:hover {
@@ -51,7 +53,7 @@ const TextArea = styled.div`
   gap: 3px;
 `;
 
-function Button({ text, type, width, btnClick, disabled }) {
+function Button({ text, type, width, btnClick, disabled, ...props }) {
   const renderText = (text, type) => {
     if (type) {
       if (type === "space")
@@ -87,6 +89,7 @@ function Button({ text, type, width, btnClick, disabled }) {
       onClick={!disabled && btnClick}
       width={width}
       disabled={disabled}
+      {...props}
     >
       <div>
         <TextArea>{renderText(text, type)}</TextArea>
