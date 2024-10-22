@@ -3,6 +3,7 @@ import styled from "styled-components";
 import theme from "../../theme";
 import Button from "../../components/Button";
 import DynamicSVG from "../../components/DynamicSVG";
+import CustomEditor from "./template/CustomEditor";
 
 const PostingAddContainer = styled.div`
   min-height: 100vh;
@@ -100,6 +101,11 @@ function PostingAdd() {
   const [isLockBtnClicked, setIsLockBtnClicked] = useState(false);
   const [isLock, setIsLock] = useState(false);
 
+  const handleSave = (content) => {
+    // 저장 로직 구현
+    console.log(content);
+  };
+
   return (
     <PostingAddContainer>
       <EditorContainer>
@@ -156,6 +162,7 @@ function PostingAdd() {
             </LockButton>
           </TitleArea>
         </EditorHeader>
+        <CustomEditor onSave={handleSave} />
       </EditorContainer>
       <SubmitContainer>
         <CancelButton>취소</CancelButton>
