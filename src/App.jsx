@@ -4,7 +4,7 @@ import MyInfo from "./pages/MyInfo";
 import PostingAdd from "./pages/PostingAdd";
 import PostingEdit from "./pages/PostingEdit";
 import PostingDetail from "./pages/PostingDetail";
-import PostingList from "./pages/PostingList";
+import Search from "./pages/Search";
 import Register from "./pages/Register";
 
 function App() {
@@ -15,7 +15,7 @@ function App() {
       <Route path="/posting/add" element={<PostingAdd />} />
       <Route path="/posting/edit" element={<PostingEdit />} />
       <Route path="/posting/detail" element={<PostingDetail />} />
-      <Route path="/postingList" element={<PostingList />} />
+      <Route path="/search" element={<Search />} />
       <Route path="register" element={<Register />} />
     </Routes>
   );
