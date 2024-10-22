@@ -58,21 +58,21 @@ function Button({ text, type, width, btnClick, disabled }) {
         return (
           <>
             <img src="/folder-add.svg" />
-            <p>스페이스 생성</p>
+            <p>{text ? text : `스페이스 생성`}</p>
           </>
         );
       if (type === "posting")
         return (
           <>
             <img src="/edit.svg" />
-            <p>게시글 쓰기</p>
+            <p>{text ? text : `게시글 쓰기`}</p>
           </>
         );
       if (type === "follow")
         return (
           <>
             <img src="/heart.svg" />
-            <p>이웃 추가</p>
+            <p>{text ? text : `이웃 추가`}</p>
           </>
         );
     } else {
