@@ -4,14 +4,21 @@ import theme from "../theme";
 
 const StyledPosting = styled.div`
   width: ${({ width }) => `${width}%`};
-  height: ${({ isMine }) => (isMine ? `420px` : `450px`)};
+  height: ${({ $ismine }) => ($ismine ? `360px` : `390px`)};
   border-radius: ${theme.borderRadius.md};
   background: ${theme.colors.white};
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  }
 `;
 
 const ImageContainer = styled.div`
   width: 100%;
-  padding-top: 240px;
+  padding-top: 180px;
   position: relative;
 `;
 
@@ -27,14 +34,15 @@ const StyledImg = styled.img`
 
 const ContentContainer = styled.div`
   width: 100%;
-  height: calc(100% - 240px);
-  padding: ${({ isMine }) =>
-    isMine ? `10px 20px 20px 20px` : `10px 20px 5px 20px`};
+  height: ${({ $ismine }) =>
+    $ismine ? `calc(100% - 180px)` : `calc(100% - 220px)`};
+  padding: ${({ $ismine }) =>
+    $ismine ? `10px 20px 20px 20px` : `10px 20px 4px 20px`};
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  ${({ isMine }) =>
-    !isMine
+  ${({ $ismine }) =>
+    !$ismine
       ? `
     border-bottom: 1px solid ${theme.colors.neutral200};
   `
@@ -45,14 +53,24 @@ const Title = styled.h3`
   font-size: ${theme.fontSizes.lg};
   font-weight: ${theme.fontWeight.bold};
   color: ${theme.colors.neutral700};
+  padding: 0 0 10px 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  word-break: keep-all;
 `;
 
 const Desciption = styled.p`
   font-size: ${theme.fontSizes.md};
   font-weight: ${theme.fontWeight.light};
   color: ${theme.colors.neutral700};
-  padding: 10px 0;
   line-height: 24px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  word-break: keep-all;
 `;
 
 const PostingInfo = styled.div`
@@ -74,17 +92,19 @@ const PostingDate = styled.p`
 `;
 
 const ProfileContainer = styled.div`
-  padding: 5px 20px 10px 20px;
+  padding: 8px 20px 20px 20px;
 `;
 
 const Profile = styled.div`
   display: flex;
+  align-items: center;
   gap: 4px;
+  font-size: ${theme.fontSizes.sm};
 `;
 
 function PostingCard({
+  onClick,
   width,
-  postingId,
   title,
   mainImg,
   content,
@@ -95,7 +115,7 @@ function PostingCard({
   profileImg,
 }) {
   return (
-    <StyledPosting width={width} isMine={isMine}>
+    <StyledPosting width={width} $ismine={isMine} onClick={onClick}>
       <ImageContainer>
         <StyledImg
           src={mainImg}
@@ -105,7 +125,7 @@ function PostingCard({
           onLoad={(e) => {}}
         />
       </ImageContainer>
-      <ContentContainer isMine={isMine}>
+      <ContentContainer $ismine={isMine}>
         <div>
           <Title>{title}</Title>
           <Desciption>{content}</Desciption>
@@ -123,20 +143,22 @@ function PostingCard({
           <PostingDate>{createAt}</PostingDate>
         </PostingInfo>
       </ContentContainer>
-      {!isMine}
-      <ProfileContainer>
-        <Profile>
-          <div>
-            <StyledImg
-              src={mainImg}
-              alt="main image"
+      {!isMine && (
+        <ProfileContainer>
+          <Profile>
+            <img
+              src={profileImg}
+              alt=""
+              height="20px"
+              width="20px"
               loading="lazy"
               decoding="async"
               onLoad={(e) => {}}
             />
-          </div>
-        </Profile>
-      </ProfileContainer>
+            <p>{nickname}</p>
+          </Profile>
+        </ProfileContainer>
+      )}
     </StyledPosting>
   );
 }
