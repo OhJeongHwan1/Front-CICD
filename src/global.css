@@ -5,8 +5,11 @@
   padding: 0;
   box-sizing: border-box;
   color: #334155;
-  background-color: #f1f5f9;
   font-family: Pretendard;
+}
+
+#root {
+  background-color: #f1f5f9;
 }
 
 ul,
