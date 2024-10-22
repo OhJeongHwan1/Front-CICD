@@ -28,15 +28,15 @@ function Main() {
         width={100 / 2}
         postingId={1}
         title={"오사카 여행일지 #4"}
-        travelDate={"2024-10-30"}
         mainImg={"https://i.imgur.com/0TIs0vO.png"}
         content={
           "오른쪽 하단에 적혀있는 날짜는 실제 작성일이며, 여행 날짜와 다를 수 있습니다."
         }
         commentsCount={3}
+        createAt={"2024-10-30"}
+        isMine={false}
         nickname={"USER001"}
         profileImg={"https://i.imgur.com/T2tqUEG.png"}
-        createAt={"2024-10-30"}
       />
     </div>
   );
