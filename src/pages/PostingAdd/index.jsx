@@ -1,19 +1,38 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import theme from "../../theme";
 import Button from "../../components/Button";
-import DynamicSVG from "../../components/DynamicSVG";
 import CustomEditor from "./template/CustomEditor";
+import SchedulePicker from "./template/ScheduleSelector";
+import SpaceSelector from "./template/SpaceSelector";
 
 const PostingAddContainer = styled.div`
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
 `;
 
+const Background = styled.div`
+  background-color: ${theme.colors.neutral100};
+  position: fixed;
+  z-index: -2;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+`;
+
+const Background2 = styled.div`
+  background-color: ${theme.colors.white};
+  position: fixed;
+  bottom: 100px;
+  z-index: -1;
+  width: 800px;
+  height: 600px;
+  overflow: hidden;
+`;
+
 const EditorContainer = styled.div`
-  margin-top: 30px;
   border-radius: ${theme.borderRadius.md} ${theme.borderRadius.md} 0 0;
   width: 800px;
   min-height: calc(100vh - 30px);
@@ -21,29 +40,7 @@ const EditorContainer = styled.div`
 `;
 
 const EditorHeader = styled.div`
-  padding: 80px 80px 40px 60px;
-`;
-
-const SpaceArea = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 10px 20px;
-  cursor: pointer;
-`;
-
-const Space = styled.p`
-  font-size: ${theme.fontSizes.lg};
-  font-weight: ${theme.fontWeight.bold};
-`;
-
-const Location = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-size: ${theme.fontSizes.md};
-  font-weight: ${theme.fontWeight.light};
-  color: ${theme.colors.neutral400};
+  padding: 80px 80px 20px 60px;
 `;
 
 const TitleArea = styled.div`
@@ -98,31 +95,57 @@ const CancelButton = styled.p`
 `;
 
 function PostingAdd() {
+  // 저장되어야 할 데이터
+  const [space, setSpace] = useState({}); // spaceId, name, city, nation
+  const [title, setTitle] = useState("");
+  const [isLock, setIsLock] = useState(false);
+  const [schedule, setSchdule] = useState({}); // sheduleId, date, spot, memo
+  const [mainImg, setMainImg] = useState("https://i.imgur.com/0TIs0vO.png");
+  const [content, setContent] = useState("");
+
+  // state
   const [isLockBtnHovered, setIsLockBtnHovered] = useState(false);
   const [isLockBtnClicked, setIsLockBtnClicked] = useState(false);
-  const [isLock, setIsLock] = useState(false);
+  const [isValid, setIsValid] = useState(false);
 
-  const handleSave = (content) => {
-    // 저장 로직 구현
-    console.log(content);
+  // 버튼 활성화 조건
+  useEffect(() => {
+    const isSpaceValid =
+      space.spaceId && space.name && space.city && space.nation;
+    const isScheduleValid =
+      schedule.scheduleId && schedule.date && schedule.spot;
+    const isTitleValid = title.trim() !== "";
+    const isContentValid = content.trim() !== "";
+
+    setIsValid(
+      isSpaceValid && isScheduleValid && isTitleValid && isContentValid
+    );
+  }, [space, schedule, title, content]);
+
+  const handleSave = () => {
+    const data = {
+      spaceId: space.id,
+      title: title,
+      accessLevel: isLock ? "MEMBER_ONLY" : "PUBLIC",
+      scheduleId: schedule.id,
+      mainImg: mainImg,
+      content: content,
+    };
+
+    console.log(data);
   };
 
   return (
     <PostingAddContainer>
       <EditorContainer>
         <EditorHeader>
-          <SpaceArea>
-            <Space>스페이스를 선택하세요</Space>
-            <Location>
-              <DynamicSVG
-                svgUrl="/location.svg"
-                color={theme.colors.neutral400}
-              />
-              City, Nation
-            </Location>
-          </SpaceArea>
+          <SpaceSelector />
           <TitleArea>
-            <TitleInput placeholder="제목을 입력하세요." />
+            <TitleInput
+              placeholder="제목을 입력하세요."
+              autoFocus={true}
+              onChange={(e) => setTitle(e.target.value)}
+            />
             <LockButton
               onMouseEnter={() => setIsLockBtnHovered(true)}
               onMouseLeave={() => setIsLockBtnHovered(false)}
@@ -162,13 +185,22 @@ function PostingAdd() {
               )}
             </LockButton>
           </TitleArea>
+          <SchedulePicker />
         </EditorHeader>
-        <CustomEditor onSave={handleSave} />
+        <CustomEditor setContent={setContent} />
       </EditorContainer>
       <SubmitContainer>
         <CancelButton>취소</CancelButton>
-        <Button type="posting" width="140px" text="작성완료" />
+        <Button
+          type="posting"
+          width="120px"
+          text="작성완료"
+          // disabled={!isValid}
+          onClick={handleSave}
+        />
       </SubmitContainer>
+      <Background />
+      <Background2 />
     </PostingAddContainer>
   );
 }

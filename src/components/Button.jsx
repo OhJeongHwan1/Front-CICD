@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import DynamicSVG from "./DynamicSVG";
 
 const StyledButton = styled.div`
   width: ${({ width }) => (width ? `${width}` : "270px")};
@@ -59,7 +60,10 @@ function Button({ text, type, width, btnClick, disabled, ...props }) {
       if (type === "space")
         return (
           <>
-            <img src="/folder-add.svg" />
+            <DynamicSVG
+              svgUrl="/folder-add.svg"
+              color={disabled ? `#94A3B8` : "white"}
+            />
             <p style={{ color: disabled ? `#94A3B8` : "white" }}>
               {text ? text : `스페이스 생성`}
             </p>
@@ -68,7 +72,10 @@ function Button({ text, type, width, btnClick, disabled, ...props }) {
       if (type === "posting")
         return (
           <>
-            <img src="/edit.svg" />
+            <DynamicSVG
+              svgUrl="/edit.svg"
+              color={disabled ? `#94A3B8` : "white"}
+            />
             <p style={{ color: disabled ? `#94A3B8` : "white" }}>
               {text ? text : `게시글 쓰기`}
             </p>
@@ -77,7 +84,10 @@ function Button({ text, type, width, btnClick, disabled, ...props }) {
       if (type === "follow")
         return (
           <>
-            <img src="/heart.svg" />
+            <DynamicSVG
+              svgUrl="/heart.svg"
+              color={disabled ? `#94A3B8` : "white"}
+            />
             <p style={{ color: disabled ? `#94A3B8` : "white" }}>
               {text ? text : `이웃 추가`}
             </p>

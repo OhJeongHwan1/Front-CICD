@@ -5,6 +5,7 @@ import Input from "../../components/Input";
 import CustomModal from "../../components/CustomModal";
 import PostingCard from "../../components/PostingCard";
 import theme from "../../theme";
+import ProfileStack from "../../components/ProfileStack";
 
 function Main() {
   const [modal, setModal] = useState(false);
@@ -24,7 +25,8 @@ function Main() {
         btnClick={handleClick}
         width={`150px`}
         text="로그인"
-        //disabled={true}
+        disabled
+        type="space"
       />
       <br></br>
       <EditButton btnClick={handleClick} width={`150px`} text="수정" />
@@ -77,6 +79,34 @@ function Main() {
         nickname={"USER001"}
         profileImg={"https://i.imgur.com/T2tqUEG.png"}
       />
+      <div className="w-2 h-10" />
+      <div className="flex flex-col gap-2">
+        <ProfileStack profileList={["https://i.imgur.com/VnZtNxH.png"]} />
+        <ProfileStack
+          profileList={[
+            "https://i.imgur.com/VnZtNxH.png",
+            "https://i.imgur.com/QHfydVa.png",
+          ]}
+        />
+        <ProfileStack
+          profileList={[
+            "https://i.imgur.com/VnZtNxH.png",
+            "https://i.imgur.com/VXvXELL.png",
+            "https://i.imgur.com/D4UpBrx.png",
+          ]}
+        />
+        <ProfileStack
+          profileList={[
+            "https://i.imgur.com/VnZtNxH.png",
+            "https://i.imgur.com/aXtrK5E.png",
+            "https://i.imgur.com/UIAinYd.png",
+            "https://i.imgur.com/QHfydVa.png",
+            "https://i.imgur.com/VXvXELL.png",
+            "https://i.imgur.com/D4UpBrx.png",
+          ]}
+          borderColor={theme.colors.neutral100}
+        />
+      </div>
     </div>
   );
 }

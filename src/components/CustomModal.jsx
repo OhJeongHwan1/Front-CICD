@@ -31,7 +31,7 @@ const TitleArea = styled.div`
 
 const ContentArea = styled.div`
   margin-top: 100px;
-  max-height: 500px;
+  max-height: 400px;
   padding: 28px 36px;
   overflow-y: auto;
   background-color: #fff;
@@ -45,7 +45,7 @@ const ContentArea = styled.div`
     border-radius: 5px;
   }
   &::-webkit-scrollbar-track-piece {
-    background-color: transparent;
+    background-color: arent;
     border-radius: 5px;
     margin: 5px 0;
   }
@@ -121,7 +121,7 @@ function CustomModal({
           />
           <div>{title}</div>
           <CloseButton onClick={modalClose}>
-            <img src="./close-circle.svg" alt="" />
+            <img src="/close-circle.svg" alt="" />
           </CloseButton>
         </TitleArea>
         <ContentArea noBottom={noBottom}>{children}</ContentArea>

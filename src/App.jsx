@@ -13,13 +13,16 @@ function App() {
   return (
     <>
       <NavigationBar />
-      <div style={{ padding: "100px 0 0 120px" }}>
+      <div style={{ padding: "90px 0 0 100px" }}>
         <Routes>
           <Route path="/" element={<Main />} />
           <Route path="/myInfo" element={<MyInfo />} />
           <Route path="/posting/add" element={<PostingAdd />} />
           <Route path="/posting/edit" element={<PostingEdit />} />
-          <Route path="/posting/detail" element={<PostingDetail />} />
+          <Route
+            path="/posting/detail/:postingId"
+            element={<PostingDetail />}
+          />
           <Route path="/search" element={<Search />} />
           <Route path="/register" element={<Register />} />
           <Route path="/space" element={<Space />} />
