@@ -61,7 +61,7 @@ function Button({ text, type, width, btnClick, disabled, ...props }) {
           <>
             <img src="/folder-add.svg" />
             <p style={{ color: disabled ? `#94A3B8` : "white" }}>
-              스페이스 생성
+              {text ? text : `스페이스 생성`}
             </p>
           </>
         );
@@ -69,14 +69,18 @@ function Button({ text, type, width, btnClick, disabled, ...props }) {
         return (
           <>
             <img src="/edit.svg" />
-            <p style={{ color: disabled ? `#94A3B8` : "white" }}>게시글 쓰기</p>
+            <p style={{ color: disabled ? `#94A3B8` : "white" }}>
+              {text ? text : `게시글 쓰기`}
+            </p>
           </>
         );
       if (type === "follow")
         return (
           <>
             <img src="/heart.svg" />
-            <p style={{ color: disabled ? `#94A3B8` : "white" }}>이웃 추가</p>
+            <p style={{ color: disabled ? `#94A3B8` : "white" }}>
+              {text ? text : `이웃 추가`}
+            </p>
           </>
         );
     } else {
