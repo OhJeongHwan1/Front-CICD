@@ -66,9 +66,6 @@ function LoginModal({ loginModal, handleClose }) {
         ></Input>
       </div>
       <div className="mt-6">
-        <p className="flex justify-center underline cursor-pointer">
-          비밀번호를 잊어버리셨나요?
-        </p>
         <p className="flex justify-center cursor-pointer mt-3">
           아직 계정이 없으신가요?
           <Highlight onClick={moveToRegister}>&nbsp;회원가입 하기</Highlight>
