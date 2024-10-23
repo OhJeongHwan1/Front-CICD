@@ -9,6 +9,7 @@ import NicknameComp from "./template/NicknameComp";
 import Button from "../../components/Button";
 import icon from "/user-tag.svg";
 import { useNavigate } from "react-router";
+import LoginModal from "../../components/LoginModal";
 
 const Background = styled.div`
   background-color: ${theme.colors.neutral100};

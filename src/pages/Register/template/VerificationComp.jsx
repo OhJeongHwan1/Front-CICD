@@ -121,7 +121,7 @@ function VerificationComp({ email, verificationCode, setVerificationCode }) {
           <StyledInput
             key={index}
             ref={inputRefs[index]}
-            type="text"
+            the_type="text"
             maxLength={1}
             value={value}
             onChange={(e) => handleCodeChange(index, e.target.value)}

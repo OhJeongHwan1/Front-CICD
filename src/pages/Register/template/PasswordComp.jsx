@@ -60,6 +60,7 @@ function PasswordComp({ password, setPassword }) {
     <div className="flex flex-col">
       <p className="pb-5">비밀번호를 입력해주세요.</p>
       <Input
+        the_type={"password"}
         type="password"
         placeholder="비밀번호를 입력하세요."
         maxlength={16}
@@ -83,6 +84,7 @@ function PasswordComp({ password, setPassword }) {
         <p className="pb-5">비밀번호를 다시 입력해주세요.</p>
         <Input
           type="password"
+          the_type={"password"}
           placeholder="비밀번호를 재입력해주세요."
           maxlength={16}
           value={secondPw}

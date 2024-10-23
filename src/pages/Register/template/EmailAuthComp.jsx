@@ -45,7 +45,7 @@ function EmailAuthComp({ email, setEmail }) {
         보내드릴게요.
       </p>
       <Input
-        type={"sms"}
+        the_type={"sms"}
         error={emailError}
         placeholder={"이메일을 입력하세요."}
         value={email}

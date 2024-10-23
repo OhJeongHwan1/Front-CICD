@@ -9,6 +9,7 @@ import { selectUser } from "../redux/userSlice";
 import theme from "../theme";
 import { userLogOut } from "../redux/userSlice";
 import SpaceAddModal from "./SpaceAddModal";
+import LoginModal from "./LoginModal";
 
 const NavContainer = styled.div`
   position: fixed;
@@ -79,6 +80,7 @@ const DeleteButton = styled.div`
 
 function NavigationBar() {
   const [spaceModal, setSpaceModal] = useState(false);
+  const [loginModal, setLoginModal] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
@@ -105,17 +107,24 @@ function NavigationBar() {
 
   const handleClose = () => {
     setSpaceModal(false);
+    setLoginModal(false);
+  };
+
+  const openLoginModal = () => {
+    setLoginModal(true);
   };
 
   return (
     <NavContainer isRegister={location.pathname === "/register"}>
       <div className="flex items-center h-[60px] gap-[70px]">
         <img
+          onClick={moveToMain}
           style={{
             margin:
               location.pathname === "/register"
                 ? "5px 0 0 5px"
                 : "15px 0 0 15px",
+            cursor: "pointer",
           }}
           width={45}
           height={45}
@@ -131,7 +140,7 @@ function NavigationBar() {
 
       <RightWrap>
         {user.nickname !== null ? (
-          <Button width={`110px`} text="로그인" />
+          <Button width={`110px`} text="로그인" btnClick={openLoginModal} />
         ) : (
           <div
             className="flex items-center gap-[24px] cursor-pointer"
@@ -176,6 +185,9 @@ function NavigationBar() {
       )}
       {spaceModal && (
         <SpaceAddModal spaceModal={spaceModal} handleClose={handleClose} />
+      )}
+      {loginModal && (
+        <LoginModal loginModal={loginModal} handleClose={handleClose} />
       )}
     </NavContainer>
   );

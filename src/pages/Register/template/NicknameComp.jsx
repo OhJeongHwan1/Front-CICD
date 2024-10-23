@@ -42,7 +42,7 @@ function NicknameComp({ nickname, setNickname }) {
     <div className="flex flex-col">
       <p className="pb-5">닉네임을 입력해주세요.</p>
       <Input
-        type={"user"}
+        the_type={"user"}
         placeholder={"닉네임을 입력하세요."}
         maxlength={12}
         value={nickname}
