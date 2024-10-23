@@ -12,6 +12,7 @@ const ButtonWrap = styled.div`
   align-items: flex-start;
   height: 32px;
   border-bottom: 2px solid ${theme.colors.neutral200};
+  justify-content: space-between;
 `;
 
 const LocationButton = styled.div`

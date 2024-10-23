@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CustomModal from "./CustomModal";
 import styled from "styled-components";
 import theme from "../theme";
 import Input from "./Input";
 import SelectedButton from "./SelectedButton";
 import DynamicSVG from "./DynamicSVG";
+import CustomDatePicker from "./CustomDatePicker";
+import { formatDate } from "../time";
 
 const Title = styled.p`
   font-size: ${theme.fontSizes.h4};
@@ -70,6 +72,7 @@ const StyledTextArea = styled.textarea`
     margin: 5px 0;
   }
 `;
+
 const MembersWrapper = styled.div`
   display: flex;
   align-items: center;
@@ -93,7 +96,27 @@ const InputArea = ({ title, discription, children }) => {
 };
 
 function SpaceAddModal({ spaceModal, handleClose }) {
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
   const [memberNum, setMemberNum] = useState(4);
+  const [locate, setLocate] = useState(null);
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+
+  const spaceAddButtonClick = () => {
+    const data = {
+      spaceName: name,
+      description: description,
+      maxMembers: memberNum,
+      nationCode: locate.nation,
+      cityCode: locate.city,
+      startDate: formatDate(startDate),
+      endDate: formatDate(endDate),
+    };
+
+    console.log(data);
+  };
+
   return (
     <CustomModal
       modal={spaceModal}
@@ -101,26 +124,41 @@ function SpaceAddModal({ spaceModal, handleClose }) {
       title="새로운 스페이스 만들기"
       titleIcon="/folder-add2.svg"
       btnText="생성"
+      btnClick={spaceAddButtonClick}
       large
     >
       <InputArea
         title="스페이스 이름"
         discription="이번 여행에 대한 스페이스 이름을 정해주세요. 한글, 영문자, 공백 포함 최대 40자까지 입력할 수 있어요. "
       >
-        <Input width="100%" placeholder="스페이스 이름을 입력하세요" />
+        <Input
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          width="100%"
+          placeholder="스페이스 이름을 입력하세요"
+        />
       </InputArea>
       <InputArea
         title="스페이스 설명(선택)"
         discription="이번 여행에 대한 설명을 입력해주세요. "
       >
-        <StyledTextArea rows={3} placeholder="스페이스 설명을 입력하세요." />
+        <StyledTextArea
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          rows={3}
+          placeholder="스페이스 설명을 입력하세요."
+        />
       </InputArea>
       <MiddleWrapper>
         <InputArea
           title="장소 선택"
           discription="이번 여행 장소를 선택해주세요."
         >
-          <SelectedButton width="280px" color={theme.colors.neutral100} />
+          <SelectedButton
+            setLocate={setLocate}
+            width="280px"
+            color={theme.colors.neutral100}
+          />
         </InputArea>
         <InputArea
           title="최대 인원 수"
@@ -151,7 +189,14 @@ function SpaceAddModal({ spaceModal, handleClose }) {
       <InputArea
         title="날짜 지정"
         discription="여행 날짜(시작 날짜 / 마지막 날짜)를 선택해주세요."
-      ></InputArea>
+      >
+        <CustomDatePicker
+          startDate={startDate}
+          setStartDate={setStartDate}
+          endDate={endDate}
+          setEndDate={setEndDate}
+        />
+      </InputArea>
     </CustomModal>
   );
 }

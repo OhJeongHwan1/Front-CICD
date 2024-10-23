@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DynamicSVG from "./DynamicSVG";
 import theme from "../theme";
 import LocationSelectModal from "./LocationSelectModal";
@@ -26,10 +26,14 @@ const StyledP = styled.p`
   font-weight: ${theme.fontWeight.light};
 `;
 
-function SelectedButton({ width, color }) {
+function SelectedButton({ setLocate, width, color }) {
   const [location, setLocation] = useState(null);
   const [origin, setOrign] = useState(null);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    setLocate(location);
+  }, [location]);
 
   return (
     <StyledButton
