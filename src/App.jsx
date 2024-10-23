@@ -19,7 +19,10 @@ function App() {
           <Route path="/myInfo" element={<MyInfo />} />
           <Route path="/posting/add" element={<PostingAdd />} />
           <Route path="/posting/edit" element={<PostingEdit />} />
-          <Route path="/posting/detail" element={<PostingDetail />} />
+          <Route
+            path="/posting/detail/:postingId"
+            element={<PostingDetail />}
+          />
           <Route path="/search" element={<Search />} />
           <Route path="/register" element={<Register />} />
           <Route path="/space" element={<Space />} />
