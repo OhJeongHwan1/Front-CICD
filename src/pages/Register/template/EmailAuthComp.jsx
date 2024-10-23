@@ -1,13 +1,20 @@
 import React, { useEffect, useState } from "react";
 import theme from "../../../theme";
 import Input from "../../../components/Input";
+import styled from "styled-components";
 
-function EmailAuthComp() {
-  const [email, setEmail] = useState("");
+const ErrorText = styled.p`
+  color: ${theme.colors.error};
+  margin-left: 20px;
+  padding-top: 8px;
+  font-size: small;
+`;
+
+function EmailAuthComp({ email, setEmail }) {
   const [emailError, setEmailError] = useState(false);
 
   useEffect(() => {
-    const savedEmail = localStorage.getItem("email");
+    const savedEmail = sessionStorage.getItem("email");
     if (savedEmail) {
       setEmail(savedEmail);
     }
@@ -22,7 +29,7 @@ function EmailAuthComp() {
     const newEmail = e.target.value;
     setEmail(newEmail);
 
-    localStorage.setItem("email", newEmail);
+    sessionStorage.setItem("email", newEmail);
 
     if (!validateEmail(newEmail)) {
       setEmailError(true);
@@ -39,14 +46,13 @@ function EmailAuthComp() {
       </p>
       <Input
         type={"sms"}
+        error={emailError}
         placeholder={"이메일을 입력하세요."}
         value={email}
         onChange={handleEmailChange}
       />
       {emailError && (
-        <p style={{ color: `${theme.colors.error}` }}>
-          이메일 양식이 틀려요! 다시 입력해주세요.
-        </p>
+        <ErrorText>이메일 양식이 아니에요! 다시 입력해주세요.</ErrorText>
       )}
     </div>
   );
