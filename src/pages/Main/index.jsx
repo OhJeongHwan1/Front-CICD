@@ -3,7 +3,6 @@ import Button from "../../components/Button";
 import EditButton from "../../components/EditButton";
 import Input from "../../components/Input";
 import CustomModal from "../../components/CustomModal";
-import NavigationBar from "../../components/NavBar";
 import PostingCard from "../../components/PostingCard";
 import theme from "../../theme";
 
@@ -18,7 +17,7 @@ function Main() {
   };
 
   return (
-    <div style={{ padding: "100px 0 0 120px" }}>
+    <div>
       Main
       <br></br>
       <Button
@@ -59,7 +58,6 @@ function Main() {
         </CustomModal>
       )}
       <br></br>
-      <NavigationBar />
       <Input type="searc" placeholder="검색어를 입력해주세여." />
       <PostingCard
         onClick={() => {

@@ -2,8 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   user: {
-    nickname: "",
-    profile: null,
+    nickname: "sdaddasdsdad",
+    profile: "/Default Profile.png",
   },
   //
 };
@@ -11,10 +11,14 @@ const initialState = {
 export const userSlice = createSlice({
   name: "user",
   initialState,
-  reducers: {},
+  reducers: {
+    userLogOut: (state, action) => {
+      state.user = initialState.user;
+    },
+  },
 });
 
-export const {} = userSlice.actions;
+export const { userLogOut } = userSlice.actions;
 
 export const selectUser = (state) => state.user;
 

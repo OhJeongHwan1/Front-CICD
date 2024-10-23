@@ -1,16 +1,50 @@
 import React from "react";
 import styled from "styled-components";
 import theme from "../theme";
+import DynamicSVG from "./DynamicSVG";
 
 const Wrapper = styled.div`
   width: 50px;
   height: 50px;
   border-radius: 15px;
-  background-color: ${theme.colors.neutral200};
+  background-color: ${({ selected }) =>
+    !selected ? ` ${theme.colors.neutral200}` : `${theme.colors.primary}`};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.2s;
+  ${({ selected }) => (!selected ? `cursor: pointer;` : "")};
+
+  &:hover {
+    ${(prop) => {
+      if (prop.deleteButton) return `opacity: 0.8`;
+      else if (prop.selected) return "";
+      else if (!prop.selected)
+        return `background-color:${theme.colors.neutral300}`;
+    }};
+  }
+
+  background-color: ${({ deleteButton }) =>
+    deleteButton && ` ${theme.colors.error}`};
 `;
 
-function SideButton({ icon, btnClick }) {
-  return <Wrapper></Wrapper>;
+function SideButton({ icon, btnClick, selected, deleteButton }) {
+  return (
+    <Wrapper
+      onClick={!selected && btnClick}
+      selected={selected}
+      deleteButton={deleteButton}
+    >
+      <DynamicSVG
+        svgUrl={icon}
+        color={
+          selected || deleteButton
+            ? theme.colors.neutral100
+            : theme.colors.neutral400
+        }
+      />
+    </Wrapper>
+  );
 }
 
 export default SideButton;
