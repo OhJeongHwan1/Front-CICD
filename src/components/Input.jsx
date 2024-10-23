@@ -5,7 +5,7 @@ const TYPES = ["search", "sms", "password", "user"];
 
 const StyledInput = styled.input`
   width: ${({ width }) => (width ? `${width}` : `500px`)};
-  height: 60px;
+  height: 45px;
   flex-shrink: 0;
   padding-left: ${({ the_type }) =>
     TYPES.some((t) => t === the_type) ? "68px" : "34px"};
@@ -41,7 +41,7 @@ const StyledInput = styled.input`
 
 const Icon = styled.img`
   position: absolute;
-  top: 18px;
+  top: 11px;
   left: 24px;
 `;
 

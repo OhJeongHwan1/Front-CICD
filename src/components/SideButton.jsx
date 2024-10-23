@@ -4,8 +4,8 @@ import theme from "../theme";
 import DynamicSVG from "./DynamicSVG";
 
 const Wrapper = styled.div`
-  width: 50px;
-  height: 50px;
+  width: 45px;
+  height: 45px;
   border-radius: 15px;
   background-color: ${({ selected }) =>
     !selected ? ` ${theme.colors.neutral200}` : `${theme.colors.primary}`};
