@@ -3,12 +3,11 @@ import styled from "styled-components";
 import Modal from "@mui/material/Modal";
 import theme from "../theme.js";
 import Button from "./Button.jsx";
+import DynamicSVG from "./DynamicSVG.jsx";
 
 const Container = styled.div`
   width: ${({ large }) => (large ? `800px` : `550px`)};
   min-width: ${({ large }) => (large ? `800px` : `550px`)};
-  min-height: 300px;
-
   position: relative;
 `;
 
@@ -18,7 +17,7 @@ const TitleArea = styled.div`
   min-width: ${({ large }) => (large ? `800px` : `550px`)};
   padding: 0 40px;
   position: fixed;
-  border-bottom: 1px solid ${theme.colors.neutrall200};
+  border-bottom: 1px solid ${theme.colors.neutral200};
 
   font-size: ${theme.fontSizes.h2};
   font-weight: ${theme.fontWeight.header};
@@ -33,7 +32,7 @@ const TitleArea = styled.div`
 const ContentArea = styled.div`
   margin-top: 100px;
   max-height: 500px;
-  padding: 0px 36px;
+  padding: 28px 36px;
   overflow-y: auto;
   background-color: #fff;
   ${({ noBottom }) => noBottom && `border-radius: 0 0 30px 30px;`}
@@ -58,7 +57,7 @@ const BottomArea = styled.div`
   height: 120px;
   width: 100%;
   background-color: #fff;
-  border-top: 1px solid ${theme.colors.neutrall200};
+  border-top: 1px solid ${theme.colors.neutral200};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -103,11 +102,23 @@ function CustomModal({
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
+        outline: "none",
+        border: "none",
+        backgroundColor: "none",
+        "& > *": {
+          borderRadius: "1px",
+          outline: "none",
+        },
       }}
     >
       <Container large={large}>
         <TitleArea large={large}>
-          <img alt="" src={titleIcon} />
+          <DynamicSVG
+            svgUrl={titleIcon}
+            color={theme.colors.neutral700}
+            width={32}
+            height={32}
+          />
           <div>{title}</div>
           <CloseButton onClick={modalClose}>
             <img src="./close-circle.svg" alt="" />

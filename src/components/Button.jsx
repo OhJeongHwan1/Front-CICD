@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 const StyledButton = styled.div`
   width: ${({ width }) => (width ? `${width}` : "270px")};
-  height: 48px;
+  height: 36px;
   border-radius: 15px;
   padding: 1px;
   background: linear-gradient(0deg, #4a48c9 0%, #6a68f9 50%, #9e9cfb 100%);
@@ -12,7 +12,7 @@ const StyledButton = styled.div`
   > div {
     background-color: #6a68f9;
     border-radius: 15px;
-    height: 46px;
+    height: 34px;
     display: flex;
     justify-content: center;
     transition: 0.2s;

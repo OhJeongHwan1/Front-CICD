@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import Button from "./Button";
 import Input from "./Input";
@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "../redux/userSlice";
 import theme from "../theme";
 import { userLogOut } from "../redux/userSlice";
+import SpaceAddModal from "./SpaceAddModal";
 
 const NavContainer = styled.div`
   position: fixed;
@@ -15,7 +16,7 @@ const NavContainer = styled.div`
   left: 0;
   width: 100%;
   min-width: 1000px;
-  height: 80px;
+  height: 60px;
   background-color: #fff;
   filter: drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.1));
   z-index: 101;
@@ -26,7 +27,7 @@ const NavContainer = styled.div`
     position: relative;
     left: 0;
     bottom: 0px;
-    width: 80px;
+    width: 60px;
     height: 100vh;
     background: #fff; // 가벼운 그림자 효과
     filter: drop-shadow(4px 10px 4px rgba(0, 0, 0, 0.1));
@@ -36,22 +37,22 @@ const NavContainer = styled.div`
 const RightWrap = styled.div`
   position: absolute;
   right: 80px;
-  top: 16px;
+  top: 12px;
 `;
 
 const StyledImage = styled.img`
   position: absolute;
-  top: 80px;
-  left: 80px;
+  top: 60px;
+  left: 60px;
   z-index: 5;
 `;
 
 const SideButtonWrap = styled.div`
   position: absolute;
-  width: 50px;
+  width: 45px;
   height: 290px;
-  left: 15px;
-  top: 140px;
+  left: 7.5px;
+  top: 120px;
   z-index: 6;
   display: flex;
   flex-direction: column;
@@ -59,8 +60,8 @@ const SideButtonWrap = styled.div`
 `;
 
 const ProfileImg = styled.img`
-  width: 48px;
-  height: 48px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
 `;
 
@@ -71,12 +72,13 @@ const NickName = styled.p`
 
 const DeleteButton = styled.div`
   position: absolute;
-  left: 15px;
+  left: 7.5px;
   top: 580px;
   z-index: 7;
 `;
 
 function NavigationBar() {
+  const [spaceModal, setSpaceModal] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
@@ -88,7 +90,9 @@ function NavigationBar() {
   const moveToMyInfo = () => {
     navigate(`/myInfo`);
   };
-  const openModal = () => {};
+  const openModal = () => {
+    setSpaceModal(true);
+  };
   const moveToPosting = () => {
     navigate(`/posting/add`);
   };
@@ -98,16 +102,23 @@ function NavigationBar() {
       dispatch(userLogOut());
     }
   };
+
+  const handleClose = () => {
+    setSpaceModal(false);
+  };
+
   return (
     <NavContainer isRegister={location.pathname === "/register"}>
-      <div className="flex items-center h-[80px] gap-[70px]">
+      <div className="flex items-center h-[60px] gap-[70px]">
         <img
           style={{
             margin:
               location.pathname === "/register"
-                ? "8px 0 0 8px"
-                : "18px 0 0 18px",
+                ? "5px 0 0 5px"
+                : "15px 0 0 15px",
           }}
+          width={45}
+          height={45}
           src="/Logo.svg"
           alt=""
         />
@@ -119,7 +130,7 @@ function NavigationBar() {
       </div>
 
       <RightWrap>
-        {user.nickname === null ? (
+        {user.nickname !== null ? (
           <Button width={`110px`} text="로그인" />
         ) : (
           <div
@@ -162,6 +173,9 @@ function NavigationBar() {
             </DeleteButton>
           )}
         </>
+      )}
+      {spaceModal && (
+        <SpaceAddModal spaceModal={spaceModal} handleClose={handleClose} />
       )}
     </NavContainer>
   );

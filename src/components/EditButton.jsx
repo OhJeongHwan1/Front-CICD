@@ -4,7 +4,7 @@ import theme from "../theme";
 
 const StyledButton = styled.div`
   width: ${({ width }) => (width ? `${width}` : "270px")};
-  height: 48px;
+  height: 36px;
   border-radius: 15px;
   padding: 1px;
   background: linear-gradient(0deg, #1e293b 0%, #475569 50%, #9994b8 100%);
@@ -13,7 +13,7 @@ const StyledButton = styled.div`
   > div {
     background-color: ${theme.colors.neutral600};
     border-radius: 15px;
-    height: 46px;
+    height: 34px;
     display: flex;
     justify-content: center;
     transition: 0.2s;
@@ -45,7 +45,7 @@ const StyledButton = styled.div`
   font-size: 20px;
   font-style: normal;
   font-weight: 700;
-  line-height: 48px;
+  line-height: 36px;
 `;
 
 function EditButton({ text, width, btnClick, disabled, ...props }) {
