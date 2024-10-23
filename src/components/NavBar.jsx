@@ -9,6 +9,7 @@ import { selectUser } from "../redux/userSlice";
 import theme from "../theme";
 import { userLogOut } from "../redux/userSlice";
 import SpaceAddModal from "./SpaceAddModal";
+import LocationSelectModal from "./LocationSelectModal";
 
 const NavContainer = styled.div`
   position: fixed;
@@ -52,7 +53,7 @@ const SideButtonWrap = styled.div`
   width: 45px;
   height: 290px;
   left: 7.5px;
-  top: 120px;
+  top: 110px;
   z-index: 6;
   display: flex;
   flex-direction: column;

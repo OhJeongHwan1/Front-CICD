@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-const DynamicSVG = ({ svgUrl, color, width = 24, height = 24 }) => {
+const DynamicSVG = ({ svgUrl, color, width = 24, height = 24, ...props }) => {
   const [svgContent, setSvgContent] = useState("");
 
   useEffect(() => {
@@ -16,7 +16,9 @@ const DynamicSVG = ({ svgUrl, color, width = 24, height = 24 }) => {
       });
   }, [svgUrl, color]);
 
-  return <img src={svgContent} alt="icon" width={width} height={height} />;
+  return (
+    <img src={svgContent} alt="icon" width={width} height={height} {...props} />
+  );
 };
 
 export default DynamicSVG;

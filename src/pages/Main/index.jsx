@@ -25,7 +25,8 @@ function Main() {
         btnClick={handleClick}
         width={`150px`}
         text="로그인"
-        //disabled={true}
+        disabled
+        type="space"
       />
       <br></br>
       <EditButton btnClick={handleClick} width={`150px`} text="수정" />
