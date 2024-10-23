@@ -13,7 +13,7 @@ function App() {
   return (
     <>
       <NavigationBar />
-      <div style={{ padding: "100px 0 0 120px" }}>
+      <div style={{ padding: "90px 0 0 100px" }}>
         <Routes>
           <Route path="/" element={<Main />} />
           <Route path="/myInfo" element={<MyInfo />} />
