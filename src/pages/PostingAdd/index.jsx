@@ -71,6 +71,7 @@ const LockButton = styled.div`
 `;
 
 const SubmitContainer = styled.div`
+  z-index: 100;
   display: flex;
   justify-content: space-between;
   align-items: center;

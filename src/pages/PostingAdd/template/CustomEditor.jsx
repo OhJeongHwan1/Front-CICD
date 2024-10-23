@@ -1,130 +1,112 @@
-import React, { useState, useRef, useCallback } from "react";
+import React, { useRef, useEffect } from "react";
+import { Editor } from "@toast-ui/react-editor";
+import "@toast-ui/editor/dist/toastui-editor.css";
+import styled from "styled-components";
+
+const EditorContainer = styled.div`
+  .toastui-editor-defaultUI {
+    border: none;
+  }
+
+  .toastui-editor-main {
+    min-height: 300px;
+    height: auto !important;
+  }
+
+  .ProseMirror {
+    min-height: 300px;
+    height: auto !important;
+    padding: 20px;
+  }
+
+  .toastui-editor-toolbar {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+  }
+
+  .toastui-editor-toolbar-icons {
+    border: none;
+    &:hover {
+      background-color: #e9ecef;
+    }
+  }
+
+  .toastui-editor-contents {
+    font-size: 16px;
+    margin: 30px 80px 80px 80px;
+    padding: 0 0 80px 0;
+
+    p {
+      line-height: 1.6;
+    }
+  }
+
+  .toastui-editor-defaultUI-toolbar {
+    position: sticky;
+    top: 0;
+    background-color: white;
+  }
+`;
 
 const CustomEditor = ({ onSave }) => {
-  const [content, setContent] = useState("");
   const editorRef = useRef(null);
-  const fileInputRef = useRef(null);
+  const containerRef = useRef(null);
 
-  // 텍스트 서식 지정
-  const formatText = (command, value = null) => {
-    document.execCommand(command, false, value);
-    const updatedContent = editorRef.current.innerHTML;
-    setContent(updatedContent);
-  };
+  useEffect(() => {
+    const editorInstance = editorRef.current.getInstance();
 
-  // 색상 변경
-  const handleColorChange = (e) => {
-    formatText("foreColor", e.target.value);
-  };
+    // 에디터 변경 이벤트 감지
+    editorInstance.on("change", () => {
+      const editorEl = containerRef.current.querySelector(".ProseMirror");
+      if (!editorEl) return;
 
-  // 이미지 업로드 처리
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        formatText("insertImage", e.target.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+      const selection = window.getSelection();
+      if (!selection.rangeCount) return;
 
-  // 실행 취소/다시 실행 처리
-  const handleUndo = () => formatText("undo");
-  const handleRedo = () => formatText("redo");
+      const range = selection.getRangeAt(0);
+      const rect = range.getBoundingClientRect();
 
-  // 이미지 드래그 앤 드롭 처리
-  const handleDrop = useCallback((e) => {
-    e.preventDefault();
-    const file = e.dataTransfer.files[0];
-    if (file && file.type.startsWith("image/")) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        formatText("insertImage", e.target.result);
-      };
-      reader.readAsDataURL(file);
-    }
+      // 현재 커서 위치가 viewport 하단에서 버튼 높이(80px)를 뺀 위치보다 아래에 있는지 확인
+      const bottomThreshold = window.innerHeight - 80;
+
+      if (rect.bottom > bottomThreshold) {
+        // 커서가 버튼에 가려질 경우, 커서 위치가 viewport 중간에 오도록 스크롤
+        const scrollBy = rect.bottom - bottomThreshold + 100; // 여유 공간 100px 추가
+        window.scrollBy({
+          top: scrollBy,
+          behavior: "smooth",
+        });
+      }
+    });
   }, []);
 
+  const handleSave = () => {
+    const editorInstance = editorRef.current.getInstance();
+    const content = editorInstance.getMarkdown();
+    if (onSave) {
+      onSave(content);
+    }
+  };
+
   return (
-    <div className="flex flex-col bg-white">
-      {/* 툴바 */}
-      <div className="px-6 py-2 border-y">
-        <div className="flex gap-2 items-center flex-wrap">
-          {/* 기본 서식 버튼 */}
-          <div className="flex gap-2 border-r pr-2">
-            <button
-              onClick={() => formatText("bold")}
-              className="p-2 hover:bg-gray-100 rounded font-bold"
-              title="굵게"
-            >
-              B
-            </button>
-            <button
-              onClick={() => formatText("italic")}
-              className="p-2 hover:bg-gray-100 rounded italic"
-              title="기울임"
-            >
-              I
-            </button>
-            <button
-              onClick={() => formatText("underline")}
-              className="p-2 hover:bg-gray-100 rounded underline"
-              title="밑줄"
-            >
-              U
-            </button>
-          </div>
-
-          {/* 실행 취소/다시 실행 */}
-          <div className="flex gap-2 border-r pr-2">
-            <button
-              onClick={handleUndo}
-              className="p-2 hover:bg-gray-100 rounded"
-              title="실행 취소"
-            >
-              UNDO
-            </button>
-            <button
-              onClick={handleRedo}
-              className="p-2 hover:bg-gray-100 rounded"
-              title="다시 실행"
-            >
-              REDO
-            </button>
-          </div>
-
-          {/* 이미지 업로드 */}
-          <div className="flex gap-2">
-            <button
-              onClick={() => fileInputRef.current?.click()}
-              className="p-2 hover:bg-gray-100 rounded flex items-center gap-1"
-              title="이미지 삽입"
-            >
-              IMAGE
-            </button>
-            <input
-              type="file"
-              ref={fileInputRef}
-              onChange={handleImageUpload}
-              accept="image/*"
-              className="hidden"
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* 에디터 영역 */}
-      <div
+    <EditorContainer ref={containerRef}>
+      <Editor
         ref={editorRef}
-        contentEditable
-        className="px-6 py-4 min-h-[calc(100vh-200px)] outline-none"
-        onInput={(e) => setContent(e.currentTarget.innerHTML)}
-        onDrop={handleDrop}
-        onDragOver={(e) => e.preventDefault()}
-        placeholder="글을 입력해주세요."
+        initialValue=""
+        previewStyle="vertical"
+        initialEditType="wysiwyg"
+        hideModeSwitch={true}
+        useCommandShortcut={true}
+        autofocus={false}
+        placeholder="내용을 입력해주세요"
+        toolbarItems={[
+          ["heading", "bold", "italic", "strike"],
+          ["hr"],
+          ["ul", "ol"],
+          ["image"],
+        ]}
       />
-    </div>
+    </EditorContainer>
   );
 };
 
