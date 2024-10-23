@@ -45,14 +45,14 @@ const Icon = styled.img`
   left: 24px;
 `;
 
-function Input({ width, type, placeholder, center, error, ...props }) {
-  const renderIcon = (type) => {
-    if (type) {
+function Input({ width, the_type, placeholder, center, error, ...props }) {
+  const renderIcon = (the_type) => {
+    if (the_type) {
       let path = "";
-      if (type === "search") path = "/search-status.svg";
-      if (type === "sms") path = "/sms.svg";
-      if (type === "password") path = "/password-check.svg";
-      if (type === "user") path = "/user-edit.svg";
+      if (the_type === "search") path = "/search-status.svg";
+      if (the_type === "sms") path = "/sms.svg";
+      if (the_type === "password") path = "/password-check.svg";
+      if (the_type === "user") path = "/user-edit.svg";
 
       return <Icon src={path} alt="" />;
     }
@@ -61,14 +61,14 @@ function Input({ width, type, placeholder, center, error, ...props }) {
   return (
     <div style={{ position: "relative" }}>
       <StyledInput
-        the_type={type}
+        the_type={the_type}
         width={width}
         placeholder={placeholder}
         center={center}
         error={error}
         {...props}
       ></StyledInput>
-      {renderIcon(type)}
+      {renderIcon(the_type)}
     </div>
   );
 }
