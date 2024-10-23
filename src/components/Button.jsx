@@ -60,7 +60,6 @@ function Button({ text, type, width, btnClick, disabled, ...props }) {
         return (
           <>
             <img src="/folder-add.svg" />
-
             <p style={{ color: disabled ? `#94A3B8` : "white" }}>
               {text ? text : `스페이스 생성`}
             </p>
@@ -79,7 +78,6 @@ function Button({ text, type, width, btnClick, disabled, ...props }) {
         return (
           <>
             <img src="/heart.svg" />
-
             <p style={{ color: disabled ? `#94A3B8` : "white" }}>
               {text ? text : `이웃 추가`}
             </p>
