@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import theme from "../../../theme";
 import DynamicSVG from "../../../components/DynamicSVG";
+import { useState } from "react";
+import SpaceSelectorModal from "./SpaceSelectorModal";
 
 const SpaceArea = styled.div`
   display: flex;
@@ -32,14 +34,19 @@ const Location = styled.div`
 `;
 
 const SpaceSelector = () => {
+  const [isModal, setIsModal] = useState(false);
+
   return (
-    <SpaceArea>
-      <Space>스페이스를 선택하세요</Space>
-      <Location>
-        <DynamicSVG svgUrl="/location.svg" color={theme.colors.neutral400} />
-        City, Nation
-      </Location>
-    </SpaceArea>
+    <>
+      <SpaceSelectorModal isModal={isModal} setIsModal={setIsModal} />
+      <SpaceArea onClick={() => setIsModal(!isModal)}>
+        <Space>스페이스를 선택하세요</Space>
+        <Location>
+          <DynamicSVG svgUrl="/location.svg" color={theme.colors.neutral400} />
+          City, Nation
+        </Location>
+      </SpaceArea>
+    </>
   );
 };
 

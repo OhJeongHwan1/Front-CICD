@@ -121,7 +121,7 @@ function CustomModal({
           />
           <div>{title}</div>
           <CloseButton onClick={modalClose}>
-            <img src="./close-circle.svg" alt="" />
+            <img src="/close-circle.svg" alt="" />
           </CloseButton>
         </TitleArea>
         <ContentArea noBottom={noBottom}>{children}</ContentArea>
