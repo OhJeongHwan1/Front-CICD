@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import CustomModal from "./CustomModal";
+import CustomModal from "../../../components/CustomModal";
 import styled from "styled-components";
-import theme from "../theme";
-import Input from "./Input";
-import SelectedButton from "./SelectedButton";
-import DynamicSVG from "./DynamicSVG";
-import CustomDatePicker from "./CustomDatePicker";
-import { formatDate } from "../time";
+import theme from "../../../theme";
+import Input from "../../../components/Input";
+import SelectedButton from "../../../components/SelectedButton";
+import DynamicSVG from "../../../components/DynamicSVG";
+import CustomDatePicker from "../../../components/CustomDatePicker";
+import { formatDate } from "../../../time";
 
 const Title = styled.p`
   font-size: ${theme.fontSizes.h4};
@@ -95,7 +95,7 @@ const InputArea = ({ title, discription, children }) => {
   );
 };
 
-function SpaceAddModal({ spaceModal, handleClose }) {
+function ScheduleSelectorModal({ modal, handleClose }) {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [memberNum, setMemberNum] = useState(4);
@@ -119,7 +119,7 @@ function SpaceAddModal({ spaceModal, handleClose }) {
 
   return (
     <CustomModal
-      modal={spaceModal}
+      modal={modal}
       modalClose={handleClose}
       title="새로운 스페이스 만들기"
       titleIcon="/folder-add2.svg"
@@ -201,4 +201,4 @@ function SpaceAddModal({ spaceModal, handleClose }) {
   );
 }
 
-export default SpaceAddModal;
+export default ScheduleSelectorModal;

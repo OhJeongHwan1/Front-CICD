@@ -1,6 +1,14 @@
 import CustomModal from "../../../components/CustomModal";
+import SmallSpaceCard from "./SmallSpaceCard";
+import styled from "styled-components";
 
-const SpaceSelectorModal = ({ isModal, setIsModal }) => {
+const SpaceWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+`;
+
+const SpaceSelectorModal = ({ isModal, setIsModal, setSpace }) => {
   return (
     <CustomModal
       modal={isModal}
@@ -13,7 +21,11 @@ const SpaceSelectorModal = ({ isModal, setIsModal }) => {
       statusText=""
       noBottom={false}
     >
-      하이
+      <SpaceWrapper>
+        <SmallSpaceCard onClick={() => setSpace({})} />
+        <SmallSpaceCard onClick={() => setSpace({})} />
+        <SmallSpaceCard onClick={() => setSpace({})} />
+      </SpaceWrapper>
     </CustomModal>
   );
 };

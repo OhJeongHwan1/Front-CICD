@@ -139,7 +139,7 @@ function PostingAdd() {
     <PostingAddContainer>
       <EditorContainer>
         <EditorHeader>
-          <SpaceSelector />
+          <SpaceSelector setSpace={setSpace} />
           <TitleArea>
             <TitleInput
               placeholder="제목을 입력하세요."
