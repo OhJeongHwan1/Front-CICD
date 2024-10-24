@@ -78,6 +78,8 @@ const AddButton = styled.div`
   font-size: ${theme.fontSizes.sm};
   font-weight: ${theme.fontWeight.regular};
   cursor: pointer;
+  height: 52px;
+  line-height: 52px;
 
   &:hover {
     opacity: 0.7;

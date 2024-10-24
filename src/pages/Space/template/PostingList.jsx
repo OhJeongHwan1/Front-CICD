@@ -35,8 +35,12 @@ const PostingArea = styled.div`
 `;
 
 function PostingList({ postingList }) {
-  const { user } = useSelector(selectUser);
+  // const { user } = useSelector(selectUser);
   const navigate = useNavigate();
+
+  const moveToPostingDetail = (id) => {
+    navigate(`/posting/detail/${id}`);
+  };
 
   return (
     <Container>
@@ -64,9 +68,10 @@ function PostingList({ postingList }) {
               commentsCount={posting.commentCnt}
               createAt={posting.createdAt}
               nickname={posting.wirterNickname}
-              isMine={user.nickname === posting.wirterNickname}
+              // isMine={user.nickname === posting.wirterNickname}
               profileImg={posting.mainImgUrl}
               // 작성자 profile 이미지 추가되야함.
+              onClick={() => moveToPostingDetail(posting.postingId)}
             />
           );
         })}

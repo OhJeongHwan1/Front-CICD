@@ -9,9 +9,14 @@ import MyCommentComp from "./template/MyCommentComp";
 import FollowComp from "./template/FollowComp";
 
 const Background = styled.div`
-  background-color: ${theme.colors.neutral100};
   width: 100%;
   min-height: 100vh;
+  padding-right: 30px;
+  min-width: 1280px;
+  padding-top: 30px;
+  position: relative;
+  top: -30px;
+  background-color: ${theme.colors.neutral100};
 `;
 
 const MyPageTopSection = styled.div`

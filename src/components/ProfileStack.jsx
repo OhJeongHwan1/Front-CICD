@@ -16,10 +16,15 @@ const ProfileImage = styled.img`
   }
 `;
 
-const ProfileStack = ({ profileList, size = 24, borderColor = "white" }) => {
+const ProfileStack = ({
+  profileList,
+  size = 24,
+  borderColor = "white",
+  ...props
+}) => {
   return (
-    <ProfileStackContainer>
-      {profileList.slice(0, 3).map((profileUrl, index) => (
+    <ProfileStackContainer {...props}>
+      {profileList?.slice(0, 3).map((profileUrl, index) => (
         <ProfileImage
           key={index}
           src={profileUrl}
@@ -28,13 +33,13 @@ const ProfileStack = ({ profileList, size = 24, borderColor = "white" }) => {
           style={{ zIndex: profileList.length - index }}
         />
       ))}
-      {profileList.length > 3 && (
+      {profileList?.length > 3 && (
         <div
           className="flex items-center justify-center -ml-1"
           style={{ width: size, height: size }}
         >
           <span className="text-xs text-gray-500 font-bold">
-            +{profileList.length - 3}
+            +{profileList?.length - 3}
           </span>
         </div>
       )}
