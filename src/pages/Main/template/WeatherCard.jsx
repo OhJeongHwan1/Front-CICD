@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import theme from "../../../theme";
+import DynamicSVG from "../../../components/DynamicSVG";
 
 export const getWeatherInKorean = (weatherDescription) => {
   const weatherMap = {
@@ -62,19 +63,15 @@ export const getWeatherInKorean = (weatherDescription) => {
 export const getWeatherIcon = (weatherDescription) => {
   const iconMap = {
     thunderstorm: "thunder",
-
     drizzle: "rain",
     "light rain": "rain",
     "moderate rain": "rain",
     "heavy intensity rain": "rain",
-
     snow: "snow",
     sleet: "snow",
-
     mist: "fog",
     fog: "fog",
     haze: "fog",
-
     "clear sky": "sun",
     "few clouds": "cloud-sunny",
     "scattered clouds": "cloud",
@@ -94,23 +91,29 @@ const Container = styled.div`
   border-radius: ${theme.borderRadius.md};
 `;
 
+const HeaderArea = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
 const Label = styled.div`
-  font-size: 14px;
-  color: #666;
+  font-size: ${theme.fontSizes.h4};
+  color: ${theme.colors.neutral700};
+  font-weight: ${theme.fontWeight.header};
   margin-bottom: 4px;
 `;
 
 const Temperature = styled.div`
-  font-size: 24px;
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 16px;
+  font-size: ${theme.fontSizes.xl};
+  color: ${theme.colors.neutral700};
+  font-weight: ${theme.fontWeight.light};
 `;
 
 const WeatherInfo = styled.div`
-  font-size: 14px;
-  color: #666;
-  margin-top: 4px;
+  font-size: ${theme.fontSizes.sm};
+  color: ${theme.colors.neutral700};
+  font-weight: ${theme.fontWeight.light};
 `;
 
 const ForecastContainer = styled.div`
@@ -118,7 +121,6 @@ const ForecastContainer = styled.div`
   justify-content: space-between;
   margin-top: 16px;
   padding-top: 16px;
-  border-top: 1px solid #eee;
 `;
 
 const DayForecast = styled.div`
@@ -131,31 +133,24 @@ const DayForecast = styled.div`
 
 const Day = styled.div`
   font-size: 12px;
-  color: #666;
+  color: ${theme.colors.neutral400};
   margin-bottom: 4px;
 `;
 
 const DayTemp = styled.div`
   font-size: 14px;
-  font-weight: 500;
-  color: #333;
-`;
-
-const WeatherDescription = styled.div`
-  font-size: 12px;
-  color: #666;
-  margin-top: 4px;
-  word-break: keep-all;
+  font-weight: ${theme.fontWeight.light};
+  color: ${theme.colors.neutral400};
 `;
 
 const LoadingState = styled.div`
   text-align: center;
-  color: #666;
+  color: ${theme.colors.neutral400};
   padding: 20px;
 `;
 
 const ErrorState = styled.div`
-  color: #e74c3c;
+  color: ${theme.colors.error};
   text-align: center;
   padding: 20px;
 `;
@@ -182,7 +177,6 @@ const WeatherCard = ({ city = "seoul" }) => {
 
         const data = await response.json();
 
-        // 현재 날씨 설정
         setCurrentWeather({
           temp: Math.round(data.list[0].main.temp),
           humidity: data.list[0].main.humidity,
@@ -190,10 +184,9 @@ const WeatherCard = ({ city = "seoul" }) => {
           feelsLike: Math.round(data.list[0].main.feels_like),
         });
 
-        // 3시간 단위의 데이터를 하루 단위로 변환
         const dailyData = data.list
-          .filter((item, index) => index % 8 === 0) // 24시간을 3시간으로 나누면 8
-          .slice(0, 7) // 7일치 데이터
+          .filter((item, index) => index % 8 === 0)
+          .slice(0, 7)
           .map((item) => {
             const date = new Date(item.dt * 1000);
             const today = new Date();
@@ -210,6 +203,7 @@ const WeatherCard = ({ city = "seoul" }) => {
               day: dayLabel,
               temp: Math.round(item.main.temp),
               weather: item.weather[0].description,
+              icon: getWeatherIcon(item.weather[0].description),
             };
           });
 
@@ -243,28 +237,49 @@ const WeatherCard = ({ city = "seoul" }) => {
 
   return (
     <Container>
-      <Label>날씨</Label>
-      <Temperature>
-        {currentWeather?.temp}°C
-        <span
-          style={{
-            fontSize: "14px",
-            color: "#666",
-            marginLeft: "8px",
-          }}
-        >
-          체감 {currentWeather?.feelsLike}°C
-        </span>
-      </Temperature>
-      <WeatherInfo>
-        습도: {currentWeather?.humidity}% | {currentWeather?.description}
-      </WeatherInfo>
+      <HeaderArea>
+        <div>
+          <Label>날씨</Label>
+          <Temperature>
+            {currentWeather?.temp}°C
+            <span
+              style={{
+                fontSize: theme.fontSizes.sm,
+                color: theme.colors.neutral400,
+                marginLeft: "8px",
+              }}
+            >
+              체감 {currentWeather?.feelsLike}°C
+            </span>
+          </Temperature>
+          <WeatherInfo>습도: {currentWeather?.humidity}%</WeatherInfo>
+        </div>
+        <div className="flex flex-col items-center">
+          <div className="mt-6" />
+          <DynamicSVG
+            svgUrl={getWeatherIcon(currentWeather?.description)}
+            color={theme.colors.neutral700}
+            width={48}
+            height={48}
+            alt="weather icon"
+          />
+          <WeatherInfo>
+            {getWeatherInKorean(currentWeather?.description)}{" "}
+          </WeatherInfo>
+        </div>
+      </HeaderArea>
       <ForecastContainer>
         {weatherData.map((day, index) => (
           <DayForecast key={index}>
             <Day>{day.day}</Day>
-            <DayTemp>{day.temp}°</DayTemp>
-            <WeatherDescription>{day.weather}</WeatherDescription>
+            <DynamicSVG
+              svgUrl={day.icon}
+              color={theme.colors.neutral500}
+              width={24}
+              height={24}
+              alt="weather icon"
+            />
+            <DayTemp>{day.temp}°C</DayTemp>
           </DayForecast>
         ))}
       </ForecastContainer>

@@ -69,7 +69,7 @@ const LoadingContainer = styled.div`
 `;
 
 const MainImg = styled.img`
-  width: 420px;
+  width: 100%;
   height: 260px;
   border-radius: ${theme.borderRadius.md};
 `;
@@ -219,7 +219,7 @@ function Main() {
   if (loading && !data.length) {
     return (
       <>
-        <CustomLoading />
+        <CustomLoading isFullScreen={true} />
         <Background />
       </>
     );
@@ -238,9 +238,7 @@ function Main() {
       </HeaderArea>
       <BodyArea>
         <CardArea>
-          <div
-            style={{ position: "relative", width: "420px", minWidth: "420px" }}
-          >
+          <div style={{ position: "relative", minWidth: "420px" }}>
             <MainImg alt="" src="https://picsum.photos/300/300/?image=103" />
             <MainImgText>{location.name}</MainImgText>
           </div>
@@ -272,7 +270,7 @@ function Main() {
         )}
         {hasMore && (
           <LoadingContainer ref={loadingRef}>
-            {loading && <CustomLoading isFullScreen={true} />}
+            {loading && <CustomLoading isFullScreen={false} />}
           </LoadingContainer>
         )}
       </BodyArea>

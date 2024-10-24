@@ -29,7 +29,7 @@ export default [
       ...react.configs["jsx-runtime"].rules,
       ...reactHooks.configs.recommended.rules,
       "react/jsx-no-target-blank": "off",
-      "no-unused-vars": ["error", { varsIgnorePattern: "React" }], //'React' is defined but never used. 에러 방지용
+      "no-unused-vars": "off", // 모든 미사용 변수 허용
       "react/prop-types": "off", // prop-types 관련 에러 방지용
       "react-refresh/only-export-components": [
         "warn",
