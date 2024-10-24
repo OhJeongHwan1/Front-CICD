@@ -74,6 +74,7 @@ const initialSelectedState = {
 function MyInfo() {
   const [nickname, setNickname] = useState("Username");
   const [email, setEmail] = useState("defaultuser@naver.com");
+  const [profile, setProfile] = useState("./Default Profile.png");
   const [total, setTotal] = useState({
     space: 0,
     posting: 0,
@@ -81,7 +82,7 @@ function MyInfo() {
     follow: 0,
   });
   const [selectedItems, setSelectedItems] = useState(initialSelectedState);
-  const [spaceRes, setSpaceRes] = useState();
+  const [spaceResponse, setSpaceResponse] = useState();
 
   useEffect(() => {
     // 첫 렌더링 시 스페이스 정보 들고 오는 로직 추가해야 함.
@@ -122,7 +123,11 @@ function MyInfo() {
   return (
     <Background>
       <MyPageTopSection>
-        <UserProfileCard nickname={nickname} email={email}></UserProfileCard>
+        <UserProfileCard
+          profile={profile}
+          nickname={nickname}
+          email={email}
+        ></UserProfileCard>
         <MyPageSelectList>
           <SelectListItem onClick={() => handleItemClick("space")}>
             <IconAndTotal>

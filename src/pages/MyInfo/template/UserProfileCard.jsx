@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import theme from "../../../theme";
 import styled from "styled-components";
 import DynamicSVG from "../../../components/DynamicSVG";
-import CustomModal from "../../../components/CustomModal";
+import UserProfileModal from "./UserProfileModal";
 
 const Border = styled.div`
   display: flex;
@@ -25,24 +25,29 @@ const Email = styled.div`
 
 function UserProfileCard(props) {
   const [isHovered, setIsHovered] = useState(false);
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [nickname, setNickname] = useState(props.nickname);
 
-  const handleClose = () => {};
+  const handleModal = () => {
+    setModalOpen(!isModalOpen);
+  };
 
   return (
     <>
       <Border
+        onClick={handleModal}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
         <div className="flex justify-cetner items-center pl-7 pr-7 pt-4 pb-4">
           <div className="flex justify-center items-center">
             <img
-              src="./Default Profile.png"
+              src={props.profile}
               style={{ minWidth: "80px", height: "auto" }}
-            ></img>
+            />
           </div>
           <div className="flex flex-col ml-7">
-            <Nickname>{props.nickname}</Nickname>
+            <Nickname>{nickname}</Nickname>
             <Email>{props.email}</Email>
           </div>
           <DynamicSVG
@@ -51,18 +56,18 @@ function UserProfileCard(props) {
             width={45}
             height={45}
             color={isHovered ? `${theme.colors.neutral400}` : "white"}
-          ></DynamicSVG>
+          />
         </div>
       </Border>
-      <CustomModal
-        titleIcon={"/user-tag.svg"}
-        title={"내 정보 수정"}
-        modal={false}
-        modalClose={handleClose}
-        noBottom={true}
-      >
-        <div></div>
-      </CustomModal>
+
+      <UserProfileModal
+        isOpen={isModalOpen}
+        onClose={handleModal}
+        profile={props.profile}
+        email={props.email}
+        nickname={nickname}
+        onNicknameChange={setNickname}
+      />
     </>
   );
 }
