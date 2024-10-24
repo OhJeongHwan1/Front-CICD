@@ -113,9 +113,10 @@ function PostingCard({
   isMine,
   nickname,
   profileImg,
+  ...props
 }) {
   return (
-    <StyledPosting width={width} $ismine={isMine} onClick={onClick}>
+    <StyledPosting width={width} $ismine={isMine} onClick={onClick} {...props}>
       <ImageContainer>
         <StyledImg
           src={mainImg}

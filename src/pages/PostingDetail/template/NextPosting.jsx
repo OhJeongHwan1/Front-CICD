@@ -59,10 +59,20 @@ const IconRight = styled.div`
 const NextPosting = ({ isDisabled, isNext, postingId, postingTitle }) => {
   const navigate = useNavigate();
 
+  const goToPrevPage = () => {
+    navigate(`/posting/detail/${parseInt(postingId) + 1}`);
+    window.scrollTo({ top: 0, behavior: "auto" });
+  };
+
+  const goToNextPage = () => {
+    navigate(`/posting/detail/${parseInt(postingId) - 1}`);
+    window.scrollTo({ top: 0, behavior: "auto" });
+  };
+
   const onClick = () => {
     if (!isDisabled) {
-      if (isNext) navigate(`/posting/detail/${parseInt(postingId) + 1}`);
-      else navigate(`/posting/detail/${parseInt(postingId) - 1}`);
+      if (isNext) goToPrevPage();
+      else goToNextPage();
     }
   };
 
