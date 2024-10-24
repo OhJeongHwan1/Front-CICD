@@ -142,7 +142,7 @@ function NavigationBar() {
         />
         <Input
           value={searchQuery}
-          type="search"
+          the_type="search"
           placeholder="여행 기록을 검색해보세요!"
           width={`450px`}
           onChange={(e) => {

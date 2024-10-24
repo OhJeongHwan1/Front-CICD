@@ -1,8 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 import theme from "../../../theme";
-import DynamicSVG from "../../../components/DynamicSVG";
 import Member from "./Member";
+import { setMemberInviteModal } from "../../../redux/modalSlice";
+import { useDispatch } from "react-redux";
 
 const Container = styled.div`
   width: calc(36% - 20px);
@@ -79,12 +80,13 @@ const InviteMessage = styled.div`
 `;
 
 function JoinMember({ maxMembers, members, leaderId }) {
+  const dispatch = useDispatch();
   const renderMessage = () => {
     if (maxMembers > members.length)
       return (
         <div className="flex gap-[6px]">
           <p>아직 멤버를 초대할 수 있어요!</p>
-          <InviteMessage onClick={() => alert("멤버 초대하기")}>
+          <InviteMessage onClick={() => dispatch(setMemberInviteModal(true))}>
             멤버 초대하기
           </InviteMessage>
         </div>
@@ -95,13 +97,6 @@ function JoinMember({ maxMembers, members, leaderId }) {
     <Container>
       <Top>
         <p>{`참여 멤버 (${members.length}/${maxMembers})`}</p>
-        <DynamicSVG
-          svgUrl="/setting-2.svg"
-          width={32}
-          height={32}
-          color={theme.colors.neutral400}
-          style={{ cursor: "pointer" }}
-        />
       </Top>
 
       <ContentArea>

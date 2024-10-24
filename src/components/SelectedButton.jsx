@@ -5,6 +5,7 @@ import theme from "../theme";
 import LocationSelectModal from "./LocationSelectModal";
 import { useDispatch } from "react-redux";
 import { setLocationModal } from "../redux/modalSlice";
+import { nationCodeToName, cityCodeToName } from "../data/LocationCode";
 
 const StyledButton = styled.div`
   cursor: pointer;
@@ -26,8 +27,17 @@ const StyledP = styled.p`
   font-weight: ${theme.fontWeight.light};
 `;
 
-function SelectedButton({ setLocate, width, color }) {
-  const [location, setLocation] = useState(null);
+function SelectedButton({ setLocate, width, color, locate }) {
+  const [location, setLocation] = useState(
+    locate
+      ? {
+          name: cityCodeToName[locate.city],
+          city: locate.city,
+          nation: locate.nation,
+          nationName: nationCodeToName[locate.nation],
+        }
+      : null
+  );
   const [origin, setOrign] = useState(null);
   const dispatch = useDispatch();
 

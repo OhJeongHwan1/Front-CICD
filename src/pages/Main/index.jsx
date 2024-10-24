@@ -37,7 +37,7 @@ function Main() {
       <EditButton btnClick={handleClick} width={`150px`} text="수정" />
       <br></br>
       <Input
-        type="search"
+        the_type="search"
         placeholder="검색어를 입력해주세여."
         center={true}
         error={true}

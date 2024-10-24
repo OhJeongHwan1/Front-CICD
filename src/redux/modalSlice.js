@@ -4,6 +4,8 @@ const initialState = {
   locationModal: false,
   scheduleModal: false,
   scheduleAddModal: false,
+  spaceEditModal: false,
+  memberInviteModal: false,
   //
 };
 
@@ -20,11 +22,22 @@ export const modalSlice = createSlice({
     setScheduleAddModal: (state, action) => {
       state.scheduleAddModal = action.payload;
     },
+    setSpaceEditModal: (state, action) => {
+      state.spaceEditModal = action.payload;
+    },
+    setMemberInviteModal: (state, action) => {
+      state.memberInviteModal = action.payload;
+    },
   },
 });
 
-export const { setLocationModal, setScheduleModal, setScheduleAddModal } =
-  modalSlice.actions;
+export const {
+  setLocationModal,
+  setScheduleModal,
+  setScheduleAddModal,
+  setSpaceEditModal,
+  setMemberInviteModal,
+} = modalSlice.actions;
 
 export const selectModal = (state) => state.modal;
 
