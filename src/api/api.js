@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "http://haneol-test.kro.kr ";
+const BASE_URL = "http://haneol-test.kro.kr";
 
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
@@ -28,6 +28,8 @@ export default {
     axiosInstance.get(
       `api/posting/search?nationCode=${data.nationCode}&cityCode=${data.cityCode}&writerNickname=${data.writerNickname}&title=${data.title}`
     ),
+
+  postPosting: (data) => axiosInstance.post(`api/posting`, data),
 };
 
 // 회원가입 API

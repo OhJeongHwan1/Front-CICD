@@ -27,6 +27,16 @@ export const getPostingListAsync = createAsyncThunk(
   }
 );
 
+export const postPostingAsync = createAsyncThunk(
+  "map/postPosting",
+  async (data) => {
+    const response = await api.postPosting(data);
+    const { result } = response.data;
+
+    return result;
+  }
+);
+
 export const postingSlice = createSlice({
   name: "posting",
   initialState,
