@@ -33,12 +33,18 @@ const Location = styled.div`
   color: ${theme.colors.neutral400};
 `;
 
-const SpaceSelector = () => {
+const SpaceSelector = ({ setSpace }) => {
   const [isModal, setIsModal] = useState(false);
 
   return (
     <>
-      <SpaceSelectorModal isModal={isModal} setIsModal={setIsModal} />
+      {
+        <SpaceSelectorModal
+          setSpace={setSpace}
+          isModal={isModal}
+          setIsModal={setIsModal}
+        />
+      }
       <SpaceArea onClick={() => setIsModal(!isModal)}>
         <Space>스페이스를 선택하세요</Space>
         <Location>

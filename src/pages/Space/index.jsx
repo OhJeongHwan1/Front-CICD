@@ -4,7 +4,6 @@ import theme from "../../theme";
 import { selectSpace } from "../../redux/spaceSlice";
 import { useDispatch, useSelector } from "react-redux";
 import DynamicSVG from "../../components/DynamicSVG";
-import { formatDate } from "../../time";
 import { nationCodeToName, cityCodeToName } from "../../data/LocationCode";
 import JoinMember from "./template/JoinMember";
 import Schedule from "./template/Schedule";
