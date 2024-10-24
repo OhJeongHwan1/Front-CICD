@@ -129,9 +129,9 @@ function Register() {
   const handleNext = async () => {
     console.log("현재 step: ", step);
     if (step === 1) {
-      const res = await sendEmailCode(email);
+      const res = sendEmailCode(email);
       if (res.status === 400) {
-        alert("에러");
+        alert("이미 가입된 이메일이거나 잘못된 요청입니다.");
         return;
       }
     } else if (step === 2) {

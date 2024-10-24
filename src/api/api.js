@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "http://localhost:8080";
+const BASE_URL = "http://haneol-test.kro.kr";
 
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
@@ -30,7 +30,7 @@ export default {
     ),
 };
 
-// 회원가입 API
+// 회원가입
 export const sendEmailCode = async (email) => {
   try {
     const res = await axiosInstance.post(
@@ -97,52 +97,46 @@ export const signUp = async (email, password, nickname) => {
   }
 };
 
-// 로그인 API
+// 로그인
 export const login = async (email, password) => {
   try {
-    const data = {
-      email: email,
-      password: password,
-    };
+    const data = { email, password };
 
-    const res = await axiosInstance.post(
-      "api/user/login",
-      JSON.stringify(data),
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const res = await axiosInstance.post("/api/user/login", data, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
-    if (res.status === 200) {
-      // 헤더에서 토큰을 추출해서 localStorage에 저장한다.
-      const token = res.headers["authorization"];
+    const token = res.data.token; // 응답 본문에서 token을 추출
+    const expiresIn = res.data.expiresIn; // 만료 시간 확인
 
+    if (token) {
       localStorage.setItem("token", token);
-      console.log("Login SUCCESS.");
+      console.log("Token received: ", token);
+      console.log("Expires in: ", expiresIn);
       return true;
     } else {
-      console.error("Login FAILED.");
+      console.error("Token is undefined.");
       return false;
     }
   } catch (error) {
-    console.error("Erro during login:", error);
+    console.error("Error during login:", error);
     return false;
   }
 };
 
-export const getMyPostings = async () => {
-  const response = await fetch("/api/my-postings", {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
-    },
-  });
-
-  if (!response.ok) {
-    throw new Error("Failed to fetch posts");
+// 회원 탈퇴
+export const resignation = async (accessToken) => {
+  try {
+    const res = await axiosInstance.delete("api/user", {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return res.data;
+  } catch (error) {
+    console.error("Error during resignation:", error);
+    throw error;
   }
-
-  return response.json();
 };
