@@ -12,7 +12,6 @@ import SpaceAddModal from "./SpaceAddModal";
 import LoginModal from "./LoginModal";
 import LocationSelectModal from "./LocationSelectModal";
 
-
 const NavContainer = styled.div`
   position: fixed;
   top: 0;
@@ -148,7 +147,7 @@ function NavigationBar() {
             className="flex items-center gap-[24px] cursor-pointer"
             onClick={moveToMyInfo}
           >
-            <ProfileImg alt="" src={user.profile} />
+            <ProfileImg alt="/Default Profile.png" src={user.profile} />
             <NickName>{user.nickname}</NickName>
           </div>
         )}

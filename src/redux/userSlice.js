@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   user: {
+    userId: 0,
     nickname: "sdaddasdsdad",
     profile: "/Default Profile.png",
   },

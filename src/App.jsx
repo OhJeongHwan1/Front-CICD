@@ -25,7 +25,7 @@ function App() {
           />
           <Route path="/search" element={<Search />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/space" element={<Space />} />
+          <Route path="/space/:id" element={<Space />} />
         </Routes>
       </div>
     </>
