@@ -13,7 +13,28 @@ import { sendEmailCode, signUp, verifyEmailCode } from "../../api/api";
 const Background = styled.div`
   background-color: ${theme.colors.neutral100};
   width: 100%;
-  min-height: calc(100vh - 100px);
+  min-height: calc(100vh - 90px);
+`;
+
+const BackgroundImg = styled.div`
+  display: block;
+  position: fixed;
+  top: 200px;
+  left: 200px;
+  height: 480px;
+  width: 480px;
+  background: url("/RegisterBanner.png") no-repeat;
+  background-size: cover;
+
+  @media (max-width: 1560px) {
+    top: 280px;
+    height: 360px;
+    width: 360px;
+  }
+
+  @media (max-width: 1280px) {
+    display: none;
+  }
 `;
 
 const Layout = styled.div`
@@ -149,6 +170,7 @@ function Register() {
 
   return (
     <Background>
+      <BackgroundImg />
       <Layout>
         <RegisterSection>
           <RegisterTop>

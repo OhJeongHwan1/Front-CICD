@@ -8,6 +8,9 @@ import DynamicSVG from "../../components/DynamicSVG";
 import CustomViewer from "./template/CustomViewer";
 import Comments from "./template/Comments";
 import TopButton from "../../components/TopButton";
+import axios from "axios";
+import SpaceCard from "./template/SpaceCard";
+import NextPosting from "./template/NextPosting";
 
 const PostingDetailContainer = styled.div`
   display: flex;
@@ -116,13 +119,12 @@ function PostingDetail() {
     const fetchPostData = async () => {
       try {
         setLoading(true);
-        // API 호출
-        // const response = await fetch(`/api/posting/${postingId}`);
-        // const data = await response.json();
+        // Axios API 호출
+        // const response = await axios.get(`/api/posting/${postingId}`);
 
-        // Dummy Data
-        const data = {
-          space: "새로운 여행01",
+        // Dummy Data (API 연동 전까지 사용)
+        const dummyData = {
+          space: `새로운 여행01`,
           spaceParticipantsProfile: [
             "https://i.imgur.com/VnZtNxH.png",
             "https://i.imgur.com/aXtrK5E.png",
@@ -133,15 +135,15 @@ function PostingDetail() {
           ],
           spaceStartDate: "2024-10-10",
           spaceEndDate: "2024-10-21",
-          postingId: 1,
-          nextPostingId: 2,
-          prevPostingId: null,
+          postingId: postingId,
+          prevPostingTitle: `미국 여행 #${parseInt(postingId) - 1}`,
+          nextPostingTitle: `미국 여행 #${parseInt(postingId) + 1}`,
           nation: "미국",
           city: "샌프란시스코",
           writerProfile: "https://i.imgur.com/VnZtNxH.png",
           writerNickname: "USER001",
           writerEmail: "abcd@gmail.com",
-          title: "미국 여행 준비",
+          title: `미국 여행 #${postingId}`,
           accessLevel: "MEMBER_ONLY",
           mainImgUrl: "https://i.imgur.com/0TIs0vO.png",
           content:
@@ -150,9 +152,16 @@ function PostingDetail() {
           scheduleDate: "2024-10-11",
         };
 
-        setPostData(data);
+        // API 연동 시에는 response.data를 사용하고, 더미데이터는 주석처리
+        // setPostData(response.data);
+        setPostData(dummyData);
       } catch (error) {
-        console.error("게시글을 불러오는데 실패했습니다:", error);
+        // Axios 에러 처리
+        if (axios.isAxiosError(error)) {
+          console.error("API 에러:", error.response?.data || error.message);
+        } else {
+          console.error("게시글을 불러오는데 실패했습니다:", error);
+        }
       } finally {
         setLoading(false);
       }
@@ -221,9 +230,31 @@ function PostingDetail() {
           </InfoItem>
         </InfoArea>
         <CustomViewer content={postData.content} />
-        <AssociatedPostingArea>미국여행 준비</AssociatedPostingArea>
+        <AssociatedPostingArea>
+          <NextPosting
+            isDisabled={parseInt(postingId) == 1}
+            isNext={false}
+            postingId={postingId}
+            postingTitle={postData.prevPostingTitle}
+          />
+          <SpaceCard
+            space={postData.space}
+            nation={postData.nation}
+            city={postData.city}
+            spaceParticipantsProfile={postData.spaceParticipantsProfile}
+            spaceStartDate={postData.spaceStartDate}
+            spaceEndDate={postData.spaceEndDate}
+          />
+          <NextPosting
+            isDisabled={parseInt(postingId) == 2}
+            isNext={true}
+            postingId={postingId}
+            postingTitle={postData.nextPostingTitle}
+          />
+        </AssociatedPostingArea>
       </PostingContainer>
-      <Comments commentList={[]} />
+      <Comments postingId={postingId} />
+      <div className="mb-32" />
       <TopButton />
       <Background />
     </PostingDetailContainer>

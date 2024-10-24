@@ -6,15 +6,20 @@ import CustomModal from "../../components/CustomModal";
 import PostingCard from "../../components/PostingCard";
 import theme from "../../theme";
 import ProfileStack from "../../components/ProfileStack";
+import { useNavigate } from "react-router";
 
 function Main() {
   const [modal, setModal] = useState(false);
-
+  const navigate = useNavigate();
   const modalClose = () => {
     setModal(false);
   };
   const handleClick = () => {
     alert("dsadadsad");
+  };
+
+  const goToPostingDetailPage = (postingId) => {
+    navigate(`/posting/detail/${postingId}`);
   };
 
   return (
@@ -62,9 +67,7 @@ function Main() {
       <br></br>
       <Input type="searc" placeholder="검색어를 입력해주세여." />
       <PostingCard
-        onClick={() => {
-          alert("hi");
-        }}
+        onClick={() => goToPostingDetailPage(1)}
         width={100 / 2}
         title={
           "오사카 여행일지 #4 오사카 여행일지 #4 오사카 여행일지 #4 오사카 여행일지 #4"
