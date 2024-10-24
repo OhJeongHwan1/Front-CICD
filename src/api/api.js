@@ -28,6 +28,8 @@ export default {
     axiosInstance.get(
       `api/posting/search?nationCode=${data.nationCode}&cityCode=${data.cityCode}&writerNickname=${data.writerNickname}&title=${data.title}`
     ),
+
+  postPosting: (data) => axiosInstance.post(`api/posting`, data),
 };
 
 // 회원가입

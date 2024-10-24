@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   locationModal: false,
+  locationModal2: false,
   scheduleModal: false,
   scheduleAddModal: false,
   spaceEditModal: false,
@@ -15,6 +16,9 @@ export const modalSlice = createSlice({
   reducers: {
     setLocationModal: (state, action) => {
       state.locationModal = action.payload;
+    },
+    setLocationModal2: (state, action) => {
+      state.locationModal2 = action.payload;
     },
     setScheduleModal: (state, action) => {
       state.scheduleModal = action.payload;
@@ -33,6 +37,7 @@ export const modalSlice = createSlice({
 
 export const {
   setLocationModal,
+  setLocationModal2,
   setScheduleModal,
   setScheduleAddModal,
   setSpaceEditModal,

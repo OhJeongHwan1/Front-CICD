@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
-import CustomModal from "./CustomModal";
+import CustomModal2 from "./CustomModal2";
 import { useDispatch, useSelector } from "react-redux";
-import { setLocationModal } from "../redux/modalSlice";
-import { selectModal } from "../redux/modalSlice";
-import { LocationCode } from "../data/LocationCode";
+import { selectModal, setLocationModal2 } from "../../../redux/modalSlice";
+import { LocationCode } from "../../../data/LocationCode";
 import styled from "styled-components";
-import theme from "../theme";
+import theme from "../../../theme";
 
 const ButtonWrap = styled.div`
   display: flex;
@@ -52,31 +51,31 @@ const CityWrap = styled.div`
     selected ? `1px solid ${theme.colors.primary}` : ``};
 `;
 
-function LocationSelectModal({ location, setLocation, origin, setOrigin }) {
+function LocationSelectModal2({ location2, setLocation2, origin, setOrigin }) {
   const dispatch = useDispatch();
   const [realOrigin, setRealOrigin] = useState(origin);
-  const { locationModal } = useSelector(selectModal);
-  const [selectedLocation, setSelectedLocation] = useState(
+  const { locationModal2 } = useSelector(selectModal);
+  const [selectedLocation2, setSelectedLocation2] = useState(
     LocationCode[origin]
   );
-  const [selectLocate, setSelectLocate] = useState(location);
-  console.log(location);
+  const [selectLocate, setSelectLocate] = useState(location2);
+
   const handleModalClose = (e) => {
-    dispatch(setLocationModal(false));
+    dispatch(setLocationModal2(false));
     setOrigin(realOrigin);
     e.stopPropagation();
   };
 
   const locationSelect = (e) => {
-    dispatch(setLocationModal(false));
-    setLocation(selectLocate);
+    dispatch(setLocationModal2(false));
+    setLocation2(selectLocate);
     e.stopPropagation();
   };
 
   useEffect(() => {}, [LocationCode]);
   return (
-    <CustomModal
-      modal={locationModal}
+    <CustomModal2
+      modal={locationModal2}
       modalClose={handleModalClose}
       title="장소 선택"
       titleIcon="/location.svg"
@@ -90,10 +89,10 @@ function LocationSelectModal({ location, setLocation, origin, setOrigin }) {
           return (
             <LocationButton
               onClick={() => {
-                setSelectedLocation(loc);
+                setSelectedLocation2(loc);
                 setOrigin(i);
               }}
-              selected={loc.location === selectedLocation.location}
+              selected={loc.location === selectedLocation2.location}
             >
               {loc.location}
             </LocationButton>
@@ -101,7 +100,7 @@ function LocationSelectModal({ location, setLocation, origin, setOrigin }) {
         })}
       </ButtonWrap>
       <CitiesWrap>
-        {selectedLocation.citys.map((city) => {
+        {selectedLocation2.citys.map((city) => {
           return (
             <CityWrap
               selected={city.name === selectLocate?.name}
@@ -112,8 +111,8 @@ function LocationSelectModal({ location, setLocation, origin, setOrigin }) {
           );
         })}
       </CitiesWrap>
-    </CustomModal>
+    </CustomModal2>
   );
 }
 
-export default LocationSelectModal;
+export default LocationSelectModal2;
