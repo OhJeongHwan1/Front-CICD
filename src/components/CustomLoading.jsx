@@ -24,7 +24,7 @@ const fadeInOut = keyframes`
 `;
 
 const SearchLoadingContainer = styled.div`
-  height: ${(props) => (props.$isFullScreen ? "100vh" : "100px")};
+  height: ${({ isFullScreen }) => (isFullScreen ? "100vh" : "100px")};
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -55,9 +55,9 @@ const Dot = styled.div`
   animation-delay: ${(props) => props.$delay}s;
 `;
 
-const CustomLoading = ({ isFullScreen = false }) => {
+const CustomLoading = ({ isFullScreen = false, ...props }) => {
   return (
-    <SearchLoadingContainer $isFullScreen={isFullScreen}>
+    <SearchLoadingContainer isFullScreen={isFullScreen}>
       <DotsContainer>
         <Dot $delay={0} />
         <Dot $delay={0.2} />

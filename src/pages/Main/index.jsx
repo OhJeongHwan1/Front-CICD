@@ -272,7 +272,7 @@ function Main() {
         )}
         {hasMore && (
           <LoadingContainer ref={loadingRef}>
-            {loading && <CustomLoading />}
+            {loading && <CustomLoading isFullScreen={true} />}
           </LoadingContainer>
         )}
       </BodyArea>
