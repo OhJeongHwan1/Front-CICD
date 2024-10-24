@@ -17,15 +17,12 @@ const Wrapper = styled.div`
 
   &:hover {
     ${(prop) => {
-      if (prop.deleteButton) return `opacity: 0.8`;
+      if (prop.deleteButton) return `background-color:${theme.colors.error}`;
       else if (prop.selected) return "";
       else if (!prop.selected)
         return `background-color:${theme.colors.neutral300}`;
     }};
   }
-
-  background-color: ${({ deleteButton }) =>
-    deleteButton && ` ${theme.colors.error}`};
 `;
 
 function SideButton({ icon, btnClick, selected, deleteButton }) {

@@ -2,7 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   user: {
-    nickname: "sdaddasdsdad",
+    userId: 0,
+    nickname: "오정환",
     profile: "/Default Profile.png",
   },
   //

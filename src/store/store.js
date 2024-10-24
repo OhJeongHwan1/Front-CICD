@@ -9,6 +9,7 @@ import postingSlice from "../redux/UserSlice";
 import spaceSlice from "../redux/spaceSlice";
 import costSlice from "../redux/costSlice";
 import modalSlice from "../redux/modalSlice";
+import scheduleSlice from "../redux/scheduleSlice";
 
 const reducers = combineReducers({
   user: userSlice,
@@ -17,6 +18,7 @@ const reducers = combineReducers({
   space: spaceSlice,
   cost: costSlice,
   modal: modalSlice,
+  schedule: scheduleSlice,
 });
 
 const persistConfig = {
