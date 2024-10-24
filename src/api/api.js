@@ -1,5 +1,4 @@
 import axios from "axios";
-import { Navigate, useNavigate } from "react-router";
 
 const BASE_URL = "http://localhost:8080";
 
@@ -10,19 +9,104 @@ const axiosInstance = axios.create({
   },
 });
 
-const navigate = useNavigate();
+// 회원가입 API
+export const sendEmailCode = async (email) => {
+  try {
+    const res = await axiosInstance.post(
+      `api/user/send-email-code?sendTo=${encodeURIComponent(email)}`
+    );
 
-export const login = async (data) => {
-  await axiosInstance.post("user/login", data).then((res) => {
     if (res.status === 200) {
-      if (res.data.msg) {
-        alert("로그인 성공");
-        navigate(`/`);
-      } else {
-        alert("로그인 실패");
-      }
+      console.log("Email sent to server successfully.");
     } else {
-      alert("비정상 응답");
+      console.error("Failed to send email to server.");
     }
-  });
+  } catch (error) {
+    console.error("Error:", error);
+  }
+};
+
+export const verifyEmailCode = async (inputNum) => {
+  try {
+    const res = await axiosInstance.post(
+      `api/user/check-email-code?inputNum=${encodeURIComponent(inputNum)}`
+    );
+
+    if (res.status === 200) {
+      console.log("Email verification SUCCESS.");
+      return true;
+    } else {
+      console.error("Email verification FAILED.");
+      return false;
+    }
+  } catch (error) {
+    console.error("Error during email verification:", error);
+    return false;
+  }
+};
+
+export const signUp = async (email, password, nickname) => {
+  try {
+    const data = {
+      email: email,
+      password: password,
+      nickName: nickname,
+    };
+
+    const res = await axiosInstance.post(
+      "api/user/signup",
+      JSON.stringify(data),
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (res.status === 201) {
+      console.log("Signup SUCCESS.");
+      return true;
+    } else {
+      console.error("Signup FAILED.");
+      return false;
+    }
+  } catch (error) {
+    console.error("Error during signup:", error);
+    return false;
+  }
+};
+
+// 로그인 API
+export const login = async (email, password) => {
+  try {
+    const data = {
+      email: email,
+      password: password,
+    };
+
+    const res = await axiosInstance.post(
+      "api/user/login",
+      JSON.stringify(data),
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (res.status === 200) {
+      // 헤더에서 토큰을 추출해서 localStorage에 저장한다.
+      const token = res.headers["authorization"];
+
+      localStorage.setItem("token", token);
+      console.log("Login SUCCESS.");
+      return true;
+    } else {
+      console.error("Login FAILED.");
+      return false;
+    }
+  } catch (error) {
+    console.error("Erro during login:", error);
+    return false;
+  }
 };

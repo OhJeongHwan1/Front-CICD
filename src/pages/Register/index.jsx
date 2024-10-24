@@ -7,23 +7,13 @@ import VerificationComp from "./template/VerificationComp";
 import PasswordComp from "./template/PasswordComp";
 import NicknameComp from "./template/NicknameComp";
 import Button from "../../components/Button";
-import icon from "/user-tag.svg";
 import { useNavigate } from "react-router";
-import LoginModal from "../../components/LoginModal";
+import { sendEmailCode, signUp, verifyEmailCode } from "../../api/api";
 
 const Background = styled.div`
   background-color: ${theme.colors.neutral100};
   width: 100%;
   min-height: calc(100vh - 100px);
-`;
-
-const UserTagIcon = styled.img`
-  z-index: 0;
-  position: absolute;
-  left: 20%;
-  top: 40%;
-  width: 160px;
-  height: 160px;
 `;
 
 const Layout = styled.div`
@@ -114,7 +104,22 @@ function Register() {
 
   const handlePrev = () => setStep((prev) => Math.max(prev - 1, 0));
 
-  const handleNext = () => setStep((prevStep) => prevStep + 1);
+  const handleNext = async () => {
+    console.log("현재 step: ", step);
+    if (step === 1) {
+      const res = await sendEmailCode(email);
+      // 이메일 중복 시 처리 로직 작성해야 함.
+    } else if (step === 2) {
+      const res = await verifyEmailCode(verificationCode);
+      if (!res) {
+        alert("인증코드를 다시 확인해주세요.");
+        return;
+      }
+    } else if (step === 4) {
+      await signUp(email, password, nickname);
+    }
+    setStep((prevStep) => prevStep + 1);
+  };
 
   const isNextBtnDisabled = () => {
     // abc@abc.com
@@ -124,13 +129,15 @@ function Register() {
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*?])[A-Za-z\d!@#$%^&*?]{8,}$/;
     // 한글, 영문 대소문자, 숫자, 띄어쓰기
     const nicknameRegex = /^[가-힣a-zA-Z0-9\s]+$/;
+    // 6자리 숫자
+    const CodeRegex = /^\d{6}$/;
     switch (step) {
       case 0:
         return !agreement;
       case 1:
         return !emailRegex.test(email);
       case 2:
-        return !verificationCode; // 인증 코드 검증 로직 필요함.
+        return !CodeRegex.test(verificationCode);
       case 3:
         return !pwRegex.test(password);
       case 4:
