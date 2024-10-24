@@ -22,6 +22,8 @@ const AllAgreements = styled.div`
   width: 100%;
   height: 57px;
   padding: 30px;
+  font-size: ${theme.fontSizes.lg};
+  font-weight: bold;
   border-radius: ${theme.borderRadius.md};
 `;
 
@@ -34,10 +36,10 @@ const AgreementTitle = styled.div`
   margin-left: 15px;
 
   span {
-    font-size: small;
+    font-size: ${theme.fontSizes.lg};
   }
   p {
-    font-size: small;
+    font-size: ${theme.fontSizes.md};
     text-decoration: underline;
   }
   p:hover {
@@ -115,7 +117,9 @@ function AgreementComp({ agreement, setAgreement }) {
               name="all-checkbox"
             />
           }
-          label={<span className="text-white">전체 동의</span>}
+          label={
+            <span className="text-white text-xl font-bold">전체 동의</span>
+          }
         />
       </AllAgreements>
       <AgreementTitle>
