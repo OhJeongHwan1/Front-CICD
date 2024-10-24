@@ -12,7 +12,7 @@ import styled from "styled-components";
 import CustomLoading from "../../components/CustomLoading";
 import { convertToKoreanFormat } from "../../utils/convertTime";
 import TopButton from "../../components/TopButton";
-import SelectedButton from "../../components/SelectedButton";
+import SelectedButton2 from "./template/SelectedButton2";
 import ExchangeCard from "./template/ExchangeCard";
 import WeatherCard from "./template/WeatherCard";
 import { useDispatch } from "react-redux";
@@ -229,7 +229,7 @@ function Main() {
     <div style={{ minWidth: "1280px" }}>
       <HeaderArea>
         여행지 정보
-        <SelectedButton
+        <SelectedButton2
           setLocate={setLocation}
           locate={location}
           width="240px"

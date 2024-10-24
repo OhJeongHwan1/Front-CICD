@@ -24,7 +24,7 @@ const Background = styled.div`
 
 const MyPageTopSection = styled.div`
   display: flex;
-  margin-top: 10px;
+  margin-top: 20px;
 `;
 
 const MyPageSelectList = styled.ul`
