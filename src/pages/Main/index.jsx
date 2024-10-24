@@ -5,7 +5,6 @@ import React, {
   useRef,
   useState,
 } from "react";
-import CustomModal from "../../components/CustomModal";
 import PostingCard from "../../components/PostingCard";
 import theme from "../../theme";
 import { useNavigate } from "react-router";
@@ -16,6 +15,8 @@ import TopButton from "../../components/TopButton";
 import SelectedButton from "../../components/SelectedButton";
 import ExchangeCard from "./template/ExchangeCard";
 import WeatherCard from "./template/WeatherCard";
+import { useDispatch } from "react-redux";
+import { getPostingListAsync } from "../../redux/postingSlice";
 
 const Background = styled.div`
   background-color: ${theme.colors.neutral100};
@@ -47,7 +48,9 @@ const BodyArea = styled.div`
 `;
 
 const CardArea = styled.div`
+  width: 100%;
   display: flex;
+  justify-content: space-between;
   gap: 20px;
 `;
 
@@ -63,6 +66,30 @@ const LoadingContainer = styled.div`
   display: flex;
   justify-content: center;
   padding: 20px 0;
+`;
+
+const MainImg = styled.img`
+  width: 420px;
+  height: 260px;
+  border-radius: ${theme.borderRadius.md};
+`;
+
+const MainImgText = styled.p`
+  width: 420px;
+  height: 260px;
+
+  text-align: center;
+  line-height: 260px;
+  text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  font-family: Montserrat;
+  font-size: 52px;
+  font-style: normal;
+  font-weight: 400;
+  color: ${theme.colors.neutral50};
+
+  position: absolute;
+  top: 0;
+  left: 0;
 `;
 
 const ForwardedPostingCard = forwardRef((props, ref) => (
@@ -85,6 +112,7 @@ function Main() {
   const [page, setPage] = useState(1);
   const observerRef = useRef(null);
   const loadingRef = useRef(null);
+  const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
@@ -177,6 +205,17 @@ function Main() {
     loadData(1, true);
   }, [loadData]);
 
+  useEffect(() => {
+    const data = {
+      nationCode: location.nation,
+      cityCode: location.city,
+    };
+    dispatch(getPostingListAsync(data))
+      .unwrap()
+      .then((res) => setData(res));
+    // .catch((err) => alert(err));
+  }, [location]);
+
   if (loading && !data.length) {
     return (
       <>
@@ -187,7 +226,7 @@ function Main() {
   }
 
   return (
-    <div>
+    <div style={{ minWidth: "1280px" }}>
       <HeaderArea>
         여행지 정보
         <SelectedButton
@@ -199,7 +238,12 @@ function Main() {
       </HeaderArea>
       <BodyArea>
         <CardArea>
-          {location.name}, {location.nationName}
+          <div
+            style={{ position: "relative", width: "420px", minWidth: "420px" }}
+          >
+            <MainImg alt="" src="https://picsum.photos/300/300/?image=103" />
+            <MainImgText>{location.name}</MainImgText>
+          </div>
           <ExchangeCard nationCode={location.nation} />
           <WeatherCard city={location.city} />
         </CardArea>

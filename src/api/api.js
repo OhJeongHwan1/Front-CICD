@@ -9,6 +9,27 @@ const axiosInstance = axios.create({
   },
 });
 
+axiosInstance.interceptors.request.use(
+  (config) => {
+    // 로컬 스토리지에서 토큰 가져오기
+    const token = localStorage.getItem("token");
+    if (token) {
+      config.headers["Authorization"] = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+export default {
+  getPostingList: (data) =>
+    axiosInstance.get(
+      `api/posting/search?nationCode=${data.nationCode}&cityCode=${data.cityCode}&writerNickname=${data.writerNickname}&title=${data.title}`
+    ),
+};
+
 // 회원가입 API
 export const sendEmailCode = async (email) => {
   try {

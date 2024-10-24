@@ -52,19 +52,24 @@ const CityWrap = styled.div`
     selected ? `1px solid ${theme.colors.primary}` : ``};
 `;
 
-function LocationSelectModal({ location, setLocation, origin }) {
+function LocationSelectModal({ location, setLocation, origin, setOrigin }) {
   const dispatch = useDispatch();
+  const [realOrigin, setRealOrigin] = useState(origin);
   const { locationModal } = useSelector(selectModal);
-  const [selectedLocation, setSelectedLocation] = useState(LocationCode[0]);
+  const [selectedLocation, setSelectedLocation] = useState(
+    LocationCode[origin]
+  );
+  const [selectLocate, setSelectLocate] = useState(location);
 
   const handleModalClose = (e) => {
     dispatch(setLocationModal(false));
-    setLocation(origin);
+    setOrigin(realOrigin);
     e.stopPropagation();
   };
 
   const locationSelect = (e) => {
     dispatch(setLocationModal(false));
+    setLocation(selectLocate);
     e.stopPropagation();
   };
 
@@ -77,13 +82,17 @@ function LocationSelectModal({ location, setLocation, origin }) {
       titleIcon="/location.svg"
       btnText="장소 선택하기"
       btnClick={locationSelect}
+      btnDisable={selectLocate === null}
       large
     >
       <ButtonWrap>
-        {LocationCode.map((loc) => {
+        {LocationCode.map((loc, i) => {
           return (
             <LocationButton
-              onClick={() => setSelectedLocation(loc)}
+              onClick={() => {
+                setSelectedLocation(loc);
+                setOrigin(i);
+              }}
               selected={loc.location === selectedLocation.location}
             >
               {loc.location}
@@ -95,8 +104,8 @@ function LocationSelectModal({ location, setLocation, origin }) {
         {selectedLocation.citys.map((city) => {
           return (
             <CityWrap
-              selected={city.name === location?.name}
-              onClick={() => setLocation(city)}
+              selected={city.name === selectLocate?.name}
+              onClick={() => setSelectLocate(city)}
             >
               {city.name}
             </CityWrap>
