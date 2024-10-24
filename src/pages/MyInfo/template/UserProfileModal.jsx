@@ -40,7 +40,7 @@ const PasswordSection = styled.div`
 `;
 
 const PasswordTitle = styled.div`
-  margin: 50px 0 10px 0;
+  margin: 30px 0 10px 0;
   .bold {
     font-weight: ${theme.fontWeight.bold};
   }

@@ -110,3 +110,18 @@ export const login = async (email, password) => {
     return false;
   }
 };
+
+export const getMyPostings = async () => {
+  const response = await fetch("/api/my-postings", {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch posts");
+  }
+
+  return response.json();
+};
