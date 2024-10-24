@@ -8,9 +8,8 @@ const CommentsContainer = styled.div`
   border-radius: ${theme.borderRadius.md};
   width: 800px;
   min-height: 360px;
-  padding: 40px 80px 0 80px;
+  padding: 40px 80px 80px 80px;
   background: ${theme.colors.white};
-  margin-bottom: 80px;
 `;
 
 const CommentHeader = styled.div`

@@ -9,6 +9,8 @@ import CustomViewer from "./template/CustomViewer";
 import Comments from "./template/Comments";
 import TopButton from "../../components/TopButton";
 import axios from "axios";
+import SpaceCard from "./template/SpaceCard";
+import NextPosting from "./template/NextPosting";
 
 const PostingDetailContainer = styled.div`
   display: flex;
@@ -122,7 +124,7 @@ function PostingDetail() {
 
         // Dummy Data (API 연동 전까지 사용)
         const dummyData = {
-          space: "새로운 여행01",
+          space: `새로운 여행0${postingId}`,
           spaceParticipantsProfile: [
             "https://i.imgur.com/VnZtNxH.png",
             "https://i.imgur.com/aXtrK5E.png",
@@ -133,15 +135,15 @@ function PostingDetail() {
           ],
           spaceStartDate: "2024-10-10",
           spaceEndDate: "2024-10-21",
-          postingId: 1,
-          nextPostingId: 2,
-          prevPostingId: null,
+          postingId: postingId,
+          prevPostingTitle: `미국 여행 #${parseInt(postingId) - 1}`,
+          nextPostingTitle: `미국 여행 #${parseInt(postingId) + 1}`,
           nation: "미국",
           city: "샌프란시스코",
           writerProfile: "https://i.imgur.com/VnZtNxH.png",
           writerNickname: "USER001",
           writerEmail: "abcd@gmail.com",
-          title: "미국 여행 준비",
+          title: `미국 여행 #${postingId}`,
           accessLevel: "MEMBER_ONLY",
           mainImgUrl: "https://i.imgur.com/0TIs0vO.png",
           content:
@@ -228,9 +230,31 @@ function PostingDetail() {
           </InfoItem>
         </InfoArea>
         <CustomViewer content={postData.content} />
-        <AssociatedPostingArea>미국여행 준비</AssociatedPostingArea>
+        <AssociatedPostingArea>
+          <NextPosting
+            isDisabled={parseInt(postingId) == 1}
+            isNext={false}
+            postingId={postingId}
+            postingTitle={postData.prevPostingTitle}
+          />
+          <SpaceCard
+            space={postData.space}
+            nation={postData.nation}
+            city={postData.city}
+            spaceParticipantsProfile={postData.spaceParticipantsProfile}
+            spaceStartDate={postData.spaceStartDate}
+            spaceEndDate={postData.spaceEndDate}
+          />
+          <NextPosting
+            isDisabled={parseInt(postingId) == 2}
+            isNext={true}
+            postingId={postingId}
+            postingTitle={postData.nextPostingTitle}
+          />
+        </AssociatedPostingArea>
       </PostingContainer>
       <Comments postingId={postingId} />
+      <div className="mb-32" />
       <TopButton />
       <Background />
     </PostingDetailContainer>
