@@ -5,7 +5,8 @@ import theme from "../../../theme";
 import { convertToKoreanFormat } from "../../../utils/convertTime";
 
 const Container = styled.div`
-  width: 320px;
+  width: 420px;
+  height: 260px;
   padding: 20px;
   background: white;
   border-radius: ${theme.borderRadius.md};
@@ -232,7 +233,7 @@ const ExchangeRate = ({ nationCode = "us" }) => {
       </Rate>
       <ChartWrapper>
         {exchangeData && exchangeData.length > 0 && (
-          <LineChart width={280} height={60} data={exchangeData}>
+          <LineChart width={380} height={60} data={exchangeData}>
             <defs>
               <linearGradient id="colorGradient" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="5%" stopColor="#8884d8" stopOpacity={0.2} />

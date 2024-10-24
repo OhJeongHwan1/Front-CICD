@@ -87,7 +87,8 @@ export const getWeatherIcon = (weatherDescription) => {
 };
 
 const Container = styled.div`
-  width: 320px;
+  width: 420px;
+  height: 260px;
   padding: 20px;
   background: white;
   border-radius: ${theme.borderRadius.md};

@@ -3,6 +3,7 @@ import styled from "styled-components";
 import theme from "../../../theme";
 import DynamicSVG from "../../../components/DynamicSVG";
 import ProfileStack from "../../../components/ProfileStack";
+import { useNavigate } from "react-router";
 
 const Container = styled.div`
   display: flex;
@@ -129,7 +130,8 @@ const NumArea = styled.div`
   right: 41px;
 `;
 
-function SpaceCard() {
+function SpaceCard({ onClick }) {
+  const navigate = useNavigate();
   const images = [
     "https://picsum.photos/300/300/?image=100",
     "https://picsum.photos/300/300/?image=101",
@@ -137,7 +139,7 @@ function SpaceCard() {
     "https://picsum.photos/300/300/?image=103",
   ];
   return (
-    <Container>
+    <Container onClick={() => navigate(`/space/1`)}>
       <TextArea>
         <Title>
           <TitleText>오사카 여행</TitleText>

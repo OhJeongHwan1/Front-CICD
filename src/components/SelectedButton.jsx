@@ -3,8 +3,8 @@ import React, { useEffect, useState } from "react";
 import DynamicSVG from "./DynamicSVG";
 import theme from "../theme";
 import LocationSelectModal from "./LocationSelectModal";
-import { useDispatch } from "react-redux";
-import { setLocationModal } from "../redux/modalSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { setLocationModal, selectModal } from "../redux/modalSlice";
 import { nationCodeToName, cityCodeToName } from "../data/LocationCode";
 
 const StyledButton = styled.div`
@@ -38,8 +38,9 @@ function SelectedButton({ setLocate, width, color, locate }) {
         }
       : null
   );
-  const [origin, setOrign] = useState(null);
+  const [origin, setOrigin] = useState(0);
   const dispatch = useDispatch();
+  const { locationModal } = useSelector(selectModal);
 
   useEffect(() => {
     setLocate(location);
@@ -51,7 +52,6 @@ function SelectedButton({ setLocate, width, color, locate }) {
       color={color}
       onClick={() => {
         dispatch(setLocationModal(true));
-        setOrign(location);
       }}
     >
       <DynamicSVG svgUrl="/location.svg" color={theme.colors.neutral700} />
@@ -60,11 +60,14 @@ function SelectedButton({ setLocate, width, color, locate }) {
           ? `${location?.name}, ${location.nationName}`
           : `장소를 선택해주세요.`}
       </StyledP>
-      <LocationSelectModal
-        origin={origin}
-        location={location}
-        setLocation={setLocation}
-      />
+      {locationModal && (
+        <LocationSelectModal
+          setOrigin={setOrigin}
+          origin={origin}
+          location={location}
+          setLocation={setLocation}
+        />
+      )}
     </StyledButton>
   );
 }
