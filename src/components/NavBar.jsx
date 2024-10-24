@@ -12,7 +12,6 @@ import SpaceAddModal from "./SpaceAddModal";
 import LoginModal from "./LoginModal";
 import LocationSelectModal from "./LocationSelectModal";
 
-
 const NavContainer = styled.div`
   position: fixed;
   top: 0;
@@ -83,6 +82,7 @@ const DeleteButton = styled.div`
 function NavigationBar() {
   const [spaceModal, setSpaceModal] = useState(false);
   const [loginModal, setLoginModal] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
@@ -116,6 +116,13 @@ function NavigationBar() {
     setLoginModal(true);
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && searchQuery.length > 0) {
+      setSearchQuery("");
+      navigate(`/search?q=${searchQuery}`);
+    }
+  };
+
   return (
     <NavContainer isRegister={location.pathname === "/register"}>
       <div className="flex items-center h-[60px] gap-[70px]">
@@ -134,9 +141,14 @@ function NavigationBar() {
           alt=""
         />
         <Input
+          value={searchQuery}
           type="search"
           placeholder="여행 기록을 검색해보세요!"
           width={`450px`}
+          onChange={(e) => {
+            setSearchQuery(e.target.value);
+          }}
+          onKeyDown={handleKeyDown}
         />
       </div>
 

@@ -124,7 +124,7 @@ function PostingDetail() {
 
         // Dummy Data (API 연동 전까지 사용)
         const dummyData = {
-          space: `새로운 여행0${postingId}`,
+          space: `새로운 여행01`,
           spaceParticipantsProfile: [
             "https://i.imgur.com/VnZtNxH.png",
             "https://i.imgur.com/aXtrK5E.png",
