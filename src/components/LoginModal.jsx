@@ -4,6 +4,7 @@ import Input from "./Input";
 import { useNavigate } from "react-router";
 import styled from "styled-components";
 import theme from "../theme";
+import { login } from "../api/api";
 
 const Highlight = styled.span`
   color: ${theme.colors.primary};
@@ -28,13 +29,24 @@ function LoginModal({ loginModal, handleClose }) {
     handleClose();
     navigate(`/register`);
   };
+
   const handleEmailChange = (e) => {
     const emailInput = e.target.value;
     setEmail(emailInput);
   };
+
   const handlePasswordChange = (e) => {
     const pwInput = e.target.value;
     setPassword(pwInput);
+  };
+
+  const handleLogin = async () => {
+    const res = await login(email, password);
+    while (!res) {
+      setLoginError(true);
+      return;
+    }
+    handleClose();
   };
 
   return (
@@ -47,6 +59,7 @@ function LoginModal({ loginModal, handleClose }) {
       statusText={
         loginError && <ErrorText>이메일 혹은 비밀번호가 틀렸어요.</ErrorText>
       }
+      btnClick={handleLogin}
     >
       <div className="inputSection">
         <div className="pb-5">

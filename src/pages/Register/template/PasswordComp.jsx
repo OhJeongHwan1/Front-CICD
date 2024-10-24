@@ -18,7 +18,6 @@ function PasswordComp({ password, setPassword }) {
   const [invalidPassword, setInvalidPassword] = useState(false);
   const [secondPw, setSecondPw] = useState("");
   const [showMismatchError, setShowMismatchError] = useState(false);
-  const [isShowPwChecked, setShowPwChecked] = useState(false);
 
   useEffect(() => {
     const savedPassword = sessionStorage.getItem("password");
