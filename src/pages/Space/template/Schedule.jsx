@@ -1,6 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import theme from "../../../theme";
 import styled from "styled-components";
+import DynamicSVG from "../../../components/DynamicSVG";
+import { setScheduleModal } from "../../../redux/modalSlice";
+import { useDispatch } from "react-redux";
+
 const Container = styled.div`
   width: calc(64% - 20px);
   background-color: #fff;
@@ -24,9 +28,10 @@ const Top = styled.div`
 
 const ContentArea = styled.div`
   width: 100%;
-  height: 165px;
+  height: 160px;
   overflow-y: auto;
   padding: 0 32px;
+  margin-top: 10px;
 
   &::-webkit-scrollbar {
     width: 10px;
@@ -52,39 +57,79 @@ const DayBox = styled.div`
   justify-content: space-between;
 `;
 
-const Day = styled.div``;
+const Day = styled.div`
+  font-size: ${theme.fontSizes.lg};
+  font-weight: ${theme.fontWeight.bold};
+  color: ${theme.colors.neutral700};
+`;
 
-function Schedule({ scheduleList }) {
-  const [groupedByDay, setGroupdedByDay] = useState(null);
-  useEffect(() => {
-    setGroupdedByDay(groupSchedulesByDay(scheduleList));
-    console.log(groupedByDay);
-  }, [scheduleList]);
+const Wrap = styled.div`
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+`;
 
-  const groupSchedulesByDay = (scheduleList) => {
-    return scheduleList.reduce((groups, schedule) => {
-      const { day } = schedule;
-      if (!groups[day]) {
-        groups[day] = [];
-      }
-      groups[day].push(schedule);
-      return groups;
-    }, {});
-  };
+const Sc = styled.div`
+  width: "100%";
+  border-radius: 20px;
+  background-color: ${({ isFirst }) =>
+    isFirst ? `${theme.colors.neutral500}` : `${theme.colors.neutral100}`};
+  height: 52px;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  justify-content: space-between;
+  div {
+    color: ${({ isFirst }) =>
+      isFirst ? `${theme.colors.neutral50}` : ` ${theme.colors.neutral500}`};
+    font-size: ${theme.fontSizes.sm};
+    font-weight: ${theme.fontWeight.regular};
+  }
+`;
 
+const Detail = styled.div`
+  cursor: pointer;
+  font-size: ${theme.fontSizes.md};
+  font-weight: ${theme.fontWeight.bold};
+  color: ${theme.colors.primary};
+`;
+
+function Schedule({ groupedByDay }) {
+  const dispatch = useDispatch();
   return (
     <Container>
-      <Top>일정</Top>
+      <Top>
+        <p>일정</p>
+        <Detail onClick={() => dispatch(setScheduleModal(true))}>
+          자세히 보기
+        </Detail>
+      </Top>
       <ContentArea>
         {groupedByDay &&
           Object.entries(groupedByDay).map(([day, schedules]) => (
             <DayBox key={day}>
-              <h3>{day}일</h3>
-              {schedules.map((schedule) => (
-                <div key={schedule.scheduleId}>
-                  {schedule.spot} - {schedule.memo}
-                </div>
-              ))}
+              <Day>{day}일</Day>
+              <Wrap>
+                {schedules.map((schedule, index) => (
+                  <Sc key={schedule.scheduleId} isFirst={index === 0}>
+                    <div>{schedule.memo}</div>
+                    <div className="flex items-center gap-[8px]">
+                      <div>{schedule.spot}</div>
+                      <DynamicSVG
+                        svgUrl="/location.svg"
+                        color={
+                          index === 0
+                            ? theme.colors.neutral50
+                            : theme.colors.neutral500
+                        }
+                        width={20}
+                        height={20}
+                      />
+                    </div>
+                  </Sc>
+                ))}
+              </Wrap>
             </DayBox>
           ))}
       </ContentArea>

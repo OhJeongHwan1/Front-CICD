@@ -18,7 +18,7 @@ const ProfileImg = styled.img`
   border-radius: 50%;
 `;
 function Member({ member, leaderId }) {
-  console.log(member.userId, leaderId);
+  // console.log(member.userId, leaderId);
   return (
     <Container>
       <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>

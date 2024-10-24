@@ -3,7 +3,7 @@ import styled from "styled-components";
 import theme from "../theme";
 
 const StyledPosting = styled.div`
-  width: ${({ width }) => `${width}%`};
+  width: ${({ width }) => `${width}`};
   height: ${({ $ismine }) => ($ismine ? `360px` : `390px`)};
   border-radius: ${theme.borderRadius.md};
   background: ${theme.colors.white};
@@ -154,6 +154,7 @@ function PostingCard({
               loading="lazy"
               decoding="async"
               onLoad={(e) => {}}
+              style={{ borderRadius: "50%" }}
             />
             <p>{nickname}</p>
           </Profile>

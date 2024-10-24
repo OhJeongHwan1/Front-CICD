@@ -1,13 +1,15 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import theme from "../../theme";
 import { selectSpace } from "../../redux/spaceSlice";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import DynamicSVG from "../../components/DynamicSVG";
 import { formatDate } from "../../time";
 import { nationCodeToName, cityCodeToName } from "../../data/LocationCode";
 import JoinMember from "./template/JoinMember";
 import Schedule from "./template/Schedule";
+import PostingList from "./template/PostingList";
+import ScheduleModal from "./template/ScheduleModal";
 
 const Container = styled.div`
   width: 100%;
@@ -60,12 +62,34 @@ const MiddleArea = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 10px;
+  margin-bottom: 30px;
   width: 100%;
   gap: 20px;
 `;
+
 function Space() {
   const { spaceDetail } = useSelector(selectSpace);
+  const [groupedByDay, setGroupdedByDay] = useState(null);
+
+  useEffect(() => {
+    setGroupdedByDay(groupSchedulesByDay(spaceDetail.scheduleList));
+  }, [spaceDetail]);
+
+  const groupSchedulesByDay = (scheduleList) => {
+    return scheduleList.reduce((groups, schedule) => {
+      const { day } = schedule;
+      if (!groups[day]) {
+        groups[day] = [];
+      }
+      groups[day].push(schedule);
+      return groups;
+    }, {});
+  };
+
+  const deleteSchedule = (scheduleid, spaceId) => {
+    alert(scheduleid + spaceId);
+  };
+
   return (
     <Container>
       <TopArea>
@@ -83,7 +107,6 @@ function Space() {
             </p>
           </SideItem>
           <SideItem>
-            {" "}
             <DynamicSVG
               svgUrl="/location.svg"
               color={theme.colors.neutral600}
@@ -106,8 +129,13 @@ function Space() {
           members={spaceDetail.members}
           leaderId={spaceDetail.leaderId}
         />
-        <Schedule scheduleList={spaceDetail.scheduleList} />
+        <Schedule groupedByDay={groupedByDay} />
       </MiddleArea>
+      <PostingList postingList={spaceDetail.postingList} />
+      <ScheduleModal
+        groupedByDay={groupedByDay}
+        deleteSchedule={deleteSchedule}
+      />
     </Container>
   );
 }
