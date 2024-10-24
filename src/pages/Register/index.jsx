@@ -53,6 +53,7 @@ const RegisterSection = styled.div`
 
   @media (max-width: 1280px) {
     width: 100%;
+    padding: 0px !important;
   }
 `;
 
@@ -129,7 +130,10 @@ function Register() {
     console.log("현재 step: ", step);
     if (step === 1) {
       const res = await sendEmailCode(email);
-      // 이메일 중복 시 처리 로직 작성해야 함.
+      if (res.status === 400) {
+        alert("에러");
+        return;
+      }
     } else if (step === 2) {
       const res = await verifyEmailCode(verificationCode);
       if (!res) {
