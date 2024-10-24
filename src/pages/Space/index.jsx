@@ -10,6 +10,9 @@ import JoinMember from "./template/JoinMember";
 import Schedule from "./template/Schedule";
 import PostingList from "./template/PostingList";
 import ScheduleModal from "./template/ScheduleModal";
+import { selectModal, setSpaceEditModal } from "../../redux/modalSlice";
+import SpaceEditModal from "./template/SpaceEditModal";
+import MemberInviteModal from "./template/MemberInviteModal";
 
 const Container = styled.div`
   width: 100%;
@@ -26,6 +29,9 @@ const Title = styled.p`
   font-size: ${theme.fontSizes.h1};
   font-weight: ${theme.fontWeight.header};
   color: ${theme.colors.neutral600};
+  display: flex;
+  align-items: center;
+  gap: 10px;
 `;
 
 const TopArea = styled.div`
@@ -69,7 +75,9 @@ const MiddleArea = styled.div`
 
 function Space() {
   const { spaceDetail } = useSelector(selectSpace);
+  const { spaceEditModal, memberInviteModal } = useSelector(selectModal);
   const [groupedByDay, setGroupdedByDay] = useState(null);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setGroupdedByDay(groupSchedulesByDay(spaceDetail.scheduleList));
@@ -93,18 +101,24 @@ function Space() {
   return (
     <Container>
       <TopArea>
-        <Title>{spaceDetail.spaceName}</Title>
+        <Title>
+          <p>{spaceDetail.spaceName}</p>
+          <DynamicSVG
+            svgUrl="/setting-2.svg"
+            width={42}
+            height={42}
+            color={theme.colors.neutral400}
+            style={{ cursor: "pointer" }}
+            onClick={() => dispatch(setSpaceEditModal(true))}
+          />
+        </Title>
         <SideWrap>
           <SideItem>
             <DynamicSVG
               svgUrl="/calendar.svg"
               color={theme.colors.neutral600}
             />
-            <p>
-              {`${formatDate(spaceDetail.startDate)} ~ ${formatDate(
-                spaceDetail.endDate
-              )}`}
-            </p>
+            <p>{`${spaceDetail.startDate} ~ ${spaceDetail.endDate}`}</p>
           </SideItem>
           <SideItem>
             <DynamicSVG
@@ -136,6 +150,8 @@ function Space() {
         groupedByDay={groupedByDay}
         deleteSchedule={deleteSchedule}
       />
+      {spaceEditModal && <SpaceEditModal spaceDetail={spaceDetail} />}
+      {memberInviteModal && <MemberInviteModal members={spaceDetail.members} />}
     </Container>
   );
 }

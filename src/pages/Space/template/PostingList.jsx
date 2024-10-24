@@ -5,6 +5,7 @@ import DynamicSVG from "../../../components/DynamicSVG";
 import PostingCard from "../../../components/PostingCard";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../../redux/userSlice";
+import { useNavigate } from "react-router";
 
 const Container = styled.div`
   width: 100%;
@@ -35,6 +36,8 @@ const PostingArea = styled.div`
 
 function PostingList({ postingList }) {
   const { user } = useSelector(selectUser);
+  const navigate = useNavigate();
+
   return (
     <Container>
       <TopArea>

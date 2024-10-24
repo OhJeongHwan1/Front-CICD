@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import theme from "../theme";
 import DynamicSVG from "./DynamicSVG";
@@ -26,16 +26,20 @@ const Wrapper = styled.div`
 `;
 
 function SideButton({ icon, btnClick, selected, deleteButton }) {
+  const [isHovered, setHovered] = useState(false);
   return (
     <Wrapper
       onClick={!selected && btnClick}
       selected={selected}
       deleteButton={deleteButton}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      isHovered={isHovered}
     >
       <DynamicSVG
         svgUrl={icon}
         color={
-          selected || deleteButton
+          selected || isHovered
             ? theme.colors.neutral100
             : theme.colors.neutral400
         }
