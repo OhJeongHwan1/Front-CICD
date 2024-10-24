@@ -7,7 +7,7 @@ const SpaceSelectorModal = ({ isModal, setIsModal }) => {
       modalClose={() => setIsModal(!isModal)}
       large={true}
       title="스페이스 선택"
-      titleIcon="/folder-add.svg"
+      titleIcon="/folder-add2.svg"
       btnText="선택"
       btnDisable={false}
       btnClick={() => {}}
