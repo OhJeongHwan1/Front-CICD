@@ -13,6 +13,9 @@ import styled from "styled-components";
 import CustomLoading from "../../components/CustomLoading";
 import { convertToKoreanFormat } from "../../utils/convertTime";
 import TopButton from "../../components/TopButton";
+import SelectedButton from "../../components/SelectedButton";
+import ExchangeCard from "./template/ExchangeCard";
+import WeatherCard from "./template/WeatherCard";
 
 const Background = styled.div`
   background-color: ${theme.colors.neutral100};
@@ -26,9 +29,12 @@ const Background = styled.div`
 `;
 
 const HeaderArea = styled.div`
+  display: flex;
+  justify-content: space-between;
   font-size: ${theme.fontSizes.h2};
   font-weight: ${theme.fontWeight.header};
   color: ${theme.colors.neutral600};
+  padding-right: 30px;
   margin: 20px 0;
 `;
 
@@ -38,6 +44,11 @@ const BodyArea = styled.div`
   display: flex;
   flex-direction: column;
   gap: 40px;
+`;
+
+const CardArea = styled.div`
+  display: flex;
+  gap: 20px;
 `;
 
 const GridContainer = styled.div`
@@ -62,6 +73,12 @@ ForwardedPostingCard.displayName = "ForwardedPostingCard";
 
 function Main() {
   const [modal, setModal] = useState(false);
+  const [location, setLocation] = useState({
+    name: "서울",
+    nation: "kr",
+    city: "seoul",
+    nationName: "대한민국",
+  });
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
@@ -171,9 +188,23 @@ function Main() {
 
   return (
     <div>
-      <HeaderArea>{`여행지 정보`}</HeaderArea>
-      <BodyArea>ㅎㅇㅎㅇ</BodyArea>
-      <HeaderArea>{`최신 포스팅`}</HeaderArea>
+      <HeaderArea>
+        여행지 정보
+        <SelectedButton
+          setLocate={setLocation}
+          locate={location}
+          width="240px"
+          color={theme.colors.white}
+        />
+      </HeaderArea>
+      <BodyArea>
+        <CardArea>
+          {location.name}, {location.nationName}
+          <ExchangeCard nationCode={location.nation} />
+          <WeatherCard city={location.city} />
+        </CardArea>
+      </BodyArea>
+      <HeaderArea>최신 포스팅</HeaderArea>
       <BodyArea>
         {Array.from({ length: Math.ceil(data.length / 5) }).map(
           (_, rowIndex) => (
