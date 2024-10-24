@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import api from "../api/api";
 
 const initialState = {
   postingList: [],
@@ -21,16 +20,6 @@ export const getPostingListAsync = createAsyncThunk(
   "map/getPostingList",
   async (data) => {
     const response = await api.getPostingList(data);
-    const { result } = response.data;
-
-    return result;
-  }
-);
-
-export const postPostingAsync = createAsyncThunk(
-  "map/postPosting",
-  async (data) => {
-    const response = await api.postPosting(data);
     const { result } = response.data;
 
     return result;

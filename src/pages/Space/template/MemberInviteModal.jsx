@@ -5,6 +5,7 @@ import theme from "../../../theme";
 import DynamicSVG from "../../../components/DynamicSVG";
 import { useSelector, useDispatch } from "react-redux";
 import { selectModal, setMemberInviteModal } from "../../../redux/modalSlice";
+import { addMembersAsync } from "../../../redux/spaceSlice";
 
 const Title = styled.p`
   font-size: ${theme.fontSizes.h4};
@@ -61,7 +62,7 @@ const Email = styled.p`
   color: ${theme.colors.neutral700};
 `;
 
-function MemberInviteModal({ members }) {
+function MemberInviteModal({ members, spaceId }) {
   const { memberInviteModal } = useSelector(selectModal);
   const [selectedMembers, setSelectedMembers] = useState([]);
   const dispatch = useDispatch();
@@ -80,6 +81,21 @@ function MemberInviteModal({ members }) {
     }
   };
 
+  const inviteMembers = () => {
+    console.log(selectedMembers);
+    dispatch(
+      addMembersAsync({
+        spaceId: spaceId,
+        memberIds: selectedMembers.map((mem) => mem.userId),
+      })
+    )
+      .unwrap()
+      .then((res) => {
+        dispatch(setMemberInviteModal(false));
+      })
+      .catch((err) => alert(err));
+  };
+
   return (
     <CustomModal
       modal={memberInviteModal}
@@ -87,6 +103,7 @@ function MemberInviteModal({ members }) {
       title="멤버 초대"
       titleIcon="/user-cirlce-add.svg"
       btnText="초대하기"
+      btnClick={inviteMembers}
       large
     >
       <Title>내 이웃</Title>

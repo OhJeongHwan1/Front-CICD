@@ -2,6 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import DynamicSVG from "../../../components/DynamicSVG";
 import theme from "../../../theme";
+import { deleteMemberAsync } from "../../../redux/spaceSlice";
+import { useDispatch } from "react-redux";
 
 const Container = styled.div`
   height: 60px;
@@ -17,8 +19,16 @@ const ProfileImg = styled.img`
   height: 36px;
   border-radius: 50%;
 `;
-function Member({ member, leaderId }) {
-  // console.log(member.userId, leaderId);
+function Member({ member, leaderId, spaceId }) {
+  const dispatch = useDispatch();
+  const deleteMember = () => {
+    dispatch(
+      deleteMemberAsync({
+        spaceId: spaceId,
+        memberId: member.userId,
+      })
+    );
+  };
   return (
     <Container>
       <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
@@ -36,6 +46,7 @@ function Member({ member, leaderId }) {
           svgUrl="/close-circle2.svg"
           color={theme.colors.neutral400}
           style={{ cursor: "pointer" }}
+          onClick={deleteMember}
         />
       )}
     </Container>

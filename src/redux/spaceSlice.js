@@ -1,4 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import api from "../api/api";
 
 const initialState = {
   spaceList: [],
@@ -175,6 +176,46 @@ const initialState = {
   selectedSpaceId: 0,
   //
 };
+
+export const postSpaceAsync = createAsyncThunk(
+  "map/postSpace",
+  async (data) => {
+    const response = await api.postSpace(data);
+    const { result } = response.data;
+
+    return result;
+  }
+);
+
+export const editSpaceAsync = createAsyncThunk(
+  "map/editSpace",
+  async (data) => {
+    const response = await api.editSpace(data);
+    const { result } = response.data;
+
+    return result;
+  }
+);
+
+export const addMembersAsync = createAsyncThunk(
+  "map/addMembers",
+  async (data) => {
+    const response = await api.addMembers(data);
+    const { result } = response.data;
+
+    return result;
+  }
+);
+
+export const deleteMemberAsync = createAsyncThunk(
+  "map/deleteMember",
+  async (data) => {
+    const response = await api.deleteMember(data);
+    const { result } = response.data;
+
+    return result;
+  }
+);
 
 export const spaceSlice = createSlice({
   name: "space",

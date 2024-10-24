@@ -141,6 +141,7 @@ function Space() {
           maxMembers={spaceDetail.maxMembers}
           members={spaceDetail.members}
           leaderId={spaceDetail.leaderId}
+          spaceId={spaceDetail.spaceId}
         />
         <Schedule groupedByDay={groupedByDay} />
       </MiddleArea>
@@ -150,7 +151,12 @@ function Space() {
         deleteSchedule={deleteSchedule}
       />
       {spaceEditModal && <SpaceEditModal spaceDetail={spaceDetail} />}
-      {memberInviteModal && <MemberInviteModal members={spaceDetail.members} />}
+      {memberInviteModal && (
+        <MemberInviteModal
+          members={spaceDetail.members}
+          spaceId={spaceDetail.spaceId}
+        />
+      )}
     </Container>
   );
 }

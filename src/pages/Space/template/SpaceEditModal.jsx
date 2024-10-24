@@ -9,6 +9,7 @@ import CustomDatePicker from "../../../components/CustomDatePicker";
 import { formatDate } from "../../../time";
 import { useSelector, useDispatch } from "react-redux";
 import { selectModal, setSpaceEditModal } from "../../../redux/modalSlice";
+import { editSpaceAsync } from "../../../redux/spaceSlice";
 
 const Title = styled.p`
   font-size: ${theme.fontSizes.h4};
@@ -112,6 +113,7 @@ function SpaceEditModal({ spaceDetail }) {
 
   const spaceAddButtonClick = () => {
     const data = {
+      spaceId: spaceDetail.spaceId,
       spaceName: name,
       description: description,
       maxMembers: memberNum,
@@ -121,7 +123,7 @@ function SpaceEditModal({ spaceDetail }) {
       endDate: formatDate(endDate),
     };
 
-    console.log(data);
+    dispatch(editSpaceAsync(data));
   };
 
   const handleClose = () => {
