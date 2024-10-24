@@ -1,9 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import React, {
+  useEffect,
+  useState,
+  useRef,
+  useCallback,
+  forwardRef,
+} from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 import theme from "../../theme";
-import SearchNotFound from "./template/SearchNotFound";
-import SearchLoading from "./template/SearchLoading";
+import SearchLoading from "../../components/CustomLoading";
+import PostingCard from "../../components/PostingCard";
+import { convertToKoreanFormat } from "../../utils/convertTime";
+import TopButton from "../../components/TopButton";
 
 const Background = styled.div`
   background-color: ${theme.colors.neutral100};
@@ -20,133 +28,183 @@ const HeaderArea = styled.div`
   font-size: ${theme.fontSizes.h2};
   font-weight: ${theme.fontWeight.header};
   color: ${theme.colors.neutral600};
+  margin: 20px 0;
 `;
+
+const BodyArea = styled.div`
+  padding: 20px 0;
+  width: calc(100% - 30px);
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+`;
+
+const GridContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 20px;
+  width: 100%;
+`;
+
+const LoadingContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 20px 0;
+`;
+
+const ForwardedPostingCard = forwardRef((props, ref) => (
+  <PostingCard {...props} ref={ref} />
+));
+
+ForwardedPostingCard.displayName = "ForwardedPostingCard";
 
 function Search() {
   const [searchParams] = useSearchParams();
-  const [data, setData] = useState(null);
+  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const [page, setPage] = useState(1);
+  const observerRef = useRef(null);
+  const loadingRef = useRef(null);
 
-  const query = searchParams.get("q");
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchData = async (query) => {
+  const ITEMS_PER_PAGE = 20;
+  const TOTAL_ITEMS = 100;
+
+  const query = searchParams.get("q") || "";
+
+  const goToPostingDetailPage = (postingId) => {
+    navigate(`/posting/detail/${postingId}`);
+    window.scrollTo({ top: 0, behavior: "auto" });
+  };
+
+  const generateDummyData = useCallback((start, count) => {
+    const remainingCount = Math.max(0, TOTAL_ITEMS - (start - 1));
+    const actualCount = Math.min(count, remainingCount);
+
+    return Array.from({ length: actualCount }, (_, index) => ({
+      postId: start + index,
+      mainImg: "https://i.imgur.com/0TIs0vO.png",
+      title: `${index % 2 === 0 ? "오사카" : "미국"} 여행일지 #${
+        start + index
+      }`,
+      content: "Lorem ipsum odor amet, consectetuer adipiscing elit...",
+      commentsCount: Math.floor(Math.random() * 1000),
+      createAt: "2024-10-22",
+      writerNickname: `USER${String(Math.floor(Math.random() * 10)).padStart(
+        3,
+        "0"
+      )}`,
+      profileImg: `https://i.imgur.com/T2tqUEG.png`,
+    }));
+  }, []);
+
+  const loadData = useCallback(
+    async (currentPage, isNewQuery = false) => {
       try {
         setLoading(true);
-        // Axios API 호출
-        // const response = await axios.get(`/api/posting/${postingId}`);
+        const startIndex = (currentPage - 1) * ITEMS_PER_PAGE + 1;
 
-        // Dummy Data (API 연동 전까지 사용)
-        const dummyData = [
-          {
-            postId: 1,
-            mainImg: "https://i.imgur.com/0TIs0vO.png",
-            title: "오사카 여행일지 #4",
-            content:
-              "오른쪽 하단에 적혀있는 날짜는 실제 작성일이며, 여행 날짜와 다를 수 있습니다. 오른쪽 하단에 적혀있는 날짜는 실제 작성일이며, 여행 날짜와 다를 수 있습니다. 오른쪽 하단에 적혀있는 날짜는 실제 작성일이며, 여행 날짜와 다를 수 있습니다.",
-            commentsCount: 3,
-            createAt: "2024-10-22",
-            writerNickname: "USER001",
-            profileImg: "https://i.imgur.com/T2tqUEG.png",
-          },
-          {
-            postId: 2,
-            mainImg: "https://i.imgur.com/0TIs0vO.png",
-            title: "오사카 여행일지 #3",
-            content:
-              "Lorem ipsum odor amet, consectetuer adipiscing elit. Auctor natoque lacinia et imperdiet vitae duis ultricies. Leo luctus eu; habitant quisque conubia vel. Conubia conubia dis mattis; quis luctus commodo posuere elementum. Pretium velit nec et proin elementum quam congue. Odio rutrum at congue diam odio scelerisque tortor ipsum. Maecenas est nibh erat ante curae facilisi neque pellentesque. Luctus nascetur urna aenean pellentesque ante urna dui. Dapibus luctus odio dictumst fringilla vel dictumst nibh. Nullam platea morbi eleifend netus, justo amet.",
-            commentsCount: 33,
-            createAt: "2024-10-22",
-            writerNickname: "USER002",
-            profileImg: "https://i.imgur.com/QHfydVa.png",
-          },
-          {
-            postId: 3,
-            mainImg: "https://i.imgur.com/0TIs0vO.png",
-            title: "오사카 여행일지 #2",
-            content:
-              "Lorem ipsum odor amet, consectetuer adipiscing elit. Auctor natoque lacinia et imperdiet vitae duis ultricies. Leo luctus eu; habitant quisque conubia vel. Conubia conubia dis mattis; quis luctus commodo posuere elementum. Pretium velit nec et proin elementum quam congue. Odio rutrum at congue diam odio scelerisque tortor ipsum. Maecenas est nibh erat ante curae facilisi neque pellentesque. Luctus nascetur urna aenean pellentesque ante urna dui. Dapibus luctus odio dictumst fringilla vel dictumst nibh. Nullam platea morbi eleifend netus, justo amet.",
-            commentsCount: 333,
-            createAt: "2024-10-22",
-            writerNickname: "USER003",
-            profileImg: "https://i.imgur.com/VXvXELL.png",
-          },
-          {
-            postId: 4,
-            mainImg: "https://i.imgur.com/0TIs0vO.png",
-            title: "오사카 여행일지 #1",
-            content:
-              "Lorem ipsum odor amet, consectetuer adipiscing elit. Auctor natoque lacinia et imperdiet vitae duis ultricies. Leo luctus eu; habitant quisque conubia vel. Conubia conubia dis mattis; quis luctus commodo posuere elementum. Pretium velit nec et proin elementum quam congue. Odio rutrum at congue diam odio scelerisque tortor ipsum. Maecenas est nibh erat ante curae facilisi neque pellentesque. Luctus nascetur urna aenean pellentesque ante urna dui. Dapibus luctus odio dictumst fringilla vel dictumst nibh. Nullam platea morbi eleifend netus, justo amet.",
-            commentsCount: 3,
-            createAt: "2024-10-22",
-            writerNickname: "USER004",
-            profileImg: "https://i.imgur.com/aXtrK5E.png",
-          },
-          {
-            postId: 5,
-            mainImg: "https://i.imgur.com/0TIs0vO.png",
-            title: "미국 여행일지 #3",
-            content:
-              "Lorem ipsum odor amet, consectetuer adipiscing elit. Auctor natoque lacinia et imperdiet vitae duis ultricies. Leo luctus eu; habitant quisque conubia vel. Conubia conubia dis mattis; quis luctus commodo posuere elementum. Pretium velit nec et proin elementum quam congue. Odio rutrum at congue diam odio scelerisque tortor ipsum. Maecenas est nibh erat ante curae facilisi neque pellentesque. Luctus nascetur urna aenean pellentesque ante urna dui. Dapibus luctus odio dictumst fringilla vel dictumst nibh. Nullam platea morbi eleifend netus, justo amet.",
-            commentsCount: 3333,
-            createAt: "2024-10-22",
-            writerNickname: "USER005",
-            profileImg: "https://i.imgur.com/D4UpBrx.png",
-          },
-          {
-            postId: 6,
-            mainImg: "https://i.imgur.com/0TIs0vO.png",
-            title: "미국 여행일지 #2",
-            content:
-              "Lorem ipsum odor amet, consectetuer adipiscing elit. Auctor natoque lacinia et imperdiet vitae duis ultricies. Leo luctus eu; habitant quisque conubia vel. Conubia conubia dis mattis; quis luctus commodo posuere elementum. Pretium velit nec et proin elementum quam congue. Odio rutrum at congue diam odio scelerisque tortor ipsum. Maecenas est nibh erat ante curae facilisi neque pellentesque. Luctus nascetur urna aenean pellentesque ante urna dui. Dapibus luctus odio dictumst fringilla vel dictumst nibh. Nullam platea morbi eleifend netus, justo amet.",
-            commentsCount: 33,
-            createAt: "2024-10-22",
-            writerNickname: "USER006",
-            profileImg: "https://i.imgur.com/UIAinYd.png",
-          },
-          {
-            postId: 7,
-            mainImg: "https://i.imgur.com/0TIs0vO.png",
-            title: "미국 여행일지 #1",
-            content:
-              "Lorem ipsum odor amet, consectetuer adipiscing elit. Auctor natoque lacinia et imperdiet vitae duis ultricies. Leo luctus eu; habitant quisque conubia vel. Conubia conubia dis mattis; quis luctus commodo posuere elementum. Pretium velit nec et proin elementum quam congue. Odio rutrum at congue diam odio scelerisque tortor ipsum. Maecenas est nibh erat ante curae facilisi neque pellentesque. Luctus nascetur urna aenean pellentesque ante urna dui. Dapibus luctus odio dictumst fringilla vel dictumst nibh. Nullam platea morbi eleifend netus, justo amet.",
-            commentsCount: 333,
-            createAt: "2024-10-22",
-            writerNickname: "USER001",
-            profileImg: "https://i.imgur.com/T2tqUEG.png",
-          },
-        ];
+        // 일부러 딜레이를 주어 로딩 상태를 확인할 수 있게 함
+        await new Promise((resolve) => setTimeout(resolve, 1000));
 
-        // API 연동 시에는 response.data를 사용하고, 더미데이터는 주석처리
-        // setPostData(response.data);
-        setData(dummyData);
+        const newData = generateDummyData(startIndex, ITEMS_PER_PAGE);
+
+        setData((prev) => (isNewQuery ? newData : [...prev, ...newData]));
+        setHasMore(startIndex + ITEMS_PER_PAGE <= TOTAL_ITEMS);
       } catch (error) {
-        // Axios 에러 처리
-        if (axios.isAxiosError(error)) {
-          console.error("API 에러:", error.response?.data || error.message);
-        } else {
-          console.error("게시글을 불러오는데 실패했습니다:", error);
-        }
+        console.error("Error loading data:", error);
       } finally {
         setLoading(false);
       }
+    },
+    [generateDummyData]
+  );
+
+  useEffect(() => {
+    const options = {
+      root: null,
+      rootMargin: "20px",
+      threshold: 0.1,
     };
 
-    // query 값이 변경될 때마다 검색 실행
-    if (query) {
-      fetchData(query);
-    }
-  }, [query]);
+    const observer = new IntersectionObserver((entries) => {
+      const [entry] = entries;
+      if (entry.isIntersecting && !loading && hasMore) {
+        setPage((prevPage) => prevPage + 1);
+      }
+    }, options);
 
-  if (loading) return <SearchLoading />;
-  if (!data) return <SearchNotFound />;
+    if (loadingRef.current) {
+      observer.observe(loadingRef.current);
+    }
+
+    return () => {
+      if (loadingRef.current) {
+        observer.unobserve(loadingRef.current);
+      }
+    };
+  }, [loading, hasMore]);
+
+  useEffect(() => {
+    if (page > 1) {
+      loadData(page, false);
+    }
+  }, [page, loadData]);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "auto" });
+    setPage(1);
+    setHasMore(true);
+    loadData(1, true);
+  }, [query, loadData]);
+
+  if (loading && !data.length) {
+    return (
+      <>
+        <SearchLoading />
+        <Background />
+      </>
+    );
+  }
 
   return (
     <div>
       <HeaderArea>
-        "{query}" 검색 결과 - {data.length}건
+        {query
+          ? `"${query}" 검색 결과 - ${TOTAL_ITEMS}건`
+          : `전체 게시글 - ${TOTAL_ITEMS}건`}
       </HeaderArea>
-
+      <BodyArea>
+        {Array.from({ length: Math.ceil(data.length / 5) }).map(
+          (_, rowIndex) => (
+            <GridContainer key={rowIndex}>
+              {data.slice(rowIndex * 5, (rowIndex + 1) * 5).map((item) => (
+                <ForwardedPostingCard
+                  onClick={() => goToPostingDetailPage(item.postId)}
+                  key={item.postId}
+                  title={item.title}
+                  mainImg={item.mainImg}
+                  content={item.content}
+                  commentsCount={item.commentsCount}
+                  createAt={convertToKoreanFormat(item.createAt)}
+                  isMine={false}
+                  nickname={item.writerNickname}
+                  profileImg={item.profileImg}
+                />
+              ))}
+            </GridContainer>
+          )
+        )}
+        {hasMore && (
+          <LoadingContainer ref={loadingRef}>
+            {loading && <SearchLoading />}
+          </LoadingContainer>
+        )}
+      </BodyArea>
+      <TopButton />
       <Background />
     </div>
   );
