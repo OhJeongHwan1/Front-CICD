@@ -11,11 +11,16 @@ const Border = styled.div`
   border-radius: ${theme.borderRadius.md};
   justify-content: center;
   align-items: center;
-  transition: all 0.3s ease-in-out;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  }
 `;
 
 const Nickname = styled.div`
-  color: ${theme.fontSizes.h2};
+  font-size: ${theme.fontSizes.lg};
   font-weight: ${theme.fontWeight.header};
 `;
 
@@ -43,7 +48,7 @@ function UserProfileCard(props) {
           <div className="flex justify-center items-center">
             <img
               src={props.profile}
-              style={{ minWidth: "80px", height: "auto" }}
+              style={{ minWidth: "60px", height: "auto" }}
             />
           </div>
           <div className="flex flex-col ml-7">
@@ -59,7 +64,6 @@ function UserProfileCard(props) {
           />
         </div>
       </Border>
-
       <UserProfileModal
         isOpen={isModalOpen}
         onClose={handleModal}

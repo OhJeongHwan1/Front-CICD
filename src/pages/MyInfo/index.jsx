@@ -6,7 +6,10 @@ import DynamicSVG from "../../components/DynamicSVG";
 import MySpaceComp from "./template/MySpaceComp";
 import MyPostingComp from "./template/MyPostingComp";
 import MyCommentComp from "./template/MyCommentComp";
-import FollowComp from "./template/FollowComp";
+import MyFollowComp from "./template/MyFollowComp";
+import Button from "../../components/Button";
+import { useNavigate } from "react-router";
+import AddFollowModal from "./template/AddFollowModal";
 
 const Background = styled.div`
   width: 100%;
@@ -38,10 +41,19 @@ const SelectListItem = styled.li`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  padding: 10px 30px 10px 30px;
+  padding: 10px 30px 3px 30px;
   gap: 10px;
   cursor: pointer;
   font-weight: ${theme.fontWeight.bold};
+  color: ${({ selected }) =>
+    selected ? `${theme.colors.primary}` : `${theme.colors.neutral700}`};
+  border-bottom: ${({ selected }) =>
+    selected ? `7px solid ${theme.colors.primary}` : "7px solid transparent"};
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    transform: scale(1.03);
+  }
 `;
 
 const IconAndTotal = styled.div`
@@ -60,6 +72,7 @@ const MyPageBottomSection = styled.div`
 
 const MyPageTitle = styled.div`
   display: flex;
+  justify-content: space-between;
   padding-bottom: 20px;
   margin-top: 20px;
   span {
@@ -77,8 +90,9 @@ const initialSelectedState = {
 };
 
 function MyInfo() {
-  const [nickname, setNickname] = useState("Username");
-  const [email, setEmail] = useState("defaultuser@naver.com");
+  const navigate = useNavigate();
+  const [nickname, setNickname] = useState("집가고싶어");
+  const [email, setEmail] = useState("wannagohome@naver.com");
   const [profile, setProfile] = useState("./Default Profile.png");
   const [total, setTotal] = useState({
     space: 0,
@@ -86,11 +100,13 @@ function MyInfo() {
     comment: 0,
     follow: 0,
   });
+  const [isOpen, setOpen] = useState(false);
   const [selectedItems, setSelectedItems] = useState(initialSelectedState);
   const [spaceResponse, setSpaceResponse] = useState();
 
   useEffect(() => {
-    // 첫 렌더링 시 스페이스 정보 들고 오는 로직 추가해야 함.
+    window.scrollTo(0, 0);
+    // 첫 렌더링 시 스페이스 정보 가져오는 API 호출.
   }, []);
 
   const handleItemClick = (item) => {
@@ -105,8 +121,11 @@ function MyInfo() {
       comment: item === "comment",
       follow: item === "follow",
     });
-    console.log(`${item} has been selected.`);
     // 추가 로직 (예: API 호출 등)
+  };
+
+  const handleFollowModal = () => {
+    setOpen(!isOpen);
   };
 
   const getSvgUrl = () => {
@@ -134,41 +153,69 @@ function MyInfo() {
           email={email}
         ></UserProfileCard>
         <MyPageSelectList>
-          <SelectListItem onClick={() => handleItemClick("space")}>
+          <SelectListItem
+            selected={selectedItems.space}
+            onClick={() => handleItemClick("space")}
+          >
             <IconAndTotal>
               <DynamicSVG
                 svgUrl={"/home-2.svg"}
-                color={`${theme.colors.neutral700}`}
+                color={
+                  selectedItems.space
+                    ? `${theme.colors.primary}`
+                    : `${theme.colors.neutral700}`
+                }
               ></DynamicSVG>
-              <div>{total.space}</div>
+              <p>{total.space}</p>
             </IconAndTotal>
             스페이스 보기
           </SelectListItem>
-          <SelectListItem onClick={() => handleItemClick("posting")}>
+          <SelectListItem
+            selected={selectedItems.posting}
+            onClick={() => handleItemClick("posting")}
+          >
             <IconAndTotal>
               <DynamicSVG
                 svgUrl={"/edit2.svg"}
-                color={`${theme.colors.neutral700}`}
+                color={
+                  selectedItems.posting
+                    ? `${theme.colors.primary}`
+                    : `${theme.colors.neutral700}`
+                }
               ></DynamicSVG>
               <div>{total.posting}</div>
             </IconAndTotal>
             포스팅 보기
           </SelectListItem>
-          <SelectListItem onClick={() => handleItemClick("comment")}>
+          <SelectListItem
+            selected={selectedItems.comment}
+            onClick={() => handleItemClick("comment")}
+          >
             <IconAndTotal>
               <DynamicSVG
                 svgUrl={"/message-text.svg"}
-                color={`${theme.colors.neutral700}`}
+                color={
+                  selectedItems.comment
+                    ? `${theme.colors.primary}`
+                    : `${theme.colors.neutral700}`
+                }
               ></DynamicSVG>
               <div>{total.comment}</div>
             </IconAndTotal>
             작성한 댓글 보기
           </SelectListItem>
-          <SelectListItem onClick={() => handleItemClick("follow")}>
+          <SelectListItem
+            selected={selectedItems.follow}
+            onClick={() => handleItemClick("follow")}
+          >
             <IconAndTotal>
               <DynamicSVG
                 svgUrl={"/heart.svg"}
-                color={`${theme.colors.error}`}
+                color={
+                  selectedItems.follow
+                    ? `${theme.colors.primary}`
+                    : `${theme.colors.neutral700}`
+                }
               ></DynamicSVG>
               <div>{total.follow}</div>
             </IconAndTotal>
@@ -178,19 +225,41 @@ function MyInfo() {
       </MyPageTopSection>
       <MyPageBottomSection>
         <MyPageTitle>
-          <DynamicSVG
-            svgUrl={getSvgUrl()}
-            color={`${theme.colors.neutral700}`}
-            width={30}
-            height={30}
-          />
-          <span>{getTitle()}</span>
+          <div className="flex">
+            <DynamicSVG
+              svgUrl={getSvgUrl()}
+              color={`${theme.colors.neutral700}`}
+              width={30}
+              height={30}
+            />
+            <span>{getTitle()}</span>
+          </div>
+          {selectedItems.posting && (
+            <Button
+              text={"포스팅 작성"}
+              type={"posting"}
+              width={"160px"}
+              btnClick={() => navigate("/posting/add")}
+            ></Button>
+          )}
+          {selectedItems.follow && (
+            <Button
+              text={"이웃 추가"}
+              type={"follow"}
+              width={"160px"}
+              btnClick={handleFollowModal}
+            ></Button>
+          )}
         </MyPageTitle>
         {selectedItems.space && <MySpaceComp></MySpaceComp>}
         {selectedItems.posting && <MyPostingComp></MyPostingComp>}
         {selectedItems.comment && <MyCommentComp></MyCommentComp>}
-        {selectedItems.follow && <FollowComp></FollowComp>}
+        {selectedItems.follow && <MyFollowComp></MyFollowComp>}
       </MyPageBottomSection>
+      <AddFollowModal
+        isOpen={isOpen}
+        onClose={handleFollowModal}
+      ></AddFollowModal>
     </Background>
   );
 }
