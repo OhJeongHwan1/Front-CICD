@@ -138,6 +138,14 @@ export const login = async (email, password) => {
   }
 };
 
+// 로그아웃
+const logout = () => {
+  // localStorage에서 토큰을 삭제
+  localStorage.removeItem("token");
+
+  navigate("/");
+};
+
 // 회원 탈퇴
 export const resignation = async (accessToken) => {
   try {

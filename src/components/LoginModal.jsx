@@ -42,7 +42,7 @@ function LoginModal({ loginModal, handleClose }) {
 
   const handleLogin = async () => {
     const res = await login(email, password);
-    while (!res) {
+    while (!res.ok) {
       setLoginError(true);
       return;
     }
