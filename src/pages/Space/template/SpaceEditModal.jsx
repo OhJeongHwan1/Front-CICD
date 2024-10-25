@@ -98,7 +98,7 @@ const InputArea = ({ title, discription, children }) => {
   );
 };
 
-function SpaceEditModal({ spaceDetail }) {
+function SpaceEditModal({ spaceDetail, reload }) {
   const [name, setName] = useState(spaceDetail.spaceName);
   const [description, setDescription] = useState(spaceDetail.description);
   const [memberNum, setMemberNum] = useState(spaceDetail.maxMembers);
@@ -123,7 +123,12 @@ function SpaceEditModal({ spaceDetail }) {
       endDate: formatDate(endDate),
     };
 
-    dispatch(editSpaceAsync(data));
+    dispatch(editSpaceAsync(data))
+      .unwrap()
+      .then(() => {
+        reload();
+        dispatch(setSpaceEditModal(false));
+      });
   };
 
   const handleClose = () => {

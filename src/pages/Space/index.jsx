@@ -103,6 +103,12 @@ function Space() {
     setGroupdedByDay(groupSchedulesByDay(scheduleList));
   }, [scheduleList]);
 
+  const reload = () => {
+    loadSpaceDetail();
+    loadSpacePostingList();
+    loadSpaceSchedule();
+  };
+
   const loadSpaceDetail = () => {
     dispatch(getSpaceDetailAsync(selectedSpaceId))
       .unwrap()
@@ -211,7 +217,9 @@ function Space() {
         deleteSchedule={deleteSchedule}
         loadSpaceSchedule={loadSpaceSchedule}
       />
-      {spaceEditModal && <SpaceEditModal spaceDetail={spaceDetail} />}
+      {spaceEditModal && (
+        <SpaceEditModal reload={reload} spaceDetail={spaceDetail} />
+      )}
       {memberInviteModal && (
         <MemberInviteModal
           members={spaceDetail?.members}

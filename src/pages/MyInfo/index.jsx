@@ -104,8 +104,6 @@ function MyInfo() {
   const [isOpen, setOpen] = useState(false);
   const [selectedItems, setSelectedItems] = useState(initialSelectedState);
   const [spaceResponse, setSpaceResponse] = useState();
-  const { user } = useSelector(selectUser);
-
 
   useEffect(() => {
     window.scrollTo(0, 0);
