@@ -77,7 +77,7 @@ function Button({ text, type, width, btnClick, disabled, ...props }) {
               color={disabled ? `#94A3B8` : "white"}
             />
             <p style={{ color: disabled ? `#94A3B8` : "white" }}>
-              {text ? text : `게시글 쓰기`}
+              {text ? text : `포스팅 작성`}
             </p>
           </>
         );

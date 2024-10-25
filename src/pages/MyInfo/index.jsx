@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import theme from "../../theme";
 import UserProfileCard from "./template/UserProfileCard";
@@ -12,7 +12,7 @@ import { useNavigate } from "react-router";
 import AddFollowModal from "./template/AddFollowModal";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "../../redux/userSlice";
-import { getMySpaceListAsync } from "../../redux/userSlice";
+import { getMySpaceListAsync, setMySpace } from "../../redux/userSlice";
 import CustomLoading from "../../components/CustomLoading";
 
 const Background = styled.div`
@@ -106,19 +106,25 @@ function MyInfo() {
   const [isOpen, setOpen] = useState(false);
   const [selectedItems, setSelectedItems] = useState(initialSelectedState);
   const [spaceResponse, setSpaceResponse] = useState();
-  const [mySpace, setMySpace] = useState(null);
+  // const [mySpace, setMySpace] = useState(null);
+  const { mySpace } = useSelector(selectUser);
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
+  const isInitialMount = useRef(true);
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    setLoading(true);
-    dispatch(getMySpaceListAsync())
-      .unwrap()
-      .then((res) => {
-        setLoading(false);
-        setMySpace(res);
-      });
+    if (isInitialMount.current) {
+      isInitialMount.current = false; // 첫 렌더링에서는 true, 이후 false로 설정
+    } else {
+      setLoading(true);
+      dispatch(getMySpaceListAsync())
+        .unwrap()
+        .then((res) => {
+          setLoading(false);
+          dispatch(setMySpace(res));
+        });
+    }
   }, [user]);
 
   const handleItemClick = (item) => {

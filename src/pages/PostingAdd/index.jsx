@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import theme from "../../theme";
 import Button from "../../components/Button";
@@ -7,8 +7,8 @@ import SchedulePicker from "./template/ScheduleSelector";
 import SpaceSelector from "./template/SpaceSelector";
 import ScheduleSelector from "./template/ScheduleSelector";
 import ScheduleSelectorModal from "./template/ScheduleSelectorModal";
-import { useDispatch } from "react-redux";
-import { getMySpaceListAsync } from "../../redux/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { getMySpaceListAsync, selectUser } from "../../redux/userSlice";
 import {
   addPostingAsync,
   setSelectedPostingId,
@@ -109,7 +109,7 @@ function PostingAdd() {
   const [title, setTitle] = useState("");
   const [isLock, setIsLock] = useState(false);
   const [schedule, setSchedule] = useState({}); // sheduleId, date, spot, memo
-  const [mainImg, setMainImg] = useState("https://i.imgur.com/0TIs0vO.png");
+  const [mainImg, setMainImg] = useState(null);
   const [content, setContent] = useState("");
 
   // state
@@ -117,9 +117,11 @@ function PostingAdd() {
   const [isLockBtnClicked, setIsLockBtnClicked] = useState(false);
   const [isValid, setIsValid] = useState(false);
   const [spaceList, setSpaceList] = useState([]);
+  const { user, mySpace } = useSelector(selectUser);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const isInitialMount = useRef(true);
 
   // 버튼 활성화 조건
   useEffect(() => {
@@ -136,12 +138,18 @@ function PostingAdd() {
   }, [space, schedule, title, content]);
 
   useEffect(() => {
-    dispatch(getMySpaceListAsync())
-      .unwrap()
-      .then((res) => {
-        setSpaceList(res);
-      });
-  }, []);
+    window.scrollTo(0, 0);
+    if (isInitialMount.current) {
+      setSpaceList(mySpace);
+      isInitialMount.current = false; // 첫 렌더링에서는 true, 이후 false로 설정
+    } else {
+      dispatch(getMySpaceListAsync())
+        .unwrap()
+        .then((res) => {
+          setSpaceList(res);
+        });
+    }
+  }, [user]);
 
   const handleSave = () => {
     const data = {
@@ -149,7 +157,10 @@ function PostingAdd() {
       title: title,
       accessLevel: isLock ? "MEMBER_ONLY" : "PUBLIC",
       scheduleId: schedule.scheduleId,
-      mainImg: mainImg,
+      mainImgUrl:
+        content === ""
+          ? "https://i.imgur.com/0TIs0vO.png"
+          : extractFirstImageUrl(content),
       content: content,
     };
 
@@ -161,6 +172,15 @@ function PostingAdd() {
         navigate(`/posting/detail/${res.postingId}`);
       });
   };
+
+  function extractFirstImageUrl(markdownContent) {
+    const regex = /!\[.*?\]\((.*?)\)/;
+    const match = markdownContent.match(regex);
+    if (match && match[1]) {
+      return match[1]; // 첫 번째 캡처 그룹, 즉 URL 부분을 반환
+    }
+    return null; // 매치되는 이미지가 없을 경우 null 반환
+  }
 
   return (
     <PostingAddContainer>

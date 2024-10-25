@@ -6,6 +6,7 @@ import PostingCard from "../../../components/PostingCard";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../../redux/userSlice";
 import { useNavigate } from "react-router";
+import Button from "../../../components/Button";
 
 const Container = styled.div`
   width: 100%;
@@ -41,6 +42,9 @@ function PostingList({ postingList }) {
   const moveToPostingDetail = (id) => {
     navigate(`/posting/detail/${id}`);
   };
+  const moveToPostingAdd = (id) => {
+    navigate(`/posting/add`);
+  };
 
   return (
     <Container>
@@ -54,6 +58,7 @@ function PostingList({ postingList }) {
           />
           <p>포스팅 목록</p>
         </Title>
+        <Button width={"160px"} type="posting" btnClick={moveToPostingAdd} />
       </TopArea>
 
       <PostingArea>

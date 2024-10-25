@@ -221,7 +221,7 @@ function Main() {
           <WeatherCard city={location.city} />
         </CardArea>
       </BodyArea>
-      <HeaderArea>최신 포스팅</HeaderArea>
+      <HeaderArea>전체 포스팅</HeaderArea>
       <BodyArea>
         {Array.from({ length: Math.ceil(data.length / 5) }).map(
           (_, rowIndex) => (

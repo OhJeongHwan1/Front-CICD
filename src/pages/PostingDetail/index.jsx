@@ -18,6 +18,7 @@ import {
   selectPosting,
 } from "../../redux/postingSlice";
 import { getMySpaceListAsync } from "../../redux/userSlice";
+import { cityCodeToName, nationCodeToName } from "../../data/LocationCode";
 
 const PostingDetailContainer = styled.div`
   display: flex;
@@ -141,7 +142,10 @@ function PostingDetail() {
   const deletePosting = () => {
     dispatch(deletePostingAsync(selectedPostingId))
       .unwrap()
-      .then(() => navigate(-1));
+      .then(() => {
+        alert("삭제되었습니다.");
+        navigate("/");
+      });
   };
 
   if (loading) return <CustomLoading isFullScreen />;
@@ -187,7 +191,9 @@ function PostingDetail() {
               width={24}
               height={24}
             />
-            {postData.city}, {postData.nation}
+            {`자유의 여신상, ${cityCodeToName[postData.cityCode]}, ${
+              nationCodeToName[postData.nationCode]
+            }`}
           </InfoItem>
           <InfoItem>
             <DynamicSVG

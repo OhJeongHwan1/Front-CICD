@@ -3,8 +3,11 @@ import theme from "../../../theme";
 import DynamicSVG from "../../../components/DynamicSVG";
 import { useEffect, useState } from "react";
 import ScheduleSelectorModal from "./ScheduleSelectorModal";
-import { useSelector } from "react-redux";
-import { selectSpace } from "../../../redux/spaceSlice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  selectSpace,
+  getSpaceScheduleListAsync,
+} from "../../../redux/spaceSlice";
 
 const ScheduleSelectorContainer = styled.div`
   height: 48px;
@@ -49,14 +52,19 @@ const NoneIconTextArea = styled.div`
 `;
 
 const ScheduleSelector = ({ setSchedule, disabled, schedule }) => {
-  const { spaceDetail, selectedSpaceId, postingList, scheduleList } =
-    useSelector(selectSpace);
+  const { selectedSpaceId } = useSelector(selectSpace);
   const [isModal, setIsModal] = useState(false);
   const [groupedByDay, setGroupdedByDay] = useState(null);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    setGroupdedByDay(groupSchedulesByDay(scheduleList));
-  }, [scheduleList]);
+    dispatch(getSpaceScheduleListAsync(selectedSpaceId))
+      .unwrap()
+      .then((res) => {
+        setGroupdedByDay(groupSchedulesByDay(res));
+      })
+      .catch((err) => console.log(err.message));
+  }, [selectedSpaceId]);
 
   const groupSchedulesByDay = (scheduleList) => {
     // if (scheduleList) scheduleList?.sort((a, b) => a?.day?.localeCompare(b?.day));

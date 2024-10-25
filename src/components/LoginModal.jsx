@@ -7,6 +7,7 @@ import theme from "../theme";
 // import { login } from "../api/api";
 import { loginAsync, setUser } from "../redux/userSlice";
 import { useDispatch } from "react-redux";
+import { getMySpaceListAsync } from "../redux/userSlice";
 
 const Highlight = styled.span`
   color: ${theme.colors.primary};
@@ -56,6 +57,13 @@ function LoginModal({ loginModal, handleClose }) {
         dispatch(setUser(res));
         alert("로그인 되었습니다.");
         handleClose();
+
+        dispatch(getMySpaceListAsync())
+          .unwrap()
+          .then((res) => {
+            setLoading(false);
+            dispatch(setMySpace(res));
+          });
       })
       .catch((err) => {
         if (err.message === "Request failed with status code 403") {
