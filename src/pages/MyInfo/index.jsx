@@ -286,7 +286,7 @@ function MyInfo() {
         {selectedItems.space && <MySpaceComp mySpace={mySpace} />}
         {selectedItems.posting && <MyPostingComp></MyPostingComp>}
         {selectedItems.comment && <MyCommentComp user={user} />}
-        {selectedItems.follow && <MyFollowComp></MyFollowComp>} */}
+        {selectedItems.follow && <MyFollowComp></MyFollowComp>}
       </MyPageBottomSection>
       <AddFollowModal
         isOpen={isOpen}
