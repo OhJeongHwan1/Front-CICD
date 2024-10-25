@@ -79,7 +79,7 @@ const InviteMessage = styled.div`
   }
 `;
 
-function JoinMember({ maxMembers, members, leaderId }) {
+function JoinMember({ maxMembers, members, leaderId, spaceId }) {
   const dispatch = useDispatch();
   const renderMessage = () => {
     if (maxMembers > members.length)
@@ -101,7 +101,9 @@ function JoinMember({ maxMembers, members, leaderId }) {
 
       <ContentArea>
         {members.map((member) => {
-          return <Member member={member} leaderId={leaderId} />;
+          return (
+            <Member member={member} leaderId={leaderId} spaceId={spaceId} />
+          );
         })}
       </ContentArea>
       <Bottom>

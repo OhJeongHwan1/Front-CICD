@@ -12,6 +12,14 @@ import ScheduleModal from "./template/ScheduleModal";
 import { selectModal, setSpaceEditModal } from "../../redux/modalSlice";
 import SpaceEditModal from "./template/SpaceEditModal";
 import MemberInviteModal from "./template/MemberInviteModal";
+import {
+  getSpaceDetailAsync,
+  setSpaceDetail,
+  getSpacePostingListAsync,
+  setPostingList,
+  getSpaceScheduleListAsync,
+  setScheduleList,
+} from "../../redux/spaceSlice";
 
 const Container = styled.div`
   width: 100%;
@@ -73,14 +81,32 @@ const MiddleArea = styled.div`
 `;
 
 function Space() {
-  const { spaceDetail } = useSelector(selectSpace);
+  const { spaceDetail, selectedSpaceId, postingList, scheduleList } =
+    useSelector(selectSpace);
   const { spaceEditModal, memberInviteModal } = useSelector(selectModal);
   const [groupedByDay, setGroupdedByDay] = useState(null);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    setGroupdedByDay(groupSchedulesByDay(spaceDetail.scheduleList));
-  }, [spaceDetail]);
+    dispatch(getSpaceDetailAsync(selectedSpaceId))
+      .unwrap()
+      .then((res) => dispatch(setSpaceDetail(res)))
+      .catch((err) => console.log(err.message));
+
+    dispatch(getSpacePostingListAsync(selectedSpaceId))
+      .unwrap()
+      .then((res) => dispatch(setPostingList(res)))
+      .catch((err) => console.log(err.message));
+
+    dispatch(getSpaceScheduleListAsync(selectedSpaceId))
+      .unwrap()
+      .then((res) => dispatch(setScheduleList(res)))
+      .catch((err) => console.log(err.message));
+  }, [selectedSpaceId]);
+
+  useEffect(() => {
+    setGroupdedByDay(groupSchedulesByDay(scheduleList));
+  }, [scheduleList]);
 
   const groupSchedulesByDay = (scheduleList) => {
     return scheduleList.reduce((groups, schedule) => {
@@ -141,16 +167,22 @@ function Space() {
           maxMembers={spaceDetail.maxMembers}
           members={spaceDetail.members}
           leaderId={spaceDetail.leaderId}
+          spaceId={spaceDetail.spaceId}
         />
         <Schedule groupedByDay={groupedByDay} />
       </MiddleArea>
-      <PostingList postingList={spaceDetail.postingList} />
+      <PostingList postingList={postingList} />
       <ScheduleModal
         groupedByDay={groupedByDay}
         deleteSchedule={deleteSchedule}
       />
       {spaceEditModal && <SpaceEditModal spaceDetail={spaceDetail} />}
-      {memberInviteModal && <MemberInviteModal members={spaceDetail.members} />}
+      {memberInviteModal && (
+        <MemberInviteModal
+          members={spaceDetail.members}
+          spaceId={spaceDetail.spaceId}
+        />
+      )}
     </Container>
   );
 }

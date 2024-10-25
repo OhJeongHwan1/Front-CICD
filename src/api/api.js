@@ -29,7 +29,17 @@ export default {
       `api/posting/search?nationCode=${data.nationCode}&cityCode=${data.cityCode}&writerNickname=${data.writerNickname}&title=${data.title}`
     ),
 
-  postPosting: (data) => axiosInstance.post(`api/posting`, data),
+  postSpace: (data) => axiosInstance.post(`api/space`, data),
+  editSpace: (data) => axiosInstance.put(`api/space/${data.spaceId}`, data),
+
+  getSpaceDetail: (id) => axiosInstance.get(`api/space?spaceId=${id}`),
+  getSpacePostingList: (id) =>
+    axiosInstance.get(`api/posting/space?spaceId=${id}`),
+  getSpaceScheduleList: (id) =>
+    axiosInstance.get(`api/schedule/?spaceId=${id}/schedules`),
+  addMembers: (data) => axiosInstance.post(`api/space/member`, data),
+  deleteMember: (data) =>
+    axiosInstance.delete(`api/space/member`, { data: data }),
 };
 
 // 회원가입

@@ -7,7 +7,7 @@ import SelectedButton from "./SelectedButton";
 import DynamicSVG from "./DynamicSVG";
 import CustomDatePicker from "./CustomDatePicker";
 import { formatDate } from "../time";
-import { postPostingAsync } from "../redux/postingSlice";
+import { postSpaceAsync } from "../redux/spaceSlice";
 import { useDispatch } from "react-redux";
 
 const Title = styled.p`
@@ -116,7 +116,7 @@ function SpaceAddModal({ spaceModal, handleClose }) {
       startDate: formatDate(startDate),
       endDate: formatDate(endDate),
     };
-    dispatch(postPostingAsync(data));
+    dispatch(postSpaceAsync(data));
   };
 
   return (
