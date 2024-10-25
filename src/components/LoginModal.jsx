@@ -56,13 +56,12 @@ function LoginModal({ loginModal, handleClose }) {
         dispatch(setUser(res));
         alert("로그인 되었습니다.");
         handleClose();
+      })
+      .catch((err) => {
+        if (err.message === "Request failed with status code 403") {
+          setLoginError(true);
+        }
       });
-    // const res = await login();
-    // while (!res.status === 200) {
-    //   setLoginError(true);
-    //   return;
-    // }
-    // handleClose();
   };
 
   return (

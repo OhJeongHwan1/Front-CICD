@@ -7,6 +7,7 @@ const initialState = {
   scheduleAddModal: false,
   spaceEditModal: false,
   memberInviteModal: false,
+  dateEditModal: false,
   //
 };
 
@@ -32,6 +33,9 @@ export const modalSlice = createSlice({
     setMemberInviteModal: (state, action) => {
       state.memberInviteModal = action.payload;
     },
+    setDateEditModal: (state, action) => {
+      state.dateEditModal = action.payload;
+    },
   },
 });
 
@@ -42,6 +46,7 @@ export const {
   setScheduleAddModal,
   setSpaceEditModal,
   setMemberInviteModal,
+  setDateEditModal,
 } = modalSlice.actions;
 
 export const selectModal = (state) => state.modal;

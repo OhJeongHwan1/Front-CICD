@@ -28,10 +28,9 @@ const Email = styled.div`
   color: ${theme.colors.neutral400};
 `;
 
-function UserProfileCard(props) {
+function UserProfileCard({ user }) {
   const [isHovered, setIsHovered] = useState(false);
   const [isModalOpen, setModalOpen] = useState(false);
-  const [nickname, setNickname] = useState(props.nickname);
 
   const handleModal = () => {
     setModalOpen(!isModalOpen);
@@ -47,13 +46,13 @@ function UserProfileCard(props) {
         <div className="flex justify-cetner items-center pl-7 pr-7 pt-4 pb-4">
           <div className="flex justify-center items-center">
             <img
-              src={props.profile}
+              src={user.profile}
               style={{ minWidth: "60px", height: "auto" }}
             />
           </div>
           <div className="flex flex-col ml-7">
-            <Nickname>{nickname}</Nickname>
-            <Email>{props.email}</Email>
+            <Nickname>{user.nickName}</Nickname>
+            <Email>{user.email}</Email>
           </div>
           <DynamicSVG
             className="ml-4 pr-5"
@@ -67,10 +66,9 @@ function UserProfileCard(props) {
       <UserProfileModal
         isOpen={isModalOpen}
         onClose={handleModal}
-        profile={props.profile}
-        email={props.email}
-        nickname={nickname}
-        onNicknameChange={setNickname}
+        profile={user.profile}
+        email={user.email}
+        nickname={user.nickName}
       />
     </>
   );

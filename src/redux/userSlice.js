@@ -12,22 +12,36 @@ const initialState = {
 };
 
 export const loginAsync = createAsyncThunk("user/login", async (data) => {
-  try {
-    const response = await api.login(data);
-    const token = response.headers.authorization;
+  const response = await api.login(data);
+  const token = response.headers.authorization;
 
-    if (token) {
-      localStorage.setItem("token", token.slice(7));
-      return response.data;
-    } else {
-      console.error("Token is undefined.");
-      return false;
-    }
-  } catch {
-    console.error("Error during login:", error);
+  if (token) {
+    localStorage.setItem("token", token.slice(7));
+    return response.data;
+  } else {
+    console.error("Token is undefined.");
     return false;
   }
 });
+
+export const resignAsync = createAsyncThunk(
+  "user/resign",
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("No authentication token found");
+      }
+
+      await api.resignation();
+      localStorage.removeItem("token");
+      return true;
+    } catch (error) {
+      console.error("Error during resignation:", error);
+      return rejectWithValue(error.response?.data || "Resignation failed");
+    }
+  }
+);
 
 export const userSlice = createSlice({
   name: "user",
