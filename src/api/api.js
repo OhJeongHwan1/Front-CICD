@@ -43,7 +43,15 @@ export default {
   // 포스팅
   getPostingList: (data) =>
     axiosInstance.get(
-      `api/posting/search?nationCode=${data.nationCode}&cityCode=${data.cityCode}&writerNickname=${data.writerNickname}&title=${data.title}&page=${data.page}`
+      `api/posting/search?nationCode=${
+        data.nationCode === undefined ? null : data.nationCode
+      }&cityCode=${
+        data.cityCode === undefined ? null : data.cityCode
+      }&writerNickname=${
+        data.writerNickname === undefined ? null : data.writerNickname
+      }&title=${data.title === undefined ? null : data.title}&page=${
+        data.page === undefined ? 1 : data.page
+      }`
     ),
 
   // 내 정보 보기
