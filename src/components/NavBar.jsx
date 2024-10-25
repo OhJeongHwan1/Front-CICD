@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Button from "./Button";
 import Input from "./Input";
@@ -88,22 +88,37 @@ function NavigationBar() {
   const location = useLocation();
   const { user } = useSelector(selectUser);
 
+  useEffect(() => {}, [user]);
+
   const moveToMain = () => {
     navigate(`/`);
   };
   const moveToMyInfo = () => {
-    navigate(`/myInfo`);
+    if (user.userId === null) {
+      setLoginModal(true);
+    } else {
+      navigate(`/myInfo`);
+    }
   };
   const openModal = () => {
-    setSpaceModal(true);
+    if (user.userId === null) {
+      setLoginModal(true);
+    } else {
+      setSpaceModal(true);
+    }
   };
   const moveToPosting = () => {
-    navigate(`/posting/add`);
+    if (user.userId === null) {
+      setLoginModal(true);
+    } else {
+      navigate(`/posting/add`);
+    }
   };
 
   const logout = () => {
     if (window.confirm("정말 로그아웃 하시겠습니까?")) {
       dispatch(userLogOut());
+      navigate(`/`);
     }
   };
 
@@ -153,7 +168,7 @@ function NavigationBar() {
       </div>
 
       <RightWrap>
-        {user.nickname !== null ? (
+        {user.userId === null ? (
           <Button width={`110px`} text="로그인" btnClick={openLoginModal} />
         ) : (
           <div
@@ -161,7 +176,7 @@ function NavigationBar() {
             onClick={moveToMyInfo}
           >
             <ProfileImg alt="/Default Profile.png" src={user.profile} />
-            <NickName>{user.nickname}</NickName>
+            <NickName>{user.nickName}</NickName>
           </div>
         )}
       </RightWrap>
@@ -190,7 +205,7 @@ function NavigationBar() {
               btnClick={moveToPosting}
             />
           </SideButtonWrap>
-          {user.nickname !== null && (
+          {user.nickName !== null && (
             <DeleteButton>
               <SideButton deleteButton icon="/logout.svg" btnClick={logout} />
             </DeleteButton>
