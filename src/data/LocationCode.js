@@ -408,3 +408,48 @@ export const cityCodeToName = Object.freeze({
   hurghada: "후르가다",
   fes: "페스",
 });
+
+export const searchLocationByName = (searchName) => {
+  if (!searchName) return null;
+
+  for (const [code, name] of Object.entries(nationCodeToName)) {
+    if (name.includes(searchName)) {
+      return {
+        nation: code,
+      };
+    }
+  }
+
+  for (const region of LocationCode) {
+    const foundCity = region.citys.find(
+      (city) =>
+        city.name.includes(searchName) ||
+        city.city.toLowerCase().includes(searchName.toLowerCase()) ||
+        city.nationName.includes(searchName)
+    );
+
+    if (foundCity) {
+      return {
+        nation: foundCity.nation,
+        city: foundCity.city,
+      };
+    }
+  }
+
+  const cityEntries = Object.entries(cityCodeToName);
+  for (const [cityCode, cityName] of cityEntries) {
+    if (cityName.includes(searchName)) {
+      for (const region of LocationCode) {
+        const foundCity = region.citys.find((city) => city.city === cityCode);
+        if (foundCity) {
+          return {
+            nation: foundCity.nation,
+            city: cityCode,
+          };
+        }
+      }
+    }
+  }
+
+  return null;
+};
