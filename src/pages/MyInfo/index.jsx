@@ -114,17 +114,17 @@ function MyInfo() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    if (isInitialMount.current) {
-      isInitialMount.current = false; // 첫 렌더링에서는 true, 이후 false로 설정
-    } else {
-      setLoading(true);
-      dispatch(getMySpaceListAsync())
-        .unwrap()
-        .then((res) => {
-          setLoading(false);
-          dispatch(setMySpace(res));
-        });
-    }
+    // if (isInitialMount.current) {
+    //   isInitialMount.current = false; // 첫 렌더링에서는 true, 이후 false로 설정
+    // } else {
+    setLoading(true);
+    dispatch(getMySpaceListAsync())
+      .unwrap()
+      .then((res) => {
+        setLoading(false);
+        dispatch(setMySpace(res));
+      });
+    // }
   }, [user]);
 
   const handleItemClick = (item) => {

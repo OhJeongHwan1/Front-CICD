@@ -72,9 +72,9 @@ function PostingList({ postingList }) {
               content={posting.content}
               commentsCount={posting.commentCnt}
               createAt={posting.createdAt}
-              nickname={posting.wirterNickname}
+              nickname={posting.writerNickname}
               // isMine={user.nickname === posting.wirterNickname}
-              profileImg={posting.mainImgUrl}
+              profileImg={posting.profile}
               // 작성자 profile 이미지 추가되야함.
               onClick={() => moveToPostingDetail(posting.postingId)}
             />

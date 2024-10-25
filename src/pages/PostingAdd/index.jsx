@@ -139,16 +139,16 @@ function PostingAdd() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    if (isInitialMount.current) {
-      setSpaceList(mySpace);
-      isInitialMount.current = false; // 첫 렌더링에서는 true, 이후 false로 설정
-    } else {
-      dispatch(getMySpaceListAsync())
-        .unwrap()
-        .then((res) => {
-          setSpaceList(res);
-        });
-    }
+    // if (isInitialMount.current) {
+    //   setSpaceList(mySpace);
+    //   isInitialMount.current = false; // 첫 렌더링에서는 true, 이후 false로 설정
+    // } else {
+    dispatch(getMySpaceListAsync())
+      .unwrap()
+      .then((res) => {
+        setSpaceList(res);
+      });
+    // }
   }, [user]);
 
   const handleSave = () => {
@@ -191,6 +191,7 @@ function PostingAdd() {
             setSpace={setSpace}
             spaceList={spaceList}
           />
+
           <TitleArea>
             <TitleInput
               placeholder="제목을 입력하세요."
