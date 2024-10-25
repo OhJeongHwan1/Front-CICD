@@ -22,7 +22,7 @@ export const getPostingListAsync = createAsyncThunk(
     const response = await api.getPostingList(data);
     const { result } = response.data;
 
-    return result;
+    return response.data;
   }
 );
 
