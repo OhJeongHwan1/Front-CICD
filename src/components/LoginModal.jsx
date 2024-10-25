@@ -4,7 +4,9 @@ import Input from "./Input";
 import { useNavigate } from "react-router";
 import styled from "styled-components";
 import theme from "../theme";
-import { login } from "../api/api";
+// import { login } from "../api/api";
+import { loginAsync, setUser } from "../redux/userSlice";
+import { useDispatch } from "react-redux";
 
 const Highlight = styled.span`
   color: ${theme.colors.primary};
@@ -24,6 +26,7 @@ function LoginModal({ loginModal, handleClose }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState(false);
+  const dispatch = useDispatch();
 
   const moveToRegister = () => {
     handleClose();
@@ -41,12 +44,25 @@ function LoginModal({ loginModal, handleClose }) {
   };
 
   const handleLogin = async () => {
-    const res = await login(email, password);
-    while (!res.status === 200) {
-      setLoginError(true);
-      return;
-    }
-    handleClose();
+    dispatch(
+      loginAsync({
+        email: email,
+        password: password,
+      })
+    )
+      .unwrap()
+      .then((res) => {
+        console.log(res);
+        dispatch(setUser(res));
+        alert("로그인 되었습니다.");
+        handleClose();
+      });
+    // const res = await login();
+    // while (!res.status === 200) {
+    //   setLoginError(true);
+    //   return;
+    // }
+    // handleClose();
   };
 
   return (

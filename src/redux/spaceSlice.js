@@ -176,7 +176,7 @@ const initialState = {
 };
 
 export const getSpaceDetailAsync = createAsyncThunk(
-  "map/getSpaceDetail",
+  "space/getSpaceDetail",
   async (data) => {
     const response = await api.getSpaceDetail(data);
     const { result } = response.data;
@@ -186,7 +186,7 @@ export const getSpaceDetailAsync = createAsyncThunk(
 );
 
 export const getSpacePostingListAsync = createAsyncThunk(
-  "map/getSpacePostingList",
+  "space/getSpacePostingList",
   async (data) => {
     const response = await api.getSpacePostingList(data);
     const { result } = response.data;
@@ -196,7 +196,7 @@ export const getSpacePostingListAsync = createAsyncThunk(
 );
 
 export const getSpaceScheduleListAsync = createAsyncThunk(
-  "map/getSpaceScheduleList",
+  "space/getSpaceScheduleList",
   async (data) => {
     const response = await api.getSpaceScheduleList(data);
     const { result } = response.data;
@@ -206,7 +206,7 @@ export const getSpaceScheduleListAsync = createAsyncThunk(
 );
 
 export const postSpaceAsync = createAsyncThunk(
-  "map/postSpace",
+  "space/postSpace",
   async (data) => {
     const response = await api.postSpace(data);
     const { result } = response.data;
@@ -216,7 +216,7 @@ export const postSpaceAsync = createAsyncThunk(
 );
 
 export const editSpaceAsync = createAsyncThunk(
-  "map/editSpace",
+  "space/editSpace",
   async (data) => {
     const response = await api.editSpace(data);
     const { result } = response.data;
@@ -226,7 +226,7 @@ export const editSpaceAsync = createAsyncThunk(
 );
 
 export const addMembersAsync = createAsyncThunk(
-  "map/addMembers",
+  "space/addMembers",
   async (data) => {
     const response = await api.addMembers(data);
     const { result } = response.data;
@@ -236,7 +236,7 @@ export const addMembersAsync = createAsyncThunk(
 );
 
 export const deleteMemberAsync = createAsyncThunk(
-  "map/deleteMember",
+  "space/deleteMember",
   async (data) => {
     const response = await api.deleteMember(data);
     const { result } = response.data;
