@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import api from "../api/api.js";
+import api from "../api/api";
 const initialState = {
   postingList: [],
   postingDetail: {
@@ -17,7 +17,7 @@ const initialState = {
 };
 
 export const getPostingListAsync = createAsyncThunk(
-  "map/getPostingList",
+  "post/getPostingList",
   async (data) => {
     const response = await api.getPostingList(data);
     const { result } = response.data;

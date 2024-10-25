@@ -1,4 +1,5 @@
 import axios from "axios";
+import { setUser } from "../redux/userSlice";
 
 const BASE_URL = "http://haneol-test.kro.kr";
 
@@ -24,6 +25,8 @@ axiosInstance.interceptors.request.use(
 );
 
 export default {
+  login: (data) => axiosInstance.post("/api/user/login", data),
+
   getPostingList: (data) =>
     axiosInstance.get(
       `api/posting/search?nationCode=${data.nationCode}&cityCode=${data.cityCode}&writerNickname=${data.writerNickname}&title=${data.title}&page=${data.page}`
@@ -110,33 +113,29 @@ export const signUp = async (email, password, nickname) => {
 };
 
 // 로그인
-export const login = async (email, password) => {
-  try {
-    const data = { email, password };
+// export const login = async (email, password) => {
+//   try {
+//     const data = { email, password };
 
-    const res = await axiosInstance.post("/api/user/login", data, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+//     const res = await axiosInstance.post("/api/user/login", data, {
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//     });
+//     const token = res.headers.authorization;
 
-    const token = res.headers.authorization;
-    const expiresIn = res.headers["expires-in"];
-    console.log(token.slice(7));
-    if (token) {
-      localStorage.setItem("token", token.slice(7));
-      // console.log("Token received: ", token);
-      // console.log("Expires in: ", expiresIn);
-      return true;
-    } else {
-      console.error("Token is undefined.");
-      return false;
-    }
-  } catch (error) {
-    console.error("Error during login:", error);
-    return false;
-  }
-};
+//     if (token) {
+//       localStorage.setItem("token", token.slice(7));
+//       return true;
+//     } else {
+//       console.error("Token is undefined.");
+//       return false;
+//     }
+//   } catch (error) {
+//     console.error("Error during login:", error);
+//     return false;
+//   }
+// };
 
 // 로그아웃
 const logout = () => {
