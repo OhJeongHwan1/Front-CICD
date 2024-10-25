@@ -8,7 +8,8 @@ import { selectSpace } from "../../../redux/spaceSlice";
 
 const ScheduleSelectorContainer = styled.div`
   height: 48px;
-  background: ${theme.colors.neutral500};
+  background: ${({ disabled }) =>
+    disabled ? `${theme.colors.neutral300}` : `${theme.colors.neutral500}`};
   border-radius: ${theme.borderRadius.md};
   display: flex;
   align-items: center;
@@ -19,7 +20,7 @@ const ScheduleSelectorContainer = styled.div`
   transition: 200ms;
 
   &:hover {
-    transform: scale(0.99);
+    ${({ disabled }) => !disabled && `transform: scale(0.99)`};
   }
 `;
 
@@ -47,7 +48,7 @@ const NoneIconTextArea = styled.div`
   font-weight: ${theme.fontWeight.regular};
 `;
 
-const ScheduleSelector = ({ setSchedule }) => {
+const ScheduleSelector = ({ setSchedule, disabled, schedule }) => {
   const { spaceDetail, selectedSpaceId, postingList, scheduleList } =
     useSelector(selectSpace);
   const [isModal, setIsModal] = useState(false);
@@ -59,12 +60,12 @@ const ScheduleSelector = ({ setSchedule }) => {
 
   const groupSchedulesByDay = (scheduleList) => {
     // if (scheduleList) scheduleList?.sort((a, b) => a?.day?.localeCompare(b?.day));
-    return scheduleList.reduce((groups, schedule) => {
-      const { day } = schedule;
+    return scheduleList.reduce((groups, sch) => {
+      const { day } = sch;
       if (!groups[day]) {
         groups[day] = [];
       }
-      groups[day].push(schedule);
+      groups[day].push(sch);
       return groups;
     }, {});
   };
@@ -79,7 +80,10 @@ const ScheduleSelector = ({ setSchedule }) => {
           groupedByDay={groupedByDay}
         />
       }
-      <ScheduleSelectorContainer onClick={() => setIsModal(!isModal)}>
+      <ScheduleSelectorContainer
+        onClick={() => !disabled && setIsModal(!isModal)}
+        disabled={disabled}
+      >
         <InfoArea>
           <IconTextArea>
             <DynamicSVG
@@ -88,7 +92,7 @@ const ScheduleSelector = ({ setSchedule }) => {
               width={20}
               height={20}
             />
-            날짜
+            {schedule.day ? schedule.day : "날짜"}
           </IconTextArea>
           <IconTextArea>
             <DynamicSVG
@@ -97,9 +101,11 @@ const ScheduleSelector = ({ setSchedule }) => {
               width={20}
               height={20}
             />
-            장소
+            {schedule.spot ? schedule.spot : "장소"}
           </IconTextArea>
-          <NoneIconTextArea>메모</NoneIconTextArea>
+          <NoneIconTextArea>
+            {schedule.memo ? schedule.memo : "메모"}
+          </NoneIconTextArea>
         </InfoArea>
         <img src="/arrow-down.svg" width={16} height={16} />
       </ScheduleSelectorContainer>

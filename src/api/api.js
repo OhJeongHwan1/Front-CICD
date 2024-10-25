@@ -83,6 +83,8 @@ export default {
 
   getPostingDetail: (id) => axiosInstance.get(`api/posting/${id}`),
 
+  addPosting: (data) => axiosInstance.post(`api/posting`, data),
+
   deletePosting: (id) => axiosInstance.delete(`api/posting/${id}`),
 };
 

@@ -9,6 +9,11 @@ import ScheduleSelector from "./template/ScheduleSelector";
 import ScheduleSelectorModal from "./template/ScheduleSelectorModal";
 import { useDispatch } from "react-redux";
 import { getMySpaceListAsync } from "../../redux/userSlice";
+import {
+  addPostingAsync,
+  setSelectedPostingId,
+} from "../../redux/postingSlice";
+import { useNavigate } from "react-router";
 
 const PostingAddContainer = styled.div`
   display: flex;
@@ -103,7 +108,7 @@ function PostingAdd() {
   const [space, setSpace] = useState({}); // spaceId, name, city, nation
   const [title, setTitle] = useState("");
   const [isLock, setIsLock] = useState(false);
-  const [schedule, setSchdule] = useState({}); // sheduleId, date, spot, memo
+  const [schedule, setSchedule] = useState({}); // sheduleId, date, spot, memo
   const [mainImg, setMainImg] = useState("https://i.imgur.com/0TIs0vO.png");
   const [content, setContent] = useState("");
 
@@ -114,6 +119,7 @@ function PostingAdd() {
   const [spaceList, setSpaceList] = useState([]);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   // 버튼 활성화 조건
   useEffect(() => {
@@ -139,15 +145,21 @@ function PostingAdd() {
 
   const handleSave = () => {
     const data = {
-      spaceId: space.id,
+      spaceId: space.spaceId,
       title: title,
       accessLevel: isLock ? "MEMBER_ONLY" : "PUBLIC",
-      scheduleId: schedule.id,
+      scheduleId: schedule.scheduleId,
       mainImg: mainImg,
       content: content,
     };
 
-    console.log(data);
+    dispatch(addPostingAsync(data))
+      .unwrap()
+      .then((res) => {
+        dispatch(setSelectedPostingId(res.postingId));
+        alert("작성되었습니다.");
+        navigate(`/posting/detail/${res.postingId}`);
+      });
   };
 
   return (
@@ -204,7 +216,11 @@ function PostingAdd() {
               )}
             </LockButton>
           </TitleArea>
-          <SchedulePicker />
+          <SchedulePicker
+            setSchedule={setSchedule}
+            schedule={schedule}
+            disabled={space.spaceId === undefined}
+          />
         </EditorHeader>
         <CustomEditor setContent={setContent} />
       </EditorContainer>
@@ -220,7 +236,7 @@ function PostingAdd() {
       </SubmitContainer>
       <Background />
       <Background2 />
-      <ScheduleSelectorModal setSchdule={setSchdule} />
+      <ScheduleSelectorModal setSchdule={setSchedule} />
     </PostingAddContainer>
   );
 }

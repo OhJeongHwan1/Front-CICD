@@ -74,7 +74,14 @@ function ScheduleSelectorModal({
   setIsModal,
   setSchedule,
 }) {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
+
+  const selectSchedule = (schedule) => {
+    setSchedule(schedule);
+
+    alert("설정되었습니다.");
+    setIsModal(false);
+  };
 
   return (
     <CustomModal
@@ -93,8 +100,12 @@ function ScheduleSelectorModal({
                 <Day>{day.split("-")[2]}일</Day>
                 <Wrap>
                   {schedules.map((schedule, index) => (
-                    <div style={{ position: "relative" }}>
-                      <Sc key={schedule.scheduleId} isFirst={index === 0}>
+                    <div style={{ position: "relative", cursor: "pointer" }}>
+                      <Sc
+                        key={schedule.scheduleId}
+                        onClick={() => selectSchedule(schedule)}
+                        isFirst={index === 0}
+                      >
                         <div>{schedule.memo}</div>
                         <div className="flex items-center gap-[8px]">
                           <div>{schedule.spot}</div>

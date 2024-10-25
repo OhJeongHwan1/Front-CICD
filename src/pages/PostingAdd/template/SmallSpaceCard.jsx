@@ -5,6 +5,8 @@ import DynamicSVG from "../../../components/DynamicSVG";
 import ProfileStack from "../../../components/ProfileStack";
 import { useNavigate } from "react-router";
 import { nationCodeToName, cityCodeToName } from "../../../data/LocationCode";
+import { useDispatch } from "react-redux";
+import { setSelectedSpaceId } from "../../../redux/spaceSlice";
 
 const Container = styled.div`
   display: flex;
@@ -80,15 +82,17 @@ const Date = styled.div`
 `;
 
 function SmallSpaceCard({ space, setSpace, setIsModal }) {
+  const dispatch = useDispatch();
+
+  const cardSelect = () => {
+    dispatch(setSelectedSpaceId(space.spaceId));
+    setSpace(space);
+    console.log(space);
+    alert("설정되었습니다.");
+    setIsModal(false);
+  };
   return (
-    <Container
-      onClick={() => {
-        setSpace(space);
-        console.log(space);
-        alert("설정되었습니다.");
-        setIsModal(false);
-      }}
-    >
+    <Container onClick={cardSelect}>
       <TextArea>
         <Title>
           <TitleText>{space.spaceName}</TitleText>

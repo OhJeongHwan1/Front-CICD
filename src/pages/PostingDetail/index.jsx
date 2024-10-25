@@ -166,7 +166,12 @@ function PostingDetail() {
         </TitleArea>
         <WriterArea>
           <UserArea>
-            <img src={postData.writerProfile} width={32} height={32} />
+            <img
+              src={postData.profile}
+              width={32}
+              height={32}
+              style={{ borderRadius: "50%" }}
+            />
             {postData.writerNickname}
           </UserArea>
           <EditBtnArea>

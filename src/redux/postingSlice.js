@@ -32,7 +32,15 @@ export const getPostingDetailAsync = createAsyncThunk(
   "posting/getPostingDetail",
   async (data) => {
     const response = await api.getPostingDetail(data);
-    const { result } = response.data;
+
+    return response.data;
+  }
+);
+
+export const addPostingAsync = createAsyncThunk(
+  "posting/addPosting",
+  async (data) => {
+    const response = await api.addPosting(data);
 
     return response.data;
   }
@@ -42,7 +50,6 @@ export const deletePostingAsync = createAsyncThunk(
   "posting/deletePosting",
   async (data) => {
     const response = await api.deletePosting(data);
-    const { result } = response.data;
 
     return response.data;
   }

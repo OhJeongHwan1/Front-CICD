@@ -51,8 +51,14 @@ const SpaceSelector = ({ space, setSpace, spaceList }) => {
         <Space>스페이스를 선택하세요</Space>
         <Location>
           <DynamicSVG svgUrl="/location.svg" color={theme.colors.neutral400} />
-          {`${cityCodeToName[space.cityCode]}, ${
-            nationCodeToName[space.nationCode]
+          {`${
+            space.cityCode === undefined
+              ? "도시"
+              : cityCodeToName[space.cityCode]
+          }, ${
+            space.nationCode === undefined
+              ? "국가"
+              : nationCodeToName[space.nationCode]
           }`}
         </Location>
       </SpaceArea>
