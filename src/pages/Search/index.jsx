@@ -10,8 +10,12 @@ import styled from "styled-components";
 import theme from "../../theme";
 import SearchLoading from "../../components/CustomLoading";
 import PostingCard from "../../components/PostingCard";
+import { useDispatch } from "react-redux";
 import { convertToKoreanFormat } from "../../utils/convertTime";
 import TopButton from "../../components/TopButton";
+import { searchLocationByName } from "../../data/LocationCode";
+import CustomLoading from "../../components/CustomLoading";
+import { getPostingListAsync } from "../../redux/postingSlice";
 
 const Background = styled.div`
   background-color: ${theme.colors.neutral100};
@@ -62,16 +66,14 @@ ForwardedPostingCard.displayName = "ForwardedPostingCard";
 function Search() {
   const [searchParams] = useSearchParams();
   const [data, setData] = useState([]);
+  const [totalItems, setTotalItems] = useState();
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
-  const [page, setPage] = useState(1);
-  const observerRef = useRef(null);
+  const [page, setPage] = useState(0);
   const loadingRef = useRef(null);
+  const dispatch = useDispatch();
 
   const navigate = useNavigate();
-
-  const ITEMS_PER_PAGE = 20;
-  const TOTAL_ITEMS = 100;
 
   const query = searchParams.get("q") || "";
 
@@ -80,48 +82,37 @@ function Search() {
     window.scrollTo({ top: 0, behavior: "auto" });
   };
 
-  const generateDummyData = useCallback((start, count) => {
-    const remainingCount = Math.max(0, TOTAL_ITEMS - (start - 1));
-    const actualCount = Math.min(count, remainingCount);
+  const loadData = useCallback(async () => {
+    try {
+      setLoading(true);
 
-    return Array.from({ length: actualCount }, (_, index) => ({
-      postId: start + index,
-      mainImg: "https://i.imgur.com/0TIs0vO.png",
-      title: `${index % 2 === 0 ? "오사카" : "미국"} 여행일지 #${
-        start + index
-      }`,
-      content: "Lorem ipsum odor amet, consectetuer adipiscing elit...",
-      commentsCount: Math.floor(Math.random() * 1000),
-      createAt: "2024-10-22",
-      writerNickname: `USER${String(Math.floor(Math.random() * 10)).padStart(
-        3,
-        "0"
-      )}`,
-      profileImg: `https://i.imgur.com/T2tqUEG.png`,
-    }));
-  }, []);
+      const loc = searchLocationByName(query);
 
-  const loadData = useCallback(
-    async (currentPage, isNewQuery = false) => {
-      try {
-        setLoading(true);
-        const startIndex = (currentPage - 1) * ITEMS_PER_PAGE + 1;
+      console.log(loc);
 
-        // 일부러 딜레이를 주어 로딩 상태를 확인할 수 있게 함
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+      const param = {
+        nationCode: !loc ? "0" : loc.nation,
+        cityCode: !loc ? "0" : !loc.city ? "0" : loc.city,
+        writerNickname: query,
+        title: query,
+        page: page,
+      };
 
-        const newData = generateDummyData(startIndex, ITEMS_PER_PAGE);
+      const response = await dispatch(getPostingListAsync(param)).unwrap();
 
-        setData((prev) => (isNewQuery ? newData : [...prev, ...newData]));
-        setHasMore(startIndex + ITEMS_PER_PAGE <= TOTAL_ITEMS);
-      } catch (error) {
-        console.error("Error loading data:", error);
-      } finally {
-        setLoading(false);
-      }
-    },
-    [generateDummyData]
-  );
+      setData((prevData) => [...prevData, ...response.content]);
+
+      setHasMore(data.length < response.totalElements);
+
+      setTotalItems(response.totalElements);
+
+      console.log(data);
+    } catch (error) {
+      console.error("Error loading data:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, [dispatch, page, query]);
 
   useEffect(() => {
     const options = {
@@ -149,22 +140,23 @@ function Search() {
   }, [loading, hasMore]);
 
   useEffect(() => {
-    if (page > 1) {
-      loadData(page, false);
-    }
-  }, [page, loadData]);
+    window.scrollTo({ top: 0, behavior: "auto" });
+    setData([]);
+    setPage(0);
+    setHasMore(true);
+    loadData();
+  }, [query]);
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "auto" });
-    setPage(1);
-    setHasMore(true);
-    loadData(1, true);
-  }, [query, loadData]);
+    if (page > 0) {
+      loadData();
+    }
+  }, [page, loadData]);
 
   if (loading && !data.length) {
     return (
       <>
-        <SearchLoading />
+        <CustomLoading isFullScreen={true} />
         <Background />
       </>
     );
@@ -174,8 +166,8 @@ function Search() {
     <div>
       <HeaderArea>
         {query
-          ? `"${query}" 검색 결과 - ${TOTAL_ITEMS}건`
-          : `전체 게시글 - ${TOTAL_ITEMS}건`}
+          ? `"${query}" 검색 결과 - ${totalItems}건`
+          : `전체 게시글 - ${totalItems}건`}
       </HeaderArea>
       <BodyArea>
         {Array.from({ length: Math.ceil(data.length / 5) }).map(
@@ -183,16 +175,17 @@ function Search() {
             <GridContainer key={rowIndex}>
               {data.slice(rowIndex * 5, (rowIndex + 1) * 5).map((item) => (
                 <ForwardedPostingCard
-                  onClick={() => goToPostingDetailPage(item.postId)}
-                  key={item.postId}
+                  onClick={() => goToPostingDetailPage(item.postingId)}
+                  key={item.postingId}
                   title={item.title}
-                  mainImg={item.mainImg}
+                  mainImg={item.mainImgUrl}
                   content={item.content}
-                  commentsCount={item.commentsCount}
-                  createAt={convertToKoreanFormat(item.createAt)}
+                  commentsCount={item.commentCnt}
+                  createAt={convertToKoreanFormat(item.createdAt)}
                   isMine={false}
                   nickname={item.writerNickname}
-                  profileImg={item.profileImg}
+                  profileImg={item.profile}
+                  width="250px"
                 />
               ))}
             </GridContainer>

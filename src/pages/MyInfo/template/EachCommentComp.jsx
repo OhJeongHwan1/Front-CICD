@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import theme from "../../../theme";
+import DynamicSVG from "../../../components/DynamicSVG";
 
 const Container = styled.div`
   display: flex;
@@ -10,6 +11,7 @@ const Container = styled.div`
   background-color: #fff;
   border-radius: ${theme.borderRadius.md};
   padding: 20px;
+  position: relative;
 `;
 
 const WhichPosting = styled.div`
@@ -37,17 +39,29 @@ const Content = styled.p`
   font-size: ${theme.fontSizes.md};
 `;
 
+const DeleteButton = styled.div`
+  position: absolute;
+  top: 35px;
+  right: 35px;
+  cursor: pointer;
+`;
+
 function EachCommentComp({ profile, nickname, title, comment }) {
   return (
     <Container>
       <WhichPosting>
-        <img src={profile} alt="./Default Profile.png" />
+        <img src={profile} alt="profile" />
         <Nickname>{nickname}</Nickname>
         <span>의</span>&nbsp;
         <Title>{title}</Title>
       </WhichPosting>
-
       <Content>{comment}</Content>
+      <DeleteButton>
+        <DynamicSVG
+          svgUrl={"./close-circle.svg"}
+          color={theme.colors.neutral400}
+        />
+      </DeleteButton>
     </Container>
   );
 }
