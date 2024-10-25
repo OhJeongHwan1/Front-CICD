@@ -10,6 +10,8 @@ import MyFollowComp from "./template/MyFollowComp";
 import Button from "../../components/Button";
 import { useNavigate } from "react-router";
 import AddFollowModal from "./template/AddFollowModal";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../redux/userSlice";
 
 const Background = styled.div`
   width: 100%;
@@ -91,9 +93,8 @@ const initialSelectedState = {
 
 function MyInfo() {
   const navigate = useNavigate();
-  const [nickname, setNickname] = useState("집가고싶어");
-  const [email, setEmail] = useState("wannagohome@naver.com");
-  const [profile, setProfile] = useState("./Default Profile.png");
+
+  const { user } = useSelector(selectUser);
   const [total, setTotal] = useState({
     space: 0,
     posting: 0,
@@ -102,12 +103,11 @@ function MyInfo() {
   });
   const [isOpen, setOpen] = useState(false);
   const [selectedItems, setSelectedItems] = useState(initialSelectedState);
-  const [spaceResponse, setSpaceResponse] = useState();
 
   useEffect(() => {
     window.scrollTo(0, 0);
     // 첫 렌더링 시 스페이스 정보 가져오는 API 호출.
-  }, []);
+  }, [user]);
 
   const handleItemClick = (item) => {
     // 이미 선택된 항목이 클릭되면 아무 일도 하지 않는다.
@@ -147,11 +147,7 @@ function MyInfo() {
   return (
     <Background>
       <MyPageTopSection>
-        <UserProfileCard
-          profile={profile}
-          nickname={nickname}
-          email={email}
-        ></UserProfileCard>
+        <UserProfileCard user={user}></UserProfileCard>
         <MyPageSelectList>
           <SelectListItem
             selected={selectedItems.space}

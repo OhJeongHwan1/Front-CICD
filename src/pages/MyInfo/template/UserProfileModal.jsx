@@ -4,7 +4,6 @@ import theme from "../../../theme";
 import Input from "../../../components/Input";
 import Button from "../../../components/Button";
 import CustomModal from "../../../components/CustomModal";
-import { resignation } from "../../../api/api";
 
 const ProfileSection = styled.div`
   display: flex;
@@ -77,14 +76,7 @@ const ErrorText = styled(GuideText)`
   color: ${theme.colors.error};
 `;
 
-function UserProfileModal({
-  isOpen,
-  onClose,
-  profile,
-  email,
-  nickname,
-  onNicknameChange,
-}) {
+function UserProfileModal({ isOpen, onClose, profile, email, nickname }) {
   const [inputValue, setInputValue] = useState(nickname);
   const [isCurrentPw, setCurrentPw] = useState(false);
   const [firstPw, setFirstPw] = useState("");
@@ -99,9 +91,8 @@ function UserProfileModal({
 
   const handleResignation = () => {
     const res = window.confirm("정말 탈퇴하실 건가요?");
-    console.log(localStorage.getItem("token"));
     if (res) {
-      resignation(localStorage.getItem("token"));
+      // 회원 탈퇴 API
     } else {
       return;
     }
