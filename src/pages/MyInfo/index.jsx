@@ -10,6 +10,8 @@ import MyFollowComp from "./template/MyFollowComp";
 import Button from "../../components/Button";
 import { useNavigate } from "react-router";
 import AddFollowModal from "./template/AddFollowModal";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../redux/userSlice";
 
 const Background = styled.div`
   width: 100%;
@@ -103,6 +105,7 @@ function MyInfo() {
   const [isOpen, setOpen] = useState(false);
   const [selectedItems, setSelectedItems] = useState(initialSelectedState);
   const [spaceResponse, setSpaceResponse] = useState();
+  const { user } = useSelector(selectUser);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -148,9 +151,9 @@ function MyInfo() {
     <Background>
       <MyPageTopSection>
         <UserProfileCard
-          profile={profile}
-          nickname={nickname}
-          email={email}
+          profile={user.profile}
+          nickname={user.nickName}
+          email={user.email}
         ></UserProfileCard>
         <MyPageSelectList>
           <SelectListItem

@@ -88,35 +88,61 @@ function Space() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getSpaceDetailAsync(selectedSpaceId))
-      .unwrap()
-      .then((res) => dispatch(setSpaceDetail(res)))
-      .catch((err) => console.log(err.message));
-
-    dispatch(getSpacePostingListAsync(selectedSpaceId))
-      .unwrap()
-      .then((res) => dispatch(setPostingList(res)))
-      .catch((err) => console.log(err.message));
-
-    dispatch(getSpaceScheduleListAsync(selectedSpaceId))
-      .unwrap()
-      .then((res) => dispatch(setScheduleList(res)))
-      .catch((err) => console.log(err.message));
+    loadSpacePostingList();
+    loadSpaceDetail();
+    loadSpaceSchedule();
   }, [selectedSpaceId]);
 
   useEffect(() => {
     setGroupdedByDay(groupSchedulesByDay(scheduleList));
   }, [scheduleList]);
 
+  const loadSpaceDetail = () => {
+    dispatch(getSpaceDetailAsync(selectedSpaceId))
+      .unwrap()
+      .then((res) => {
+        dispatch(setSpaceDetail(res));
+      })
+      .catch((err) => console.log(err.message));
+  };
+
+  const loadSpacePostingList = () => {
+    dispatch(getSpacePostingListAsync(selectedSpaceId))
+      .unwrap()
+      .then((res) => dispatch(setPostingList(res)))
+      .catch((err) => console.log(err.message));
+  };
+
+  const loadSpaceSchedule = () => {
+    dispatch(getSpaceScheduleListAsync(selectedSpaceId))
+      .unwrap()
+      .then((res) => {
+        dispatch(setScheduleList(res));
+      })
+      .catch((err) => console.log(err.message));
+  };
+
+  const initializeGroupsForDateRange = () => {
+    const start = new Date(spaceDetail.startDate);
+    const end = new Date(spaceDetail.endDate);
+    const groups = {};
+
+    for (let date = start; date <= end; date.setDate(date.getDate() + 1)) {
+      const day = date.toISOString().split("T")[0];
+      groups[day] = [];
+    }
+
+    return groups;
+  };
+
   const groupSchedulesByDay = (scheduleList) => {
-    return scheduleList.reduce((groups, schedule) => {
+    const groups = initializeGroupsForDateRange();
+    scheduleList?.forEach((schedule) => {
       const { day } = schedule;
-      if (!groups[day]) {
-        groups[day] = [];
-      }
-      groups[day].push(schedule);
-      return groups;
-    }, {});
+      groups[day]?.push(schedule);
+    });
+
+    return groups;
   };
 
   const deleteSchedule = (scheduleid, spaceId) => {
@@ -127,7 +153,7 @@ function Space() {
     <Container>
       <TopArea>
         <Title>
-          <p>{spaceDetail.spaceName}</p>
+          <p>{spaceDetail?.spaceName}</p>
           <DynamicSVG
             svgUrl="/setting-2.svg"
             width={42}
@@ -143,7 +169,7 @@ function Space() {
               svgUrl="/calendar.svg"
               color={theme.colors.neutral600}
             />
-            <p>{`${spaceDetail.startDate} ~ ${spaceDetail.endDate}`}</p>
+            <p>{`${spaceDetail?.startDate} ~ ${spaceDetail?.endDate}`}</p>
           </SideItem>
           <SideItem>
             <DynamicSVG
@@ -152,22 +178,22 @@ function Space() {
             />
             <p>
               {`
-              ${cityCodeToName[spaceDetail.cityCode]}, ${
-                nationCodeToName[spaceDetail.nationCode]
+              ${cityCodeToName[spaceDetail?.cityCode]}, ${
+                nationCodeToName[spaceDetail?.nationCode]
               }
               `}
             </p>
           </SideItem>
         </SideWrap>
       </TopArea>
-      <Description>{spaceDetail.description}</Description>
+      <Description>{spaceDetail?.description}</Description>
 
       <MiddleArea>
         <JoinMember
-          maxMembers={spaceDetail.maxMembers}
-          members={spaceDetail.members}
-          leaderId={spaceDetail.leaderId}
-          spaceId={spaceDetail.spaceId}
+          maxMembers={spaceDetail?.maxMembers}
+          members={spaceDetail?.members}
+          leaderId={spaceDetail?.leaderId}
+          spaceId={spaceDetail?.spaceId}
         />
         <Schedule groupedByDay={groupedByDay} />
       </MiddleArea>
@@ -175,12 +201,14 @@ function Space() {
       <ScheduleModal
         groupedByDay={groupedByDay}
         deleteSchedule={deleteSchedule}
+        loadSpaceSchedule={loadSpaceSchedule}
       />
       {spaceEditModal && <SpaceEditModal spaceDetail={spaceDetail} />}
       {memberInviteModal && (
         <MemberInviteModal
-          members={spaceDetail.members}
-          spaceId={spaceDetail.spaceId}
+          members={spaceDetail?.members}
+          spaceId={spaceDetail?.spaceId}
+          leaderId={spaceDetail?.leaderId}
         />
       )}
     </Container>

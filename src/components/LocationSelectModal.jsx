@@ -60,7 +60,7 @@ function LocationSelectModal({ location, setLocation, origin, setOrigin }) {
     LocationCode[origin]
   );
   const [selectLocate, setSelectLocate] = useState(location);
-  console.log(location);
+
   const handleModalClose = (e) => {
     dispatch(setLocationModal(false));
     setOrigin(realOrigin);
