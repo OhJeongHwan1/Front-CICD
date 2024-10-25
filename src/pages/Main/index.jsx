@@ -72,10 +72,11 @@ const MainImg = styled.img`
   width: 100%;
   height: 260px;
   border-radius: ${theme.borderRadius.md};
+  background-size: cover;
 `;
 
 const MainImgText = styled.p`
-  width: 420px;
+  width: 500px;
   height: 260px;
 
   text-align: center;
@@ -238,7 +239,7 @@ function Main() {
       </HeaderArea>
       <BodyArea>
         <CardArea>
-          <div style={{ position: "relative", minWidth: "420px" }}>
+          <div style={{ position: "relative", minWidth: "500px" }}>
             <MainImg alt="" src="https://picsum.photos/300/300/?image=103" />
             <MainImgText>{location.name}</MainImgText>
           </div>
