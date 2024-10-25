@@ -93,9 +93,8 @@ const initialSelectedState = {
 
 function MyInfo() {
   const navigate = useNavigate();
-  const [nickname, setNickname] = useState("집가고싶어");
-  const [email, setEmail] = useState("wannagohome@naver.com");
-  const [profile, setProfile] = useState("./Default Profile.png");
+
+  const { user } = useSelector(selectUser);
   const [total, setTotal] = useState({
     space: 0,
     posting: 0,
@@ -107,10 +106,11 @@ function MyInfo() {
   const [spaceResponse, setSpaceResponse] = useState();
   const { user } = useSelector(selectUser);
 
+
   useEffect(() => {
     window.scrollTo(0, 0);
     // 첫 렌더링 시 스페이스 정보 가져오는 API 호출.
-  }, []);
+  }, [user]);
 
   const handleItemClick = (item) => {
     // 이미 선택된 항목이 클릭되면 아무 일도 하지 않는다.
@@ -155,6 +155,7 @@ function MyInfo() {
           nickname={user.nickName}
           email={user.email}
         ></UserProfileCard>
+
         <MyPageSelectList>
           <SelectListItem
             selected={selectedItems.space}

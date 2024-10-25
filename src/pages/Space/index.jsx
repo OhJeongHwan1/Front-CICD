@@ -9,9 +9,14 @@ import JoinMember from "./template/JoinMember";
 import Schedule from "./template/Schedule";
 import PostingList from "./template/PostingList";
 import ScheduleModal from "./template/ScheduleModal";
-import { selectModal, setSpaceEditModal } from "../../redux/modalSlice";
+import {
+  selectModal,
+  setDateEditModal,
+  setSpaceEditModal,
+} from "../../redux/modalSlice";
 import SpaceEditModal from "./template/SpaceEditModal";
 import MemberInviteModal from "./template/MemberInviteModal";
+import DateEditModal from "./template/DateEditModal";
 import {
   getSpaceDetailAsync,
   setSpaceDetail,
@@ -83,7 +88,8 @@ const MiddleArea = styled.div`
 function Space() {
   const { spaceDetail, selectedSpaceId, postingList, scheduleList } =
     useSelector(selectSpace);
-  const { spaceEditModal, memberInviteModal } = useSelector(selectModal);
+  const { spaceEditModal, memberInviteModal, dateEditModal } =
+    useSelector(selectModal);
   const [groupedByDay, setGroupdedByDay] = useState(null);
   const dispatch = useDispatch();
 
@@ -168,6 +174,8 @@ function Space() {
             <DynamicSVG
               svgUrl="/calendar.svg"
               color={theme.colors.neutral600}
+              style={{ cursor: "pointer" }}
+              onClick={() => dispatch(setDateEditModal(true))}
             />
             <p>{`${spaceDetail?.startDate} ~ ${spaceDetail?.endDate}`}</p>
           </SideItem>
@@ -209,6 +217,12 @@ function Space() {
           members={spaceDetail?.members}
           spaceId={spaceDetail?.spaceId}
           leaderId={spaceDetail?.leaderId}
+        />
+      )}
+      {dateEditModal && (
+        <DateEditModal
+          startDate={spaceDetail.startDate}
+          endDate={spaceDetail.endDate}
         />
       )}
     </Container>

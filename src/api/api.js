@@ -27,6 +27,18 @@ axiosInstance.interceptors.request.use(
 export default {
   // 로그인
   login: (data) => axiosInstance.post("/api/user/login", data),
+  resignation: () => {
+    const token = localStorage.getItem("token");
+    return axiosInstance.post(
+      "/api/user",
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+  },
 
   // 포스팅
   getPostingList: (data) =>
@@ -151,24 +163,26 @@ export const signUp = async (email, password, nickname) => {
 // };
 
 // 로그아웃
-const logout = () => {
-  // localStorage에서 토큰을 삭제
-  localStorage.removeItem("token");
+// const logout = () => {
+//   // localStorage에서 토큰을 삭제
+//   localStorage.removeItem("token");
 
-  navigate("/");
-};
+//   navigate("/");
+// };
 
 // 회원 탈퇴
-export const resignation = async (accessToken) => {
-  try {
-    const res = await axiosInstance.delete("api/user", {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-    return res.data;
-  } catch (error) {
-    console.error("Error during resignation:", error);
-    throw error;
-  }
-};
+// export const resignation = async (accessToken) => {
+//   const navigate = useNavigate();
+
+//   try {
+//     const res = await axiosInstance.delete("api/user", {
+//       headers: {
+//         Authorization: `Bearer ${accessToken}`,
+//       },
+//     });
+//     navigate("/");
+//   } catch (error) {
+//     console.error("Error during resignation:", error);
+//     throw error;
+//   }
+// };

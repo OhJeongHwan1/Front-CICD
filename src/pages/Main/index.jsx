@@ -215,7 +215,7 @@ function Main() {
     };
     dispatch(getPostingListAsync(param))
       .unwrap()
-      .then((res) => setData(res));
+      .then((res) => setData(res.content));
     //.catch((err) => alert(err));
 
     console.log(data);
