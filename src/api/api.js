@@ -25,8 +25,22 @@ axiosInstance.interceptors.request.use(
 );
 
 export default {
+  // 로그인
   login: (data) => axiosInstance.post("/api/user/login", data),
+  resignation: () => {
+    const token = localStorage.getItem("token");
+    return axiosInstance.post(
+      "/api/user",
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+  },
 
+  // 포스팅
   getPostingList: (data) =>
     axiosInstance.get(
       `api/posting/search?nationCode=${
@@ -40,17 +54,28 @@ export default {
       }`
     ),
 
+  // 내 정보 보기
+
+  // 스페이스
   postSpace: (data) => axiosInstance.post(`api/space`, data),
+
   editSpace: (data) => axiosInstance.put(`api/space/${data.spaceId}`, data),
 
-  getSpaceDetail: (id) => axiosInstance.get(`api/space?spaceId=${id}`),
-  getSpacePostingList: (id) =>
-    axiosInstance.get(`api/posting/space?spaceId=${id}`),
+  getSpaceDetail: (id) => axiosInstance.get(`api/space/${id}`),
+
+  getSpacePostingList: (id) => axiosInstance.get(`api/posting/space/${id}`),
+
   getSpaceScheduleList: (id) =>
-    axiosInstance.get(`api/schedule/?spaceId=${id}/schedules`),
+    axiosInstance.get(`api/schedule/${id}/schedules`),
+
   addMembers: (data) => axiosInstance.post(`api/space/member`, data),
+
   deleteMember: (data) =>
     axiosInstance.delete(`api/space/member`, { data: data }),
+
+  addSchedule: (data) => axiosInstance.post(`api/schedule`, data),
+
+  deleteSchedule: (id) => axiosInstance.delete(`api/schedule/${id}`),
 };
 
 // 회원가입
@@ -146,24 +171,26 @@ export const signUp = async (email, password, nickname) => {
 // };
 
 // 로그아웃
-const logout = () => {
-  // localStorage에서 토큰을 삭제
-  localStorage.removeItem("token");
+// const logout = () => {
+//   // localStorage에서 토큰을 삭제
+//   localStorage.removeItem("token");
 
-  navigate("/");
-};
+//   navigate("/");
+// };
 
 // 회원 탈퇴
-export const resignation = async (accessToken) => {
-  try {
-    const res = await axiosInstance.delete("api/user", {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-    return res.data;
-  } catch (error) {
-    console.error("Error during resignation:", error);
-    throw error;
-  }
-};
+// export const resignation = async (accessToken) => {
+//   const navigate = useNavigate();
+
+//   try {
+//     const res = await axiosInstance.delete("api/user", {
+//       headers: {
+//         Authorization: `Bearer ${accessToken}`,
+//       },
+//     });
+//     navigate("/");
+//   } catch (error) {
+//     console.error("Error during resignation:", error);
+//     throw error;
+//   }
+// };

@@ -109,7 +109,7 @@ function Schedule({ groupedByDay }) {
         {groupedByDay &&
           Object.entries(groupedByDay).map(([day, schedules]) => (
             <DayBox key={day}>
-              <Day>{day}일</Day>
+              <Day>{day.split("-")[2]}일</Day>
               <Wrap>
                 {schedules.map((schedule, index) => (
                   <Sc key={schedule.scheduleId} isFirst={index === 0}>

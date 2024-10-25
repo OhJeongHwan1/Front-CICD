@@ -205,7 +205,7 @@ function NavigationBar() {
               btnClick={moveToPosting}
             />
           </SideButtonWrap>
-          {user.nickName !== null && (
+          {user.userId !== null && (
             <DeleteButton>
               <SideButton deleteButton icon="/logout.svg" btnClick={logout} />
             </DeleteButton>

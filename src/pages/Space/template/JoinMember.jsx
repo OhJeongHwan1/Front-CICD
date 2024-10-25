@@ -82,7 +82,7 @@ const InviteMessage = styled.div`
 function JoinMember({ maxMembers, members, leaderId, spaceId }) {
   const dispatch = useDispatch();
   const renderMessage = () => {
-    if (maxMembers > members.length)
+    if (maxMembers > members?.length)
       return (
         <div className="flex gap-[6px]">
           <p>아직 멤버를 초대할 수 있어요!</p>
@@ -96,7 +96,7 @@ function JoinMember({ maxMembers, members, leaderId, spaceId }) {
   return (
     <Container>
       <Top>
-        <p>{`참여 멤버 (${members.length}/${maxMembers})`}</p>
+        <p>{`참여 멤버 (${members?.length}/${maxMembers})`}</p>
       </Top>
 
       <ContentArea>

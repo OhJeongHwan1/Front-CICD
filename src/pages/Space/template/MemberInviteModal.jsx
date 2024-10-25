@@ -62,7 +62,7 @@ const Email = styled.p`
   color: ${theme.colors.neutral700};
 `;
 
-function MemberInviteModal({ members, spaceId }) {
+function MemberInviteModal({ members, spaceId, leaderId }) {
   const { memberInviteModal } = useSelector(selectModal);
   const [selectedMembers, setSelectedMembers] = useState([]);
   const dispatch = useDispatch();
@@ -109,40 +109,42 @@ function MemberInviteModal({ members, spaceId }) {
       <Title>내 이웃</Title>
       <SubTitle>내 이웃에서 멤버를 초대하세요!</SubTitle>
       <MemberWrapper>
-        {members.map((member) => {
-          return (
-            <MemberCard
-              selected={selectedMembers.some((m) => m === member)}
-              key={member.userId}
-              onClick={() => memberClick(member)}
-            >
-              <ProfileImg
-                src={
-                  member.profile !== null
-                    ? member.profile
-                    : "/Default Profile.png"
-                }
-                alt=""
-              />
-              <NickName>{member.nickname}</NickName>
-              <Email>{member.email}</Email>
+        {members
+          ?.filter((mem) => mem.userId !== leaderId)
+          .map((member) => {
+            return (
+              <MemberCard
+                selected={selectedMembers.some((m) => m === member)}
+                key={member.userId}
+                onClick={() => memberClick(member)}
+              >
+                <ProfileImg
+                  src={
+                    member.profile !== null
+                      ? member.profile
+                      : "/Default Profile.png"
+                  }
+                  alt=""
+                />
+                <NickName>{member.nickname}</NickName>
+                <Email>{member.email}</Email>
 
-              <DynamicSVG
-                svgUrl="/tick-square.svg"
-                color={theme.colors.primary}
-                style={{
-                  position: "absolute",
-                  bottom: "-5px",
-                  right: "-5px",
-                  transition: "0.1s",
-                  opacity: selectedMembers.some((m) => m === member)
-                    ? "1"
-                    : "0",
-                }}
-              />
-            </MemberCard>
-          );
-        })}
+                <DynamicSVG
+                  svgUrl="/tick-square.svg"
+                  color={theme.colors.primary}
+                  style={{
+                    position: "absolute",
+                    bottom: "-5px",
+                    right: "-5px",
+                    transition: "0.1s",
+                    opacity: selectedMembers.some((m) => m === member)
+                      ? "1"
+                      : "0",
+                  }}
+                />
+              </MemberCard>
+            );
+          })}
       </MemberWrapper>
     </CustomModal>
   );

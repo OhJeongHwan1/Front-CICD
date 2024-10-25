@@ -5,6 +5,8 @@ import Button from "../../components/Button";
 import CustomEditor from "./template/CustomEditor";
 import SchedulePicker from "./template/ScheduleSelector";
 import SpaceSelector from "./template/SpaceSelector";
+import ScheduleSelector from "./template/ScheduleSelector";
+import ScheduleSelectorModal from "./template/ScheduleSelectorModal";
 
 const PostingAddContainer = styled.div`
   display: flex;
@@ -201,6 +203,7 @@ function PostingAdd() {
       </SubmitContainer>
       <Background />
       <Background2 />
+      <ScheduleSelectorModal setSchdule={setSchdule} />
     </PostingAddContainer>
   );
 }

@@ -7,6 +7,7 @@ import theme from "../../../theme";
 import DynamicSVG from "../../../components/DynamicSVG";
 import { setScheduleAddModal } from "../../../redux/modalSlice";
 import ScheduleAddModal from "./ScheduleAddModal";
+import { deleteScheduleAsync } from "../../../redux/scheduleSlice";
 
 const ContentArea = styled.div`
   width: 100%;
@@ -43,6 +44,7 @@ const Day = styled.div`
   font-size: ${theme.fontSizes.lg};
   font-weight: ${theme.fontWeight.bold};
   color: ${theme.colors.neutral700};
+  line-height: 50px;
 `;
 
 const Wrap = styled.div`
@@ -86,13 +88,21 @@ const AddButton = styled.div`
   }
 `;
 
-function ScheduleModal({ groupedByDay, deleteSchedule }) {
+function ScheduleModal({ groupedByDay, deleteSchedule, loadSpaceSchedule }) {
   const dispatch = useDispatch();
   const { scheduleModal, scheduleAddModal } = useSelector(selectModal);
   const [selectDay, setSelectDay] = useState(null);
 
   const handleClose = () => {
     dispatch(setScheduleModal(false));
+  };
+
+  const deleteButtonClick = (id) => {
+    dispatch(deleteScheduleAsync(id))
+      .unwrap()
+      .then(() => {
+        loadSpaceSchedule();
+      });
   };
 
   return (
@@ -108,44 +118,44 @@ function ScheduleModal({ groupedByDay, deleteSchedule }) {
         {groupedByDay &&
           Object.entries(groupedByDay).map(([day, schedules]) => (
             <>
-              <DayBox key={day}>
-                <Day>{day}일</Day>
-                <Wrap>
-                  {schedules.map((schedule, index) => (
-                    <div style={{ position: "relative" }}>
-                      <Sc key={schedule.scheduleId} isFirst={index === 0}>
-                        <div>{schedule.memo}</div>
-                        <div className="flex items-center gap-[8px]">
-                          <div>{schedule.spot}</div>
-                          <DynamicSVG
-                            svgUrl="/location.svg"
-                            color={
-                              index === 0
-                                ? theme.colors.neutral50
-                                : theme.colors.neutral500
-                            }
-                            width={20}
-                            height={20}
-                          />
-                        </div>
-                      </Sc>
-                      <DynamicSVG
-                        svgUrl="/minus-cirlce.svg"
-                        color={theme.colors.neutral500}
-                        style={{
-                          position: "absolute",
-                          top: "14px",
-                          right: "-40px",
-                          cursor: "pointer",
-                        }}
-                        onClick={() =>
-                          deleteSchedule(schedule.scheduleId, schedule.spaceId)
-                        }
-                      />
-                    </div>
-                  ))}
-                </Wrap>
-              </DayBox>
+              {schedules.length > 0 && (
+                <DayBox key={day}>
+                  <Day>{day.split("-")[2]}일</Day>
+                  <Wrap>
+                    {schedules.map((schedule, index) => (
+                      <div style={{ position: "relative" }}>
+                        <Sc key={schedule.scheduleId} isFirst={index === 0}>
+                          <div>{schedule.memo}</div>
+                          <div className="flex items-center gap-[8px]">
+                            <div>{schedule.spot}</div>
+                            <DynamicSVG
+                              svgUrl="/location.svg"
+                              color={
+                                index === 0
+                                  ? theme.colors.neutral50
+                                  : theme.colors.neutral500
+                              }
+                              width={20}
+                              height={20}
+                            />
+                          </div>
+                        </Sc>
+                        <DynamicSVG
+                          svgUrl="/minus-cirlce.svg"
+                          color={theme.colors.neutral500}
+                          style={{
+                            position: "absolute",
+                            top: "14px",
+                            right: "-40px",
+                            cursor: "pointer",
+                          }}
+                          onClick={() => deleteButtonClick(schedule.scheduleId)}
+                        />
+                      </div>
+                    ))}
+                  </Wrap>
+                </DayBox>
+              )}
               <DayBox>
                 <Day></Day>
                 <Wrap>
@@ -164,7 +174,12 @@ function ScheduleModal({ groupedByDay, deleteSchedule }) {
             </>
           ))}
       </ContentArea>
-      {scheduleAddModal && <ScheduleAddModal selectDay={selectDay} />}
+      {scheduleAddModal && (
+        <ScheduleAddModal
+          selectDay={selectDay}
+          loadSpaceSchedule={loadSpaceSchedule}
+        />
+      )}
     </CustomModal>
   );
 }

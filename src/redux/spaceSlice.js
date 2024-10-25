@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../api/api";
 
 const initialState = {
+  selectedSpaceId: 0,
   spaceList: [],
   spaceDetail: {
     spaceId: 0,
@@ -171,7 +172,6 @@ const initialState = {
       commentCnt: 6,
     },
   ],
-  selectedSpaceId: 0,
   //
 };
 
@@ -181,7 +181,7 @@ export const getSpaceDetailAsync = createAsyncThunk(
     const response = await api.getSpaceDetail(data);
     const { result } = response.data;
 
-    return result;
+    return response.data;
   }
 );
 
@@ -201,7 +201,7 @@ export const getSpaceScheduleListAsync = createAsyncThunk(
     const response = await api.getSpaceScheduleList(data);
     const { result } = response.data;
 
-    return result;
+    return response.data;
   }
 );
 
@@ -211,7 +211,7 @@ export const postSpaceAsync = createAsyncThunk(
     const response = await api.postSpace(data);
     const { result } = response.data;
 
-    return result;
+    return response.data;
   }
 );
 
