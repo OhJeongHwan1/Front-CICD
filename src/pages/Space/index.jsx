@@ -94,14 +94,12 @@ function Space() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    loadSpacePostingList();
-    loadSpaceDetail();
-    loadSpaceSchedule();
+    reload();
   }, [selectedSpaceId]);
 
   useEffect(() => {
     setGroupdedByDay(groupSchedulesByDay(scheduleList));
-  }, [scheduleList]);
+  }, [scheduleList, spaceDetail.startDate, spaceDetail.endDate]);
 
   const reload = () => {
     loadSpaceDetail();

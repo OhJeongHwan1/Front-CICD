@@ -102,6 +102,7 @@ function ScheduleModal({ groupedByDay, deleteSchedule, loadSpaceSchedule }) {
       .unwrap()
       .then(() => {
         loadSpaceSchedule();
+        alert("삭제되었습니다.");
       });
   };
 
@@ -118,11 +119,11 @@ function ScheduleModal({ groupedByDay, deleteSchedule, loadSpaceSchedule }) {
         {groupedByDay &&
           Object.entries(groupedByDay).map(([day, schedules]) => (
             <>
-              {schedules.length > 0 && (
-                <DayBox key={day}>
-                  <Day>{day.split("-")[2]}일</Day>
-                  <Wrap>
-                    {schedules.map((schedule, index) => (
+              <DayBox key={day}>
+                <Day>{day.split("-")[2]}일</Day>
+                <Wrap>
+                  {schedules.length > 0 ? (
+                    schedules.map((schedule, index) => (
                       <div style={{ position: "relative" }}>
                         <Sc key={schedule.scheduleId} isFirst={index === 0}>
                           <div>{schedule.memo}</div>
@@ -152,10 +153,22 @@ function ScheduleModal({ groupedByDay, deleteSchedule, loadSpaceSchedule }) {
                           onClick={() => deleteButtonClick(schedule.scheduleId)}
                         />
                       </div>
-                    ))}
-                  </Wrap>
-                </DayBox>
-              )}
+                    ))
+                  ) : (
+                    <Sc>
+                      <div
+                        style={{
+                          textAlign: "center",
+                          width: "100%",
+                          color: "#bdbdbd",
+                        }}
+                      >
+                        아직 일정이 없습니다.
+                      </div>
+                    </Sc>
+                  )}
+                </Wrap>
+              </DayBox>
               <DayBox>
                 <Day></Day>
                 <Wrap>
