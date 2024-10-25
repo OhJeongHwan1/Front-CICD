@@ -101,6 +101,21 @@ function MyInfo() {
     comment: 0,
     follow: 0,
   });
+
+  const handleCommentTotal = (count) => {
+    setTotal((prev) => ({
+      ...prev,
+      comment: count,
+    }));
+  };
+
+  const handleFollowTotal = (count) => {
+    setTotal((prev) => ({
+      ...prev,
+      follow: count,
+    }));
+  };
+
   const [isOpen, setOpen] = useState(false);
   const [selectedItems, setSelectedItems] = useState(initialSelectedState);
   const [spaceResponse, setSpaceResponse] = useState();
@@ -249,10 +264,10 @@ function MyInfo() {
             ></Button>
           )}
         </MyPageTitle>
-        {selectedItems.space && <MySpaceComp></MySpaceComp>}
+        {/* {selectedItems.space && <MySpaceComp></MySpaceComp>}
         {selectedItems.posting && <MyPostingComp></MyPostingComp>}
-        {selectedItems.comment && <MyCommentComp></MyCommentComp>}
-        {selectedItems.follow && <MyFollowComp></MyFollowComp>}
+        {selectedItems.comment && <MyCommentComp user={user} />}
+        {selectedItems.follow && <MyFollowComp></MyFollowComp>} */}
       </MyPageBottomSection>
       <AddFollowModal
         isOpen={isOpen}

@@ -7,8 +7,40 @@ const Border = styled.div`
   display: flex;
   background-color: #fff;
   border-radius: ${theme.borderRadius.md};
-  justify-content: center;
+  width: 100%;
+`;
+
+const Container = styled.div`
+  display: flex;
   align-items: center;
+  width: 100%;
+  padding: 20px 30px;
+  position: relative;
+`;
+
+const ProfileSection = styled.div`
+  display: flex;
+  align-items: center;
+  flex: 1;
+`;
+
+const ImageWrapper = styled.div`
+  flex-shrink: 0;
+  width: 60px;
+  height: 60px;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+`;
+
+const InfoSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-left: 28px;
+  flex: 1;
 `;
 
 const Nickname = styled.div`
@@ -20,37 +52,49 @@ const Email = styled.div`
   color: ${theme.colors.neutral400};
 `;
 
+const DeleteButton = styled.button`
+  position: absolute;
+  right: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+`;
+
 const handleFollowDelete = () => {
-  if (window.confirm("정말로 삭제하실 건가요?")) {
+  if (window.confirm("내 이웃에서 삭제할까요?")) {
     // 이웃 삭제 API 호출
   }
 };
 
-function EachFollowComp({ nickname, email }) {
+function EachFollowComp({ nickname, email, profile }) {
   return (
     <Border>
-      <div className="flex justify-center items-center pl-7 pr-7 pt-4 pb-4">
-        <div className="flex justify-center items-center">
-          <img
-            src={"./Default Profile4.png"}
-            style={{ minWidth: "60px", height: "60px" }}
-            alt="./Default Profile.png"
-          />
-        </div>
-        <div className="flex flex-col ml-7">
-          <Nickname>{nickname}</Nickname>
-          <Email>{email}</Email>
-        </div>
-        <button onClick={handleFollowDelete}>
+      <Container>
+        <ProfileSection>
+          <ImageWrapper>
+            <img src={profile} alt="Default Profile" />
+          </ImageWrapper>
+          <InfoSection>
+            <Nickname>{nickname}</Nickname>
+            <Email>{email}</Email>
+          </InfoSection>
+        </ProfileSection>
+        <DeleteButton onClick={handleFollowDelete}>
           <DynamicSVG
-            className="ml-4 pr-5"
-            svgUrl={"/close-circle.svg"}
+            svgUrl="/close-circle.svg"
             width={45}
             height={45}
-            color={`${theme.colors.neutral400}`}
+            color={theme.colors.neutral400}
           />
-        </button>
-      </div>
+        </DeleteButton>
+      </Container>
     </Border>
   );
 }
