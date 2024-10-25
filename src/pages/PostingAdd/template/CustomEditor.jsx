@@ -3,6 +3,7 @@ import { Editor } from "@toast-ui/react-editor";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import styled from "styled-components";
 import theme from "../../../theme";
+import axios from "axios";
 
 const EditorContainer = styled.div`
   .toastui-editor-defaultUI {
@@ -383,10 +384,41 @@ const CustomEditor = ({ setContent }) => {
     });
   }, [setContent]);
 
+  // 이미지 업로드
+  const uploadImage = async (blob) => {
+    try {
+      const formData = new FormData();
+      formData.append("images", blob);
+
+      const response = await axios.post(
+        "http://haneol-test.kro.kr/api/upload",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      return response.data; // 서버에서 반환하는 URL 구조에 맞게 수정
+    } catch (error) {
+      console.error("업로드 실패:", error);
+      return null;
+    }
+  };
+
   return (
     <EditorContainer ref={containerRef}>
       <Editor
         ref={editorRef}
+        hooks={{
+          addImageBlobHook: async (blob, callback) => {
+            const imageUrl = await uploadImage(blob);
+            if (imageUrl) {
+              callback(imageUrl, "이미지");
+            }
+          },
+        }}
         initialValue=""
         previewStyle="tab"
         initialEditType="markdown"
