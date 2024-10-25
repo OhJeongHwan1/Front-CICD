@@ -209,10 +209,6 @@ function Main() {
       <BodyArea>
         <CardArea>
           <CityImageSlider city={location.city} />
-          {/* <div style={{ position: "relative", minWidth: "500px" }}>
-            <MainImg alt="" src="https://picsum.photos/300/300/?image=104" />
-            <MainImgText>{location.name}</MainImgText>
-          </div> */}
           <ExchangeCard nationCode={location.nation} />
           <WeatherCard city={location.city} />
         </CardArea>
