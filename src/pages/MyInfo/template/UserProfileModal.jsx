@@ -4,6 +4,9 @@ import theme from "../../../theme";
 import Input from "../../../components/Input";
 import Button from "../../../components/Button";
 import CustomModal from "../../../components/CustomModal";
+import { useDispatch } from "react-redux";
+import { resignAsync, userLogOut } from "../../../redux/userSlice";
+import { useNavigate } from "react-router";
 
 const ProfileSection = styled.div`
   display: flex;
@@ -77,6 +80,9 @@ const ErrorText = styled(GuideText)`
 `;
 
 function UserProfileModal({ isOpen, onClose, profile, email, nickname }) {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const [inputValue, setInputValue] = useState(nickname);
   const [isCurrentPw, setCurrentPw] = useState(false);
   const [firstPw, setFirstPw] = useState("");
@@ -89,12 +95,19 @@ function UserProfileModal({ isOpen, onClose, profile, email, nickname }) {
     onNicknameChange?.(e.target.value);
   };
 
-  const handleResignation = () => {
-    const res = window.confirm("정말 탈퇴하실 건가요?");
-    if (res) {
-      // 회원 탈퇴 API
-    } else {
-      return;
+  const handleResignation = async () => {
+    try {
+      // 사용자 확인
+      if (window.confirm("정말로 탈퇴하시겠습니까?")) {
+        const result = await dispatch(resignAsync()).unwrap();
+        if (result) {
+          dispatch(userLogOut());
+          navigate("/");
+        }
+      }
+    } catch (error) {
+      // 에러 처리
+      console.error("회원 탈퇴에 실패했어요:", error);
     }
   };
 
