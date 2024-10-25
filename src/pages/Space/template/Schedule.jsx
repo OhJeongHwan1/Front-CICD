@@ -88,6 +88,24 @@ const Sc = styled.div`
   }
 `;
 
+const Sc2 = styled.div`
+  width: "100%";
+  border-radius: 20px;
+  background-color: ${({ isFirst }) =>
+    isFirst ? `${theme.colors.neutral500}` : `${theme.colors.neutral100}`};
+  height: 52px;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  justify-content: space-between;
+  div {
+    color: ${({ isFirst }) =>
+      isFirst ? `${theme.colors.neutral50}` : ` ${theme.colors.neutral500}`};
+    font-size: ${theme.fontSizes.sm};
+    font-weight: ${theme.fontWeight.regular};
+  }
+`;
+
 const Detail = styled.div`
   cursor: pointer;
   font-size: ${theme.fontSizes.md};
@@ -111,24 +129,38 @@ function Schedule({ groupedByDay }) {
             <DayBox key={day}>
               <Day>{day.split("-")[2]}일</Day>
               <Wrap>
-                {schedules.map((schedule, index) => (
-                  <Sc key={schedule.scheduleId} isFirst={index === 0}>
-                    <div>{schedule.memo}</div>
-                    <div className="flex items-center gap-[8px]">
-                      <div>{schedule.spot}</div>
-                      <DynamicSVG
-                        svgUrl="/location.svg"
-                        color={
-                          index === 0
-                            ? theme.colors.neutral50
-                            : theme.colors.neutral500
-                        }
-                        width={20}
-                        height={20}
-                      />
+                {schedules.length ? (
+                  schedules.map((schedule, index) => (
+                    <Sc key={schedule.scheduleId} isFirst={index === 0}>
+                      <div>{schedule.memo}</div>
+                      <div className="flex items-center gap-[8px]">
+                        <div>{schedule.spot}</div>
+                        <DynamicSVG
+                          svgUrl="/location.svg"
+                          color={
+                            index === 0
+                              ? theme.colors.neutral50
+                              : theme.colors.neutral500
+                          }
+                          width={20}
+                          height={20}
+                        />
+                      </div>
+                    </Sc>
+                  ))
+                ) : (
+                  <Sc2>
+                    <div
+                      style={{
+                        textAlign: "center",
+                        width: "100%",
+                        color: "#bdbdbd",
+                      }}
+                    >
+                      아직 일정이 없습니다.
                     </div>
-                  </Sc>
-                ))}
+                  </Sc2>
+                )}
               </Wrap>
             </DayBox>
           ))}
