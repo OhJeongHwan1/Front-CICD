@@ -8,7 +8,10 @@ import DynamicSVG from "./DynamicSVG";
 import CustomDatePicker from "./CustomDatePicker";
 import { formatDate } from "../time";
 import { postSpaceAsync } from "../redux/spaceSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { selectUser } from "../redux/userSlice";
+import { setSelectedSpaceId, selectSpace } from "../redux/spaceSlice";
+import { useNavigate } from "react-router";
 
 const Title = styled.p`
   font-size: ${theme.fontSizes.h4};
@@ -104,6 +107,9 @@ function SpaceAddModal({ spaceModal, handleClose }) {
   const [locate, setLocate] = useState(null);
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
+  // const { user } = useSelector(selectUser);
+  const { selectedSpaceId } = useSelector(selectSpace);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const spaceAddButtonClick = () => {
@@ -116,7 +122,25 @@ function SpaceAddModal({ spaceModal, handleClose }) {
       startDate: formatDate(startDate),
       endDate: formatDate(endDate),
     };
-    dispatch(postSpaceAsync(data));
+
+    if (name === "" || description === "" || locate === null) {
+      alert("값을 다 입력해주세요.");
+      return;
+    }
+
+    dispatch(postSpaceAsync(data))
+      .unwrap()
+      .then((res) => {
+        dispatch(setSelectedSpaceId(res.spaceId));
+        alert("생성되었습니다.");
+        moveToSpaceDetail();
+        handleClose();
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const moveToSpaceDetail = () => {
+    navigate(`/space/${selectedSpaceId}`);
   };
 
   return (

@@ -6,6 +6,7 @@ import Input from "../../../components/Input";
 import theme from "../../../theme";
 import styled from "styled-components";
 import { selectSpace } from "../../../redux/spaceSlice";
+import { addScheduleAsync } from "../../../redux/scheduleSlice";
 
 const Title = styled.p`
   font-size: ${theme.fontSizes.h4};
@@ -74,7 +75,7 @@ const InputArea = ({ title, discription, children }) => {
   );
 };
 
-function ScheduleAddModal({ selectDay }) {
+function ScheduleAddModal({ selectDay, loadSpaceSchedule }) {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const { spaceDetail } = useSelector(selectSpace);
@@ -93,7 +94,13 @@ function ScheduleAddModal({ selectDay }) {
       day: selectDay,
     };
 
-    console.log(data);
+    dispatch(addScheduleAsync(data))
+      .unwrap()
+      .then(() => {
+        loadSpaceSchedule();
+        alert("추가되었습니다.");
+        dispatch(setScheduleAddModal(false));
+      });
   };
   return (
     <CustomModal

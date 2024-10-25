@@ -1,12 +1,33 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import api from "../api/api.js";
 
 const initialState = {
   selectedScheduleId: 0,
   //
 };
 
+export const deleteScheduleAsync = createAsyncThunk(
+  "schedule/deleteSchedule",
+  async (data) => {
+    const response = await api.deleteSchedule(data);
+    const { result } = response.data;
+
+    return result;
+  }
+);
+
+export const addScheduleAsync = createAsyncThunk(
+  "schedule/addSchedule",
+  async (data) => {
+    const response = await api.addSchedule(data);
+    const { result } = response.data;
+
+    return response.data;
+  }
+);
+
 export const scheduleSlice = createSlice({
-  name: "modal",
+  name: "schedule",
   initialState,
   reducers: {
     setSelectedScheduleId: (state, action) => {

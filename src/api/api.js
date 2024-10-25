@@ -25,6 +25,7 @@ axiosInstance.interceptors.request.use(
 );
 
 export default {
+  // 로그인
   login: (data) => axiosInstance.post("/api/user/login", data),
   resignation: () => {
     const token = localStorage.getItem("token");
@@ -39,22 +40,34 @@ export default {
     );
   },
 
+  // 포스팅
   getPostingList: (data) =>
     axiosInstance.get(
       `api/posting/search?nationCode=${data.nationCode}&cityCode=${data.cityCode}&writerNickname=${data.writerNickname}&title=${data.title}&page=${data.page}`
     ),
 
+  // 내 정보 보기
+
+  // 스페이스
   postSpace: (data) => axiosInstance.post(`api/space`, data),
+
   editSpace: (data) => axiosInstance.put(`api/space/${data.spaceId}`, data),
 
-  getSpaceDetail: (id) => axiosInstance.get(`api/space?spaceId=${id}`),
-  getSpacePostingList: (id) =>
-    axiosInstance.get(`api/posting/space?spaceId=${id}`),
+  getSpaceDetail: (id) => axiosInstance.get(`api/space/${id}`),
+
+  getSpacePostingList: (id) => axiosInstance.get(`api/posting/space/${id}`),
+
   getSpaceScheduleList: (id) =>
-    axiosInstance.get(`api/schedule/?spaceId=${id}/schedules`),
+    axiosInstance.get(`api/schedule/${id}/schedules`),
+
   addMembers: (data) => axiosInstance.post(`api/space/member`, data),
+
   deleteMember: (data) =>
     axiosInstance.delete(`api/space/member`, { data: data }),
+
+  addSchedule: (data) => axiosInstance.post(`api/schedule`, data),
+
+  deleteSchedule: (id) => axiosInstance.delete(`api/schedule/${id}`),
 };
 
 // 회원가입
