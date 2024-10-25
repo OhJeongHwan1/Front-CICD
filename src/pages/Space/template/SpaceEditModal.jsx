@@ -127,6 +127,7 @@ function SpaceEditModal({ spaceDetail, reload }) {
       .unwrap()
       .then(() => {
         reload();
+        alert("수정되었습니다.");
         dispatch(setSpaceEditModal(false));
       });
   };

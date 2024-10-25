@@ -148,11 +148,7 @@ function MyInfo() {
   return (
     <Background>
       <MyPageTopSection>
-        <UserProfileCard
-          profile={user.profile}
-          nickname={user.nickName}
-          email={user.email}
-        ></UserProfileCard>
+        <UserProfileCard user={user}></UserProfileCard>
 
         <MyPageSelectList>
           <SelectListItem

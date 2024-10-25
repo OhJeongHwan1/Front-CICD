@@ -179,7 +179,6 @@ export const getSpaceDetailAsync = createAsyncThunk(
   "space/getSpaceDetail",
   async (data) => {
     const response = await api.getSpaceDetail(data);
-    const { result } = response.data;
 
     return response.data;
   }
@@ -189,9 +188,8 @@ export const getSpacePostingListAsync = createAsyncThunk(
   "space/getSpacePostingList",
   async (data) => {
     const response = await api.getSpacePostingList(data);
-    const { result } = response.data;
 
-    return result;
+    return response.data;
   }
 );
 
@@ -199,7 +197,6 @@ export const getSpaceScheduleListAsync = createAsyncThunk(
   "space/getSpaceScheduleList",
   async (data) => {
     const response = await api.getSpaceScheduleList(data);
-    const { result } = response.data;
 
     return response.data;
   }
