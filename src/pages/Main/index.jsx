@@ -17,6 +17,7 @@ import ExchangeCard from "./template/ExchangeCard";
 import WeatherCard from "./template/WeatherCard";
 import { useDispatch } from "react-redux";
 import { getPostingListAsync } from "../../redux/postingSlice";
+import CityImageSlider from "./template/ImageCard";
 
 const Background = styled.div`
   background-color: ${theme.colors.neutral100};
@@ -207,14 +208,17 @@ function Main() {
   }, [loadData]);
 
   useEffect(() => {
-    const data = {
+    const param = {
       nationCode: location.nation,
       cityCode: location.city,
+      page: 1,
     };
-    dispatch(getPostingListAsync(data))
+    dispatch(getPostingListAsync(param))
       .unwrap()
       .then((res) => setData(res));
-    // .catch((err) => alert(err));
+    //.catch((err) => alert(err));
+
+    console.log(data);
   }, [location]);
 
   if (loading && !data.length) {
@@ -239,10 +243,11 @@ function Main() {
       </HeaderArea>
       <BodyArea>
         <CardArea>
-          <div style={{ position: "relative", minWidth: "500px" }}>
-            <MainImg alt="" src="https://picsum.photos/300/300/?image=103" />
+          <CityImageSlider city={location.city} />
+          {/* <div style={{ position: "relative", minWidth: "500px" }}>
+            <MainImg alt="" src="https://picsum.photos/300/300/?image=104" />
             <MainImgText>{location.name}</MainImgText>
-          </div>
+          </div> */}
           <ExchangeCard nationCode={location.nation} />
           <WeatherCard city={location.city} />
         </CardArea>

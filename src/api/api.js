@@ -29,7 +29,7 @@ export default {
 
   getPostingList: (data) =>
     axiosInstance.get(
-      `api/posting/search?nationCode=${data.nationCode}&cityCode=${data.cityCode}&writerNickname=${data.writerNickname}&title=${data.title}`
+      `api/posting/search?nationCode=${data.nationCode}&cityCode=${data.cityCode}&writerNickname=${data.writerNickname}&title=${data.title}&page=${data.page}`
     ),
 
   postSpace: (data) => axiosInstance.post(`api/space`, data),
