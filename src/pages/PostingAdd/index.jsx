@@ -7,6 +7,8 @@ import SchedulePicker from "./template/ScheduleSelector";
 import SpaceSelector from "./template/SpaceSelector";
 import ScheduleSelector from "./template/ScheduleSelector";
 import ScheduleSelectorModal from "./template/ScheduleSelectorModal";
+import { useDispatch } from "react-redux";
+import { getMySpaceListAsync } from "../../redux/userSlice";
 
 const PostingAddContainer = styled.div`
   display: flex;
@@ -109,6 +111,9 @@ function PostingAdd() {
   const [isLockBtnHovered, setIsLockBtnHovered] = useState(false);
   const [isLockBtnClicked, setIsLockBtnClicked] = useState(false);
   const [isValid, setIsValid] = useState(false);
+  const [spaceList, setSpaceList] = useState([]);
+
+  const dispatch = useDispatch();
 
   // 버튼 활성화 조건
   useEffect(() => {
@@ -123,6 +128,14 @@ function PostingAdd() {
       isSpaceValid && isScheduleValid && isTitleValid && isContentValid
     );
   }, [space, schedule, title, content]);
+
+  useEffect(() => {
+    dispatch(getMySpaceListAsync())
+      .unwrap()
+      .then((res) => {
+        setSpaceList(res);
+      });
+  }, []);
 
   const handleSave = () => {
     const data = {
@@ -141,7 +154,11 @@ function PostingAdd() {
     <PostingAddContainer>
       <EditorContainer>
         <EditorHeader>
-          <SpaceSelector setSpace={setSpace} />
+          <SpaceSelector
+            space={space}
+            setSpace={setSpace}
+            spaceList={spaceList}
+          />
           <TitleArea>
             <TitleInput
               placeholder="제목을 입력하세요."

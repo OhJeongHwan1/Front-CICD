@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import PostingNotFound from "./template/PostingNotFound";
-import PostingLoad from "./template/PostingLoad";
+import CustomLoading from "../../components/CustomLoading";
 import styled from "styled-components";
 import theme from "../../theme";
 import DynamicSVG from "../../components/DynamicSVG";
@@ -11,6 +11,13 @@ import TopButton from "../../components/TopButton";
 import axios from "axios";
 import SpaceCard from "./template/SpaceCard";
 import NextPosting from "./template/NextPosting";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getPostingDetailAsync,
+  deletePostingAsync,
+  selectPosting,
+} from "../../redux/postingSlice";
+import { getMySpaceListAsync } from "../../redux/userSlice";
 
 const PostingDetailContainer = styled.div`
   display: flex;
@@ -81,6 +88,11 @@ const EditBtn = styled.div`
   color: ${theme.colors.neutral400};
   cursor: pointer;
   padding: 0 10px;
+  border-radius: 6px;
+
+  &:hover {
+    background-color: ${theme.colors.neutral200};
+  }
 `;
 
 const InfoArea = styled.div`
@@ -111,66 +123,28 @@ const AssociatedPostingArea = styled.div`
 `;
 
 function PostingDetail() {
-  const { postingId } = useParams();
+  const { selectedPostingId } = useSelector(selectPosting);
   const [postData, setPostData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchPostData = async () => {
-      try {
-        setLoading(true);
-        // Axios API 호출
-        // const response = await axios.get(`/api/posting/${postingId}`);
-
-        // Dummy Data (API 연동 전까지 사용)
-        const dummyData = {
-          space: `새로운 여행01`,
-          spaceParticipantsProfile: [
-            "https://i.imgur.com/VnZtNxH.png",
-            "https://i.imgur.com/aXtrK5E.png",
-            "https://i.imgur.com/UIAinYd.png",
-            "https://i.imgur.com/QHfydVa.png",
-            "https://i.imgur.com/VXvXELL.png",
-            "https://i.imgur.com/D4UpBrx.png",
-          ],
-          spaceStartDate: "2024-10-10",
-          spaceEndDate: "2024-10-21",
-          postingId: postingId,
-          prevPostingTitle: `미국 여행 #${parseInt(postingId) - 1}`,
-          nextPostingTitle: `미국 여행 #${parseInt(postingId) + 1}`,
-          nation: "미국",
-          city: "샌프란시스코",
-          writerProfile: "https://i.imgur.com/VnZtNxH.png",
-          writerNickname: "USER001",
-          writerEmail: "abcd@gmail.com",
-          title: `미국 여행 #${postingId}`,
-          accessLevel: "MEMBER_ONLY",
-          mainImgUrl: "https://i.imgur.com/0TIs0vO.png",
-          content:
-            "![](https://i.imgur.com/0TIs0vO.png)\n## 새로운 포스팅 제목입니다.\n포스팅 내용입니다.\nLorem ipsum dolor sit amet, consectetur adipisicing elit. Vel cumque optio inventore at accusamus. Dolorum, atque, vitae mollitia beatae explicabo quos ex ut quibusdam repellat quis omnis nihil impedit ducimus nemo harum necessitatibus repudiandae ratione ipsa corporis quidem fugiat ab!\n![](https://i.imgur.com/0TIs0vO.png)\n## 새로운 포스팅 제목입니다.\n포스팅 내용입니다.\nLorem ipsum dolor sit amet, consectetur adipisicing elit. Vel cumque optio inventore at accusamus. Dolorum, atque, vitae mollitia beatae explicabo quos ex ut quibusdam repellat quis omnis nihil impedit ducimus nemo harum necessitatibus repudiandae ratione ipsa corporis quidem fugiat ab!",
-          modifedAt: "2024-10-30",
-          scheduleDate: "2024-10-11",
-        };
-
-        // API 연동 시에는 response.data를 사용하고, 더미데이터는 주석처리
-        // setPostData(response.data);
-        setPostData(dummyData);
-      } catch (error) {
-        // Axios 에러 처리
-        if (axios.isAxiosError(error)) {
-          console.error("API 에러:", error.response?.data || error.message);
-        } else {
-          console.error("게시글을 불러오는데 실패했습니다:", error);
-        }
-      } finally {
+    dispatch(getPostingDetailAsync(selectedPostingId))
+      .unwrap()
+      .then((res) => {
+        setPostData(res);
         setLoading(false);
-      }
-    };
+      });
+  }, [selectedPostingId]);
 
-    fetchPostData();
-  }, [postingId]);
+  const deletePosting = () => {
+    dispatch(deletePostingAsync(selectedPostingId))
+      .unwrap()
+      .then(() => navigate(-1));
+  };
 
-  if (loading) return <PostingLoad />;
+  if (loading) return <CustomLoading isFullScreen />;
   if (!postData) return <PostingNotFound />;
 
   return (
@@ -196,8 +170,8 @@ function PostingDetail() {
             {postData.writerNickname}
           </UserArea>
           <EditBtnArea>
-            <EditBtn>수정</EditBtn>
-            <EditBtn>삭제</EditBtn>
+            {/* <EditBtn>수정</EditBtn> */}
+            <EditBtn onClick={deletePosting}>삭제</EditBtn>
           </EditBtnArea>
         </WriterArea>
         <InfoArea>
@@ -217,7 +191,7 @@ function PostingDetail() {
               width={24}
               height={24}
             />
-            {postData.scheduleDate}
+            {postData.createdAt}
           </InfoItem>
           <InfoItem>
             <DynamicSVG
@@ -226,15 +200,15 @@ function PostingDetail() {
               width={24}
               height={24}
             />
-            {postData.modifedAt}
+            {postData.modifiedAt}
           </InfoItem>
         </InfoArea>
         <CustomViewer content={postData.content} />
         <AssociatedPostingArea>
           <NextPosting
-            isDisabled={parseInt(postingId) == 1}
+            isDisabled={parseInt(selectedPostingId) == 1}
             isNext={false}
-            postingId={postingId}
+            postingId={selectedPostingId}
             postingTitle={postData.prevPostingTitle}
           />
           <SpaceCard
@@ -246,14 +220,14 @@ function PostingDetail() {
             spaceEndDate={postData.spaceEndDate}
           />
           <NextPosting
-            isDisabled={parseInt(postingId) == 2}
+            isDisabled={parseInt(selectedPostingId) == 2}
             isNext={true}
-            postingId={postingId}
+            postingId={selectedPostingId}
             postingTitle={postData.nextPostingTitle}
           />
         </AssociatedPostingArea>
       </PostingContainer>
-      <Comments postingId={postingId} />
+      {/* <Comments postingId={selectedPostingId} /> */}
       <div className="mb-32" />
       <TopButton />
       <Background />

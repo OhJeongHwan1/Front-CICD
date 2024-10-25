@@ -25,6 +25,7 @@ import {
   getSpaceScheduleListAsync,
   setScheduleList,
 } from "../../redux/spaceSlice";
+import CustomLoading from "../../components/CustomLoading";
 
 const Container = styled.div`
   width: 100%;
@@ -92,8 +93,10 @@ function Space() {
     useSelector(selectModal);
   const [groupedByDay, setGroupdedByDay] = useState(null);
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     reload();
   }, [selectedSpaceId]);
 
@@ -108,10 +111,12 @@ function Space() {
   };
 
   const loadSpaceDetail = () => {
+    setLoading(true);
     dispatch(getSpaceDetailAsync(selectedSpaceId))
       .unwrap()
       .then((res) => {
         dispatch(setSpaceDetail(res));
+        setLoading(false);
       })
       .catch((err) => console.log(err.message));
   };
@@ -158,6 +163,8 @@ function Space() {
   const deleteSchedule = (scheduleid, spaceId) => {
     alert(scheduleid + spaceId);
   };
+
+  if (loading) return <CustomLoading isFullScreen />;
 
   return (
     <Container>

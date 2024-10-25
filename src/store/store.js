@@ -5,7 +5,7 @@ import { combineReducers } from "redux";
 
 import userSlice from "../redux/userSlice";
 import followSlice from "../redux/followSlice";
-import postingSlice from "../redux/UserSlice";
+import postingSlice from "../redux/postingSlice";
 import spaceSlice from "../redux/spaceSlice";
 import costSlice from "../redux/costSlice";
 import modalSlice from "../redux/modalSlice";

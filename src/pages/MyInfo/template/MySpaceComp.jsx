@@ -9,13 +9,12 @@ const Container = styled.div`
   gap: 30px;
 `;
 
-function MySpaceComp() {
+function MySpaceComp({ mySpace }) {
   return (
     <Container>
-      <SpaceCard />
-      <SpaceCard />
-      <SpaceCard />
-      <SpaceCard />
+      {mySpace?.map((space) => {
+        return <SpaceCard space={space} />;
+      })}
     </Container>
   );
 }

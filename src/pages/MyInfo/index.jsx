@@ -10,8 +10,10 @@ import MyFollowComp from "./template/MyFollowComp";
 import Button from "../../components/Button";
 import { useNavigate } from "react-router";
 import AddFollowModal from "./template/AddFollowModal";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "../../redux/userSlice";
+import { getMySpaceListAsync } from "../../redux/userSlice";
+import CustomLoading from "../../components/CustomLoading";
 
 const Background = styled.div`
   width: 100%;
@@ -104,10 +106,19 @@ function MyInfo() {
   const [isOpen, setOpen] = useState(false);
   const [selectedItems, setSelectedItems] = useState(initialSelectedState);
   const [spaceResponse, setSpaceResponse] = useState();
+  const [mySpace, setMySpace] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    // 첫 렌더링 시 스페이스 정보 가져오는 API 호출.
+    setLoading(true);
+    dispatch(getMySpaceListAsync())
+      .unwrap()
+      .then((res) => {
+        setLoading(false);
+        setMySpace(res);
+      });
   }, [user]);
 
   const handleItemClick = (item) => {
@@ -144,6 +155,8 @@ function MyInfo() {
     if (selectedItems.follow) return "내 이웃";
     return "잘못된 접근"; // 기본 아이콘 설정
   };
+
+  if (loading) return <CustomLoading isFullScreen />;
 
   return (
     <Background>
@@ -249,7 +262,7 @@ function MyInfo() {
             ></Button>
           )}
         </MyPageTitle>
-        {selectedItems.space && <MySpaceComp></MySpaceComp>}
+        {selectedItems.space && <MySpaceComp mySpace={mySpace} />}
         {selectedItems.posting && <MyPostingComp></MyPostingComp>}
         {selectedItems.comment && <MyCommentComp></MyCommentComp>}
         {selectedItems.follow && <MyFollowComp></MyFollowComp>}

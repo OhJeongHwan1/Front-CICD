@@ -58,7 +58,7 @@ const ScheduleSelector = ({ setSchedule }) => {
   }, [scheduleList]);
 
   const groupSchedulesByDay = (scheduleList) => {
-    scheduleList.sort((a, b) => a?.day.localeCompare(b?.day));
+    // if (scheduleList) scheduleList?.sort((a, b) => a?.day?.localeCompare(b?.day));
     return scheduleList.reduce((groups, schedule) => {
       const { day } = schedule;
       if (!groups[day]) {

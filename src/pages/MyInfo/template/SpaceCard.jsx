@@ -4,6 +4,9 @@ import theme from "../../../theme";
 import DynamicSVG from "../../../components/DynamicSVG";
 import ProfileStack from "../../../components/ProfileStack";
 import { useNavigate } from "react-router";
+import { cityCodeToName, nationCodeToName } from "../../../data/LocationCode";
+import { useDispatch } from "react-redux";
+import { setSelectedSpaceId } from "../../../redux/spaceSlice";
 
 const Container = styled.div`
   display: flex;
@@ -60,6 +63,7 @@ const Location = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
+  margin-bottom: 5px;
 `;
 
 const Description = styled.div`
@@ -130,8 +134,10 @@ const NumArea = styled.div`
   right: 41px;
 `;
 
-function SpaceCard({ onClick }) {
+function SpaceCard({ space }) {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  console.log(space);
   const images = [
     "https://picsum.photos/300/300/?image=100",
     "https://picsum.photos/300/300/?image=101",
@@ -139,10 +145,15 @@ function SpaceCard({ onClick }) {
     "https://picsum.photos/300/300/?image=103",
   ];
   return (
-    <Container onClick={() => navigate(`/space/1`)}>
+    <Container
+      onClick={() => {
+        dispatch(setSelectedSpaceId(space.spaceId));
+        navigate(`/space/${space.spaceId}`);
+      }}
+    >
       <TextArea>
         <Title>
-          <TitleText>오사카 여행</TitleText>
+          <TitleText>{space.spaceName}</TitleText>
           <ProfileStack
             profileList={[
               "https://i.imgur.com/VnZtNxH.png",
@@ -162,13 +173,11 @@ function SpaceCard({ onClick }) {
             svgUrl="/location.svg"
             color={theme.colors.neutral700}
           />
-          <p>오사카, 일본</p>
+          <p>{`${cityCodeToName[space.cityCode]}, ${
+            nationCodeToName[space.nationCode]
+          }`}</p>
         </Location>
-        <Description>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Aspernatur
-          repellat, et ipsa rem pariatur tempora optio a unde magni explicabo
-          vitae consequuntur nulla, quasi illo non commodi odit placeat eos!
-        </Description>
+        <Description>{space.description}</Description>
         <Date>
           <DynamicSVG
             width={20}
@@ -176,7 +185,9 @@ function SpaceCard({ onClick }) {
             svgUrl="/calendar.svg"
             color={theme.colors.neutral700}
           />
-          <p>2024-10-24 ~ 2024-10-25</p>
+          <p>
+            {space.startDate} ~ {space.endDate}
+          </p>
         </Date>
       </TextArea>
       <ImgArea>

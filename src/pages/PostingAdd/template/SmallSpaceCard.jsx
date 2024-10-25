@@ -4,6 +4,7 @@ import theme from "../../../theme";
 import DynamicSVG from "../../../components/DynamicSVG";
 import ProfileStack from "../../../components/ProfileStack";
 import { useNavigate } from "react-router";
+import { nationCodeToName, cityCodeToName } from "../../../data/LocationCode";
 
 const Container = styled.div`
   display: flex;
@@ -78,25 +79,25 @@ const Date = styled.div`
   gap: 8px;
 `;
 
-function SmallSpaceCard({ onClick }) {
-  const navigate = useNavigate();
-
+function SmallSpaceCard({ space, setSpace, setIsModal }) {
   return (
-    <Container onClick={onClick}>
+    <Container
+      onClick={() => {
+        setSpace(space);
+        console.log(space);
+        alert("설정되었습니다.");
+        setIsModal(false);
+      }}
+    >
       <TextArea>
         <Title>
-          <TitleText>오사카 여행</TitleText>
-          <ProfileStack
-            profileList={[
-              "https://i.imgur.com/VnZtNxH.png",
-              "https://i.imgur.com/aXtrK5E.png",
-              "https://i.imgur.com/UIAinYd.png",
-              "https://i.imgur.com/QHfydVa.png",
-              "https://i.imgur.com/VXvXELL.png",
-              "https://i.imgur.com/D4UpBrx.png",
-            ]}
-            borderColor={theme.colors.neutral100}
-          />
+          <TitleText>{space.spaceName}</TitleText>
+          {space?.members?.length !== 0 && (
+            <ProfileStack
+              profileList={space?.members?.map((mem) => mem.profile)}
+              borderColor={theme.colors.neutral100}
+            />
+          )}
         </Title>
         <Location>
           <DynamicSVG
@@ -105,13 +106,11 @@ function SmallSpaceCard({ onClick }) {
             svgUrl="/location.svg"
             color={theme.colors.neutral700}
           />
-          <p>오사카, 일본</p>
+          <p>{`${cityCodeToName[space.cityCode]}, ${
+            nationCodeToName[space.nationCode]
+          }`}</p>
         </Location>
-        <Description>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Aspernatur
-          repellat, et ipsa rem pariatur tempora optio a unde magni explicabo
-          vitae consequuntur nulla, quasi illo non commodi odit placeat eos!
-        </Description>
+        <Description>{space.description}</Description>
         <Date>
           <DynamicSVG
             width={20}
@@ -119,7 +118,7 @@ function SmallSpaceCard({ onClick }) {
             svgUrl="/calendar.svg"
             color={theme.colors.neutral700}
           />
-          <p>2024-10-24 ~ 2024-10-25</p>
+          <p>{`${space.startDate} ~ ${space.endDate}`}</p>
         </Date>
       </TextArea>
     </Container>

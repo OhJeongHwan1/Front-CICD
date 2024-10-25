@@ -73,8 +73,7 @@ const SpaceCard = ({
           width={20}
           height={20}
         />
-        {convertToKoreanFormat(spaceStartDate)} ~{" "}
-        {convertToKoreanFormat(spaceEndDate)}
+        {`${spaceStartDate} ~ ${spaceEndDate}`}
       </IconText>
     </SpaceCardContainer>
   );

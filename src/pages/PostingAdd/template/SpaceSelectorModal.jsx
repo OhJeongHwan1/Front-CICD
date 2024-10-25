@@ -8,7 +8,7 @@ const SpaceWrapper = styled.div`
   gap: 10px;
 `;
 
-const SpaceSelectorModal = ({ isModal, setIsModal, setSpace }) => {
+const SpaceSelectorModal = ({ isModal, setIsModal, setSpace, spaceList }) => {
   return (
     <CustomModal
       modal={isModal}
@@ -22,9 +22,15 @@ const SpaceSelectorModal = ({ isModal, setIsModal, setSpace }) => {
       noBottom={false}
     >
       <SpaceWrapper>
-        <SmallSpaceCard onClick={() => setSpace({})} />
-        <SmallSpaceCard onClick={() => setSpace({})} />
-        <SmallSpaceCard onClick={() => setSpace({})} />
+        {spaceList?.map((space) => {
+          return (
+            <SmallSpaceCard
+              space={space}
+              setSpace={setSpace}
+              setIsModal={setIsModal}
+            />
+          );
+        })}
       </SpaceWrapper>
     </CustomModal>
   );

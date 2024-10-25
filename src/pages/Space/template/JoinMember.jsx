@@ -100,7 +100,7 @@ function JoinMember({ maxMembers, members, leaderId, spaceId }) {
       </Top>
 
       <ContentArea>
-        {members.map((member) => {
+        {members?.map((member) => {
           return (
             <Member member={member} leaderId={leaderId} spaceId={spaceId} />
           );

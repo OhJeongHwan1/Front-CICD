@@ -16,7 +16,10 @@ import SelectedButton2 from "./template/SelectedButton2";
 import ExchangeCard from "./template/ExchangeCard";
 import WeatherCard from "./template/WeatherCard";
 import { useDispatch } from "react-redux";
-import { getPostingListAsync } from "../../redux/postingSlice";
+import {
+  getPostingListAsync,
+  setSelectedPostingId,
+} from "../../redux/postingSlice";
 import CityImageSlider from "./template/ImageCard";
 
 const Background = styled.div`
@@ -117,6 +120,7 @@ function Main() {
   const navigate = useNavigate();
 
   const goToPostingDetailPage = (postingId) => {
+    dispatch(setSelectedPostingId(postingId));
     navigate(`/posting/detail/${postingId}`);
     window.scrollTo({ top: 0, behavior: "auto" });
   };

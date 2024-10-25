@@ -43,6 +43,14 @@ export const resignAsync = createAsyncThunk(
   }
 );
 
+export const getMySpaceListAsync = createAsyncThunk(
+  "user/getMySpaceList",
+  async (data) => {
+    const response = await api.getMySpaceList(data);
+    return response.data;
+  }
+);
+
 export const userSlice = createSlice({
   name: "user",
   initialState,

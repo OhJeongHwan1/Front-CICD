@@ -56,6 +56,8 @@ export default {
 
   // 내 정보 보기
 
+  getMySpaceList: (data) => axiosInstance.get(`api/space/my`),
+
   // 스페이스
   postSpace: (data) => axiosInstance.post(`api/space`, data),
 
@@ -76,6 +78,12 @@ export default {
   addSchedule: (data) => axiosInstance.post(`api/schedule`, data),
 
   deleteSchedule: (id) => axiosInstance.delete(`api/schedule/${id}`),
+
+  // 포스팅
+
+  getPostingDetail: (id) => axiosInstance.get(`api/posting/${id}`),
+
+  deletePosting: (id) => axiosInstance.delete(`api/posting/${id}`),
 };
 
 // 회원가입
