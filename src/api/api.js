@@ -120,13 +120,13 @@ export const login = async (email, password) => {
       },
     });
 
-    const token = res.data.token; // 응답 본문에서 token을 추출
-    const expiresIn = res.data.expiresIn; // 만료 시간 확인
-
+    const token = res.headers.authorization;
+    const expiresIn = res.headers["expires-in"];
+    console.log(token.slice(7));
     if (token) {
-      localStorage.setItem("token", token);
-      console.log("Token received: ", token);
-      console.log("Expires in: ", expiresIn);
+      localStorage.setItem("token", token.slice(7));
+      // console.log("Token received: ", token);
+      // console.log("Expires in: ", expiresIn);
       return true;
     } else {
       console.error("Token is undefined.");
