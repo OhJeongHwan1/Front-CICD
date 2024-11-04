@@ -179,7 +179,7 @@ function PostingAdd() {
     if (match && match[1]) {
       return match[1]; // 첫 번째 캡처 그룹, 즉 URL 부분을 반환
     }
-    return null; // 매치되는 이미지가 없을 경우 null 반환
+    return "https://i.imgur.com/0TIs0vO.png"; // 매치되는 이미지가 없을 경우 null 반환
   }
 
   return (

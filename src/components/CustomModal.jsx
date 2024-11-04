@@ -6,15 +6,15 @@ import Button from "./Button.jsx";
 import DynamicSVG from "./DynamicSVG.jsx";
 
 const Container = styled.div`
-  width: ${({ large }) => (large ? `800px` : `550px`)};
-  min-width: ${({ large }) => (large ? `800px` : `550px`)};
+  width: ${({ $large }) => ($large ? `800px` : `550px`)};
+  min-width: ${({ $large }) => ($large ? `800px` : `550px`)};
   position: relative;
 `;
 
 const TitleArea = styled.div`
   height: 100px;
-  width: ${({ large }) => (large ? `800px` : `550px`)};
-  min-width: ${({ large }) => (large ? `800px` : `550px`)};
+  width: ${({ $large }) => ($large ? `800px` : `550px`)};
+  min-width: ${({ $large }) => ($large ? `800px` : `550px`)};
   padding: 0 40px;
   position: fixed;
   border-bottom: 1px solid ${theme.colors.neutral200};
@@ -45,7 +45,7 @@ const ContentArea = styled.div`
     border-radius: 5px;
   }
   &::-webkit-scrollbar-track-piece {
-    background-color: arent;
+    background-color: transparent;
     border-radius: 5px;
     margin: 5px 0;
   }
@@ -111,8 +111,8 @@ function CustomModal({
         },
       }}
     >
-      <Container large={large}>
-        <TitleArea large={large}>
+      <Container $large={large}>
+        <TitleArea $large={large}>
           <DynamicSVG
             svgUrl={titleIcon}
             color={theme.colors.neutral700}

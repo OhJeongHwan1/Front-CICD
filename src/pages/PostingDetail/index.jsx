@@ -191,7 +191,7 @@ function PostingDetail() {
               width={24}
               height={24}
             />
-            {`자유의 여신상, ${cityCodeToName[postData.cityCode]}, ${
+            {`${cityCodeToName[postData.cityCode]}, ${
               nationCodeToName[postData.nationCode]
             }`}
           </InfoItem>
@@ -221,20 +221,22 @@ function PostingDetail() {
             isNext={false}
             postingId={selectedPostingId}
             postingTitle={postData.prevPostingTitle}
+            selectedPostingId={selectedPostingId}
           />
           <SpaceCard
             space={postData.space}
-            nation={postData.nation}
-            city={postData.city}
+            nation={nationCodeToName[postData.nationCode]}
+            city={cityCodeToName[postData.cityCode]}
             spaceParticipantsProfile={postData.spaceParticipantsProfile}
-            spaceStartDate={postData.spaceStartDate}
-            spaceEndDate={postData.spaceEndDate}
+            spaceStartDate={postData.createdAt}
+            spaceEndDate={postData.modifiedAt}
           />
           <NextPosting
             isDisabled={parseInt(selectedPostingId) == 2}
             isNext={true}
             postingId={selectedPostingId}
             postingTitle={postData.nextPostingTitle}
+            selectedPostingId={selectedPostingId}
           />
         </AssociatedPostingArea>
       </PostingContainer>

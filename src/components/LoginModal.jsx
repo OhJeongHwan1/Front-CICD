@@ -58,12 +58,12 @@ function LoginModal({ loginModal, handleClose }) {
         alert("로그인 되었습니다.");
         handleClose();
 
-        dispatch(getMySpaceListAsync())
-          .unwrap()
-          .then((res) => {
-            setLoading(false);
-            dispatch(setMySpace(res));
-          });
+        // dispatch(getMySpaceListAsync())
+        //   .unwrap()
+        //   .then((res) => {
+        //     console.log(res);
+        //     dispatch(setMySpace(res));
+        //   });
       })
       .catch((err) => {
         if (err.message === "Request failed with status code 403") {

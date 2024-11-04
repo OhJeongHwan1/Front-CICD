@@ -1,9 +1,10 @@
 import axios from "axios";
 import { setUser } from "../redux/userSlice";
 
-const BASE_URL = "http://haneol-test.kro.kr";
+// const BASE_URL = "http://haneol-test.kro.kr";
+const BASE_URL = "http://localhost:8080";
 
-const axiosInstance = axios.create({
+export const axiosInstance = axios.create({
   baseURL: BASE_URL,
   headers: {
     "Content-Type": "application/json",

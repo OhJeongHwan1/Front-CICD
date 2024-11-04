@@ -259,6 +259,11 @@ export const spaceSlice = createSlice({
       state.scheduleList = action.payload;
     },
   },
+  extraReducers: (builder) => {
+    builder.addCase(getSpacePostingListAsync.fulfilled, (state, action) => {
+      state.postingList = action.payload;
+    });
+  },
 });
 
 export const {

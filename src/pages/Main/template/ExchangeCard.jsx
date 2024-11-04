@@ -52,13 +52,13 @@ const ChartWrapper = styled.div`
 const LoadingState = styled.div`
   text-align: center;
   color: #666;
-  padding: 20px;
+  line-height: 220px;
 `;
 
 const ErrorState = styled.div`
   color: #e74c3c;
   text-align: center;
-  padding: 20px;
+  line-height: 220px;
 `;
 
 const nationToCurrency = {

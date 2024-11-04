@@ -15,6 +15,8 @@ const initialState = {
     updatedAt: "",
   },
   selectedPostingId: 0,
+  postingIdList: [],
+  currentIndex: 0,
   //
 };
 
@@ -62,10 +64,18 @@ export const postingSlice = createSlice({
     setSelectedPostingId: (state, action) => {
       state.selectedPostingId = action.payload;
     },
+    setCurrentIndex: (state, action) => {
+      state.currentIndex = action.payload;
+    },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(getPostingListAsync.fulfilled, (state, action) => {
+      state.postingIdList = action.payload.content.map((pos) => pos.postingId);
+    });
   },
 });
 
-export const { setSelectedPostingId } = postingSlice.actions;
+export const { setSelectedPostingId, setCurrentIndex } = postingSlice.actions;
 
 export const selectPosting = (state) => state.posting;
 

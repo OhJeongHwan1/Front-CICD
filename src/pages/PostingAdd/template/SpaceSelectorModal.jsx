@@ -25,6 +25,7 @@ const SpaceSelectorModal = ({ isModal, setIsModal, setSpace, spaceList }) => {
         {spaceList?.map((space) => {
           return (
             <SmallSpaceCard
+              key={space.spaceId}
               space={space}
               setSpace={setSpace}
               setIsModal={setIsModal}

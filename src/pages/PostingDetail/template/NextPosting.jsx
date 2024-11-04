@@ -2,6 +2,8 @@ import styled from "styled-components";
 import theme from "../../../theme";
 import DynamicSVG from "../../../components/DynamicSVG";
 import { useNavigate } from "react-router";
+import { useDispatch } from "react-redux";
+import { setSelectedPostingId } from "../../../redux/postingSlice";
 
 const NextPostingContainer = styled.div`
   display: flex;
@@ -56,15 +58,24 @@ const IconRight = styled.div`
   right: 4px;
 `;
 
-const NextPosting = ({ isDisabled, isNext, postingId, postingTitle }) => {
+const NextPosting = ({
+  isDisabled,
+  isNext,
+  postingId,
+  postingTitle,
+  selectedPostingId,
+}) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const goToPrevPage = () => {
+    dispatch(setSelectedPostingId(selectedPostingId + 1));
     navigate(`/posting/detail/${parseInt(postingId) + 1}`);
     window.scrollTo({ top: 0, behavior: "auto" });
   };
 
   const goToNextPage = () => {
+    dispatch(setSelectedPostingId(selectedPostingId - 1));
     navigate(`/posting/detail/${parseInt(postingId) - 1}`);
     window.scrollTo({ top: 0, behavior: "auto" });
   };

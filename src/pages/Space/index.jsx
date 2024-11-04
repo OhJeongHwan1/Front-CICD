@@ -122,10 +122,10 @@ function Space() {
   };
 
   const loadSpacePostingList = () => {
-    dispatch(getSpacePostingListAsync(selectedSpaceId))
-      .unwrap()
-      .then((res) => dispatch(setPostingList(res)))
-      .catch((err) => console.log(err.message));
+    dispatch(getSpacePostingListAsync(selectedSpaceId));
+    // .unwrap()
+    // .then((res) => dispatch(setPostingList(res)))
+    // .catch((err) => console.log(err.message));
   };
 
   const loadSpaceSchedule = () => {

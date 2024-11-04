@@ -139,7 +139,7 @@ function NavigationBar() {
   };
 
   return (
-    <NavContainer isRegister={location.pathname === "/register"}>
+    <NavContainer $isRegister={location.pathname === "/register"}>
       <div className="flex items-center h-[60px] gap-[70px]">
         <img
           onClick={moveToMain}

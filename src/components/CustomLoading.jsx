@@ -57,7 +57,7 @@ const Dot = styled.div`
 
 const CustomLoading = ({ isFullScreen = false, ...props }) => {
   return (
-    <SearchLoadingContainer isFullScreen={isFullScreen}>
+    <SearchLoadingContainer $isFullScreen={isFullScreen}>
       <DotsContainer>
         <Dot $delay={0} />
         <Dot $delay={0.2} />

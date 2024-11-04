@@ -15,6 +15,7 @@ const SliderContainer = styled.div`
 const LoadingArea = styled.div`
   width: 500px;
   height: 260px;
+  padding-top: 100px;
   justify-content: center;
   align-items: center;
 `;
@@ -90,6 +91,12 @@ const LoadingContainer = styled.div`
   justify-content: center;
 `;
 
+const ErrorState = styled.div`
+  color: #e74c3c;
+  text-align: center;
+  line-height: 260px;
+`;
+
 const CityImageSlider = ({ city = "seoul" }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [images, setImages] = useState([]);
@@ -152,38 +159,48 @@ const CityImageSlider = ({ city = "seoul" }) => {
 
   return (
     <SliderContainer>
-      <SliderWrapper $currentIndex={currentIndex}>
-        {images.map((image, index) => (
-          <Slide key={index}>
-            <Image src={image} alt={`${city} ${index + 1}`} />
-          </Slide>
-        ))}
-      </SliderWrapper>
+      {images.length !== 0 ? (
+        <>
+          <SliderWrapper $currentIndex={currentIndex}>
+            {images.map((image, index) => (
+              <Slide key={index}>
+                <Image src={image} alt={`${city} ${index + 1}`} />
+              </Slide>
+            ))}
+          </SliderWrapper>
 
-      <IndicatorWrapper>
-        {images.map((_, index) => (
-          <Indicator
-            key={index}
-            $active={currentIndex === index}
-            onClick={() => setCurrentIndex(index)}
-          />
-        ))}
-      </IndicatorWrapper>
+          <IndicatorWrapper>
+            {images.map((_, index) => (
+              <Indicator
+                key={index}
+                $active={currentIndex === index}
+                onClick={() => setCurrentIndex(index)}
+              />
+            ))}
+          </IndicatorWrapper>
 
-      <NavigationButton
-        $direction="left"
-        onClick={() =>
-          setCurrentIndex((prev) => (prev - 1 + images.length) % images.length)
-        }
-      >
-        ←
-      </NavigationButton>
-      <NavigationButton
-        $direction="right"
-        onClick={() => setCurrentIndex((prev) => (prev + 1) % images.length)}
-      >
-        →
-      </NavigationButton>
+          <NavigationButton
+            $direction="left"
+            onClick={() =>
+              setCurrentIndex(
+                (prev) => (prev - 1 + images.length) % images.length
+              )
+            }
+          >
+            ←
+          </NavigationButton>
+          <NavigationButton
+            $direction="right"
+            onClick={() =>
+              setCurrentIndex((prev) => (prev + 1) % images.length)
+            }
+          >
+            →
+          </NavigationButton>
+        </>
+      ) : (
+        <ErrorState>이미지를 가져오는데 실패했습니다.</ErrorState>
+      )}
     </SliderContainer>
   );
 };

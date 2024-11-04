@@ -29,7 +29,7 @@ const ProfileStack = ({
           key={index}
           src={profileUrl}
           size={size}
-          borderColor={borderColor}
+          $borderColor={borderColor}
           style={{ zIndex: profileList.length - index }}
         />
       ))}

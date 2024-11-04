@@ -3,6 +3,7 @@ import { Editor } from "@toast-ui/react-editor";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import styled from "styled-components";
 import theme from "../../../theme";
+import { axiosInstance } from "../../../api/api";
 import axios from "axios";
 
 const EditorContainer = styled.div`
@@ -390,8 +391,8 @@ const CustomEditor = ({ setContent }) => {
       const formData = new FormData();
       formData.append("images", blob);
 
-      const response = await axios.post(
-        "http://haneol-test.kro.kr/api/upload",
+      const response = await axiosInstance.post(
+        "http://localhost:8080/api/upload",
         formData,
         {
           headers: {

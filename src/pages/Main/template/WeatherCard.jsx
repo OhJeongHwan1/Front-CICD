@@ -146,13 +146,13 @@ const DayTemp = styled.div`
 const LoadingState = styled.div`
   text-align: center;
   color: ${theme.colors.neutral400};
-  padding: 20px;
+  line-height: 220px;
 `;
 
 const ErrorState = styled.div`
   color: ${theme.colors.error};
+  line-height: 220px;
   text-align: center;
-  padding: 20px;
 `;
 
 const WeatherCard = ({ city = "seoul" }) => {

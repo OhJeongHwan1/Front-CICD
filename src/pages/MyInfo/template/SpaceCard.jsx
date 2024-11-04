@@ -137,7 +137,7 @@ const NumArea = styled.div`
 function SpaceCard({ space }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  console.log(space);
+
   const images = [
     "https://picsum.photos/300/300/?image=100",
     "https://picsum.photos/300/300/?image=101",
@@ -191,8 +191,8 @@ function SpaceCard({ space }) {
         </Date>
       </TextArea>
       <ImgArea>
-        {images?.slice(0, 3).map((image) => {
-          return <Images alt="" src={image} />;
+        {images?.slice(0, 3).map((image, i) => {
+          return <Images key={i} alt="" src={image} />;
         })}
         <NumArea>{`총 ${3}개의 포스팅이 있어요.`}</NumArea>
       </ImgArea>

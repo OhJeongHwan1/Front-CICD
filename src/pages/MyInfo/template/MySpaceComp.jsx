@@ -13,7 +13,7 @@ function MySpaceComp({ mySpace }) {
   return (
     <Container>
       {mySpace?.map((space) => {
-        return <SpaceCard space={space} />;
+        return <SpaceCard key={space.spaceId} space={space} />;
       })}
     </Container>
   );

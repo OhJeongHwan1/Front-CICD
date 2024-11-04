@@ -100,9 +100,11 @@ function ScheduleSelectorModal({
                 <Day>{day.split("-")[2]}일</Day>
                 <Wrap>
                   {schedules.map((schedule, index) => (
-                    <div style={{ position: "relative", cursor: "pointer" }}>
+                    <div
+                      key={schedule.scheduleId}
+                      style={{ position: "relative", cursor: "pointer" }}
+                    >
                       <Sc
-                        key={schedule.scheduleId}
                         onClick={() => selectSchedule(schedule)}
                         isFirst={index === 0}
                       >

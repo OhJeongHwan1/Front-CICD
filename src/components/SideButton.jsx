@@ -13,7 +13,7 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: center;
   transition: 0.2s;
-  ${({ selected }) => (!selected ? `cursor: pointer;` : "")};
+  ${({ selected }) => !selected && `cursor: pointer;`}
 
   &:hover {
     ${(prop) => {
@@ -29,12 +29,12 @@ function SideButton({ icon, btnClick, selected, deleteButton }) {
   const [isHovered, setHovered] = useState(false);
   return (
     <Wrapper
-      onClick={!selected && btnClick}
+      onClick={() => !selected && btnClick()}
       selected={selected}
-      deleteButton={deleteButton}
+      $deleteButton={deleteButton}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      isHovered={isHovered}
+      $isHovered={isHovered}
     >
       <DynamicSVG
         svgUrl={icon}

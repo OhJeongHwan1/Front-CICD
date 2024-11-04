@@ -15,10 +15,12 @@ import TopButton from "../../components/TopButton";
 import SelectedButton2 from "./template/SelectedButton2";
 import ExchangeCard from "./template/ExchangeCard";
 import WeatherCard from "./template/WeatherCard";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   getPostingListAsync,
+  selectPosting,
   setSelectedPostingId,
+  setCurrentIndex,
 } from "../../redux/postingSlice";
 import CityImageSlider from "./template/ImageCard";
 
@@ -114,9 +116,10 @@ function Main() {
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(0);
+  const [isError, setIsError] = useState(false);
   const loadingRef = useRef(null);
   const dispatch = useDispatch();
-
+  const { postingIdList } = useSelector(selectPosting);
   const navigate = useNavigate();
 
   const goToPostingDetailPage = (postingId) => {
@@ -139,13 +142,15 @@ function Main() {
 
       const response = await dispatch(getPostingListAsync(param)).unwrap();
 
-      setData((prevData) => [...prevData, ...response.content]);
-
-      setHasMore(data.length < response.totalElements);
-
-      console.log(data);
+      if (Array.isArray(response?.content)) {
+        setData((prevData) => [...prevData, ...response?.content]);
+        setHasMore(data.length < response?.totalElements);
+      } else {
+        console.log(response);
+      }
     } catch (error) {
       console.error("Error loading data:", error);
+      setIsError(true);
     } finally {
       setLoading(false);
     }
@@ -160,7 +165,7 @@ function Main() {
 
     const observer = new IntersectionObserver((entries) => {
       const [entry] = entries;
-      if (entry.isIntersecting && !loading && hasMore) {
+      if (hasMore && entry.isIntersecting && !loading && !isError) {
         setPage((prevPage) => prevPage + 1);
       }
     }, options);
@@ -222,7 +227,7 @@ function Main() {
         {Array.from({ length: Math.ceil(data.length / 5) }).map(
           (_, rowIndex) => (
             <GridContainer key={rowIndex}>
-              {data.slice(rowIndex * 5, (rowIndex + 1) * 5).map((item) => (
+              {data?.slice(rowIndex * 5, (rowIndex + 1) * 5).map((item) => (
                 <ForwardedPostingCard
                   onClick={() => goToPostingDetailPage(item.postingId)}
                   key={item.postingId}
